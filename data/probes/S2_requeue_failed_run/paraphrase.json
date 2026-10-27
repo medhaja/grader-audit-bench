@@ -1,0 +1,14 @@
+{
+    "outputs": [
+        "bronze.customers",
+        "silver.customers"
+    ],
+    "error": null,
+    "attempt": 2,
+    "rows_written": 0,
+    "finished_at": null,
+    "started_at": "2025-06-01T11:00:00+00:00",
+    "status": "Queued",
+    "pipeline": "adf_copy_customers",
+    "run_id": "run-0143"
+}

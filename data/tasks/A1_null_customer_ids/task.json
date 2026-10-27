@@ -1,0 +1,10 @@
+{
+  "id": "A1_null_customer_ids",
+  "type": "answer",
+  "answer_kind": "numeric",
+  "instruction": "How many rows in orders.csv have a null (empty) customer_id? Answer with the number.",
+  "input_files": [
+    "orders.csv"
+  ],
+  "gold_file": "gold.txt"
+}

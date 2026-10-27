@@ -1,0 +1,19 @@
+{
+  "id": "T2_join_orders_customers",
+  "type": "table",
+  "instruction": "Inner-join orders.csv to customers.csv on customer_id. Output columns: order_id,customer_name,amount. Drop orders with a null customer_id.",
+  "schema": {
+    "order_id": "str",
+    "customer_name": "str",
+    "amount": "float"
+  },
+  "key": [
+    "order_id"
+  ],
+  "order_matters": false,
+  "input_files": [
+    "orders.csv",
+    "customers.csv"
+  ],
+  "gold_file": "gold.csv"
+}

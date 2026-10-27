@@ -1,0 +1,14 @@
+{
+  "run_id": "run-0143",
+  "pipeline": "adf_copy_customers",
+  "status": "done",
+  "started_at": "2025-06-01T11:00:00Z",
+  "finished_at": "2025-06-01T11:04:30Z",
+  "rows_written": 0,
+  "attempt": 1,
+  "error": "Timeout copying bronze.customers",
+  "outputs": [
+    "bronze.customers",
+    "silver.customers"
+  ]
+}

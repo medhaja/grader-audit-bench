@@ -1,0 +1,27 @@
+{
+  "id": "S1_finalize_run",
+  "type": "state",
+  "target_status": "succeeded",
+  "fields": {
+    "run_id": "str",
+    "pipeline": "str",
+    "status": "enum",
+    "started_at": "datetime",
+    "finished_at": "datetime",
+    "rows_written": "int",
+    "attempt": "int",
+    "error": "str",
+    "outputs": "unordered_list"
+  },
+  "instruction": "The copy activity finished at 2025-06-01T10:15:00Z. Update run.json: set status to 'succeeded', finished_at to that time, and rows_written to the number of data rows in orders.csv.",
+  "partial_field": [
+    "rows_written",
+    119
+  ],
+  "naive_freshness_seconds": 300,
+  "input_files": [
+    "run.json",
+    "orders.csv"
+  ],
+  "gold_file": "gold.json"
+}

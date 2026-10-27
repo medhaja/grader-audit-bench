@@ -1,0 +1,10 @@
+{
+  "id": "A2_completed_revenue",
+  "type": "answer",
+  "answer_kind": "numeric",
+  "instruction": "What is the total amount of orders with status 'completed' in orders.csv? Give two decimals.",
+  "input_files": [
+    "orders.csv"
+  ],
+  "gold_file": "gold.txt"
+}

@@ -1,0 +1,1 @@
+Distinct ordering customers: 28

@@ -1,0 +1,12 @@
+{
+  "id": "A3_top_region",
+  "type": "answer",
+  "answer_kind": "text",
+  "instruction": "Join orders.csv to customers.csv. Which region has the highest total completed order amount?",
+  "runner_up": "Central",
+  "input_files": [
+    "orders.csv",
+    "customers.csv"
+  ],
+  "gold_file": "gold.txt"
+}

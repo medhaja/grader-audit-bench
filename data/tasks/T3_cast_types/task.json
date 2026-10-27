@@ -1,0 +1,19 @@
+{
+  "id": "T3_cast_types",
+  "type": "table",
+  "instruction": "orders_raw.csv has messy types. Cast amount to a 2-decimal number, order_date (MM/DD/YYYY) to ISO YYYY-MM-DD, and NULL/null/empty customer_id to empty. Keep column order.",
+  "schema": {
+    "order_id": "str",
+    "customer_id": "str",
+    "amount": "float",
+    "order_date": "date"
+  },
+  "key": [
+    "order_id"
+  ],
+  "order_matters": false,
+  "input_files": [
+    "orders_raw.csv"
+  ],
+  "gold_file": "gold.csv"
+}

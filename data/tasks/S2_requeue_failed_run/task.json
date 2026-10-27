@@ -1,0 +1,25 @@
+{
+  "id": "S2_requeue_failed_run",
+  "type": "state",
+  "target_status": "queued",
+  "fields": {
+    "run_id": "str",
+    "pipeline": "str",
+    "status": "enum",
+    "started_at": "datetime",
+    "finished_at": "datetime",
+    "rows_written": "int",
+    "attempt": "int",
+    "error": "str",
+    "outputs": "unordered_list"
+  },
+  "instruction": "Re-queue the failed run in run.json: status 'queued', increment attempt by 1, and clear error and finished_at (null). Leave every other field as it is.",
+  "partial_field": [
+    "attempt",
+    1
+  ],
+  "input_files": [
+    "run.json"
+  ],
+  "gold_file": "gold.json"
+}

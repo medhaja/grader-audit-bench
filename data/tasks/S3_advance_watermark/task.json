@@ -1,0 +1,23 @@
+{
+  "id": "S3_advance_watermark",
+  "type": "state",
+  "target_status": "succeeded",
+  "fields": {
+    "run_id": "str",
+    "pipeline": "str",
+    "status": "enum",
+    "started_at": "datetime",
+    "last_watermark": "date",
+    "outputs": "unordered_list"
+  },
+  "instruction": "Incremental load done. In run.json set last_watermark to the latest order_date in orders.csv (YYYY-MM-DD) and status to 'succeeded'.",
+  "partial_field": [
+    "last_watermark",
+    "2025-05-30"
+  ],
+  "input_files": [
+    "run.json",
+    "orders.csv"
+  ],
+  "gold_file": "gold.json"
+}

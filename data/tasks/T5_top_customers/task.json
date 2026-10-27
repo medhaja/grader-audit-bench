@@ -1,0 +1,19 @@
+{
+  "id": "T5_top_customers",
+  "type": "table",
+  "instruction": "List the top 5 customers by total completed order amount, sorted from highest to lowest. Output columns: customer_id,customer_name,total_amount. Row order matters.",
+  "schema": {
+    "customer_id": "str",
+    "customer_name": "str",
+    "total_amount": "float"
+  },
+  "key": [
+    "customer_id"
+  ],
+  "order_matters": true,
+  "input_files": [
+    "orders.csv",
+    "customers.csv"
+  ],
+  "gold_file": "gold.csv"
+}

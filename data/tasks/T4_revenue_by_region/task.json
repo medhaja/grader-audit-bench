@@ -1,0 +1,19 @@
+{
+  "id": "T4_revenue_by_region",
+  "type": "table",
+  "instruction": "Join orders.csv to customers.csv and aggregate completed orders by region. Output columns: region,total_amount,order_count. Ignore orders with a null customer_id.",
+  "schema": {
+    "region": "str",
+    "total_amount": "float",
+    "order_count": "int"
+  },
+  "key": [
+    "region"
+  ],
+  "order_matters": false,
+  "input_files": [
+    "orders.csv",
+    "customers.csv"
+  ],
+  "gold_file": "gold.csv"
+}

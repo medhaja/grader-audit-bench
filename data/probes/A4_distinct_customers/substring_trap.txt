@@ -1,0 +1,1 @@
+Not 28; after removing duplicates it is 27.

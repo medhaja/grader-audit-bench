@@ -1,0 +1,19 @@
+{
+  "id": "T1_dedupe_customers",
+  "type": "table",
+  "instruction": "customers_raw.csv has duplicate customer_id rows. Keep only the row with the latest updated_at per customer_id. Output columns: customer_id,name,region,updated_at.",
+  "schema": {
+    "customer_id": "str",
+    "name": "str",
+    "region": "str",
+    "updated_at": "datetime"
+  },
+  "key": [
+    "customer_id"
+  ],
+  "order_matters": false,
+  "input_files": [
+    "customers_raw.csv"
+  ],
+  "gold_file": "gold.csv"
+}

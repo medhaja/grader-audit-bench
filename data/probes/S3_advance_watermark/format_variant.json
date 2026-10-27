@@ -1,0 +1,1 @@
+{"run_id":"run-0144","pipeline":"adf_incremental_orders","status":"succeeded","started_at":"2025-06-02T02:00:00+00:00","last_watermark":"2025/05/31","outputs":["silver.orders","gold.daily_revenue"]}

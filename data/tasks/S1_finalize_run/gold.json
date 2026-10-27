@@ -1,0 +1,14 @@
+{
+  "run_id": "run-0142",
+  "pipeline": "adf_copy_orders",
+  "status": "succeeded",
+  "started_at": "2025-06-01T10:02:11Z",
+  "finished_at": "2025-06-01T10:15:00Z",
+  "rows_written": 120,
+  "attempt": 1,
+  "error": null,
+  "outputs": [
+    "bronze.orders",
+    "silver.orders"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "run_id": "run-0143",
+  "pipeline": "adf_copy_customers",
+  "status": "not_queued",
+  "started_at": "2025-06-01T11:00:00Z",
+  "finished_at": null,
+  "rows_written": 0,
+  "attempt": 2,
+  "error": null,
+  "outputs": [
+    "bronze.customers",
+    "silver.customers"
+  ]
+}

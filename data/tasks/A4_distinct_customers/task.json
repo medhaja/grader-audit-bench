@@ -1,0 +1,10 @@
+{
+  "id": "A4_distinct_customers",
+  "type": "answer",
+  "answer_kind": "numeric",
+  "instruction": "How many distinct customers (non-null customer_id) placed at least one order in orders.csv?",
+  "input_files": [
+    "orders.csv"
+  ],
+  "gold_file": "gold.txt"
+}

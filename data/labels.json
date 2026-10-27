@@ -1,0 +1,578 @@
+[
+  {
+    "task_id": "A1_null_customer_ids",
+    "probe": "gold",
+    "should_pass": true,
+    "output_file": "probes/A1_null_customer_ids/gold.txt"
+  },
+  {
+    "task_id": "A1_null_customer_ids",
+    "probe": "paraphrase",
+    "should_pass": true,
+    "output_file": "probes/A1_null_customer_ids/paraphrase.txt"
+  },
+  {
+    "task_id": "A1_null_customer_ids",
+    "probe": "format_variant",
+    "should_pass": true,
+    "output_file": "probes/A1_null_customer_ids/format_variant.txt"
+  },
+  {
+    "task_id": "A1_null_customer_ids",
+    "probe": "noop",
+    "should_pass": false,
+    "output_file": "probes/A1_null_customer_ids/noop.txt"
+  },
+  {
+    "task_id": "A1_null_customer_ids",
+    "probe": "substring_trap",
+    "should_pass": false,
+    "output_file": "probes/A1_null_customer_ids/substring_trap.txt"
+  },
+  {
+    "task_id": "A1_null_customer_ids",
+    "probe": "look_done",
+    "should_pass": false,
+    "output_file": "probes/A1_null_customer_ids/look_done.txt"
+  },
+  {
+    "task_id": "A1_null_customer_ids",
+    "probe": "shuffled",
+    "should_pass": true,
+    "output_file": "probes/A1_null_customer_ids/shuffled.txt"
+  },
+  {
+    "task_id": "A1_null_customer_ids",
+    "probe": "partial",
+    "should_pass": false,
+    "output_file": "probes/A1_null_customer_ids/partial.txt"
+  },
+  {
+    "task_id": "A2_completed_revenue",
+    "probe": "gold",
+    "should_pass": true,
+    "output_file": "probes/A2_completed_revenue/gold.txt"
+  },
+  {
+    "task_id": "A2_completed_revenue",
+    "probe": "paraphrase",
+    "should_pass": true,
+    "output_file": "probes/A2_completed_revenue/paraphrase.txt"
+  },
+  {
+    "task_id": "A2_completed_revenue",
+    "probe": "format_variant",
+    "should_pass": true,
+    "output_file": "probes/A2_completed_revenue/format_variant.txt"
+  },
+  {
+    "task_id": "A2_completed_revenue",
+    "probe": "noop",
+    "should_pass": false,
+    "output_file": "probes/A2_completed_revenue/noop.txt"
+  },
+  {
+    "task_id": "A2_completed_revenue",
+    "probe": "substring_trap",
+    "should_pass": false,
+    "output_file": "probes/A2_completed_revenue/substring_trap.txt"
+  },
+  {
+    "task_id": "A2_completed_revenue",
+    "probe": "look_done",
+    "should_pass": false,
+    "output_file": "probes/A2_completed_revenue/look_done.txt"
+  },
+  {
+    "task_id": "A2_completed_revenue",
+    "probe": "shuffled",
+    "should_pass": true,
+    "output_file": "probes/A2_completed_revenue/shuffled.txt"
+  },
+  {
+    "task_id": "A2_completed_revenue",
+    "probe": "partial",
+    "should_pass": false,
+    "output_file": "probes/A2_completed_revenue/partial.txt"
+  },
+  {
+    "task_id": "A3_top_region",
+    "probe": "gold",
+    "should_pass": true,
+    "output_file": "probes/A3_top_region/gold.txt"
+  },
+  {
+    "task_id": "A3_top_region",
+    "probe": "paraphrase",
+    "should_pass": true,
+    "output_file": "probes/A3_top_region/paraphrase.txt"
+  },
+  {
+    "task_id": "A3_top_region",
+    "probe": "format_variant",
+    "should_pass": true,
+    "output_file": "probes/A3_top_region/format_variant.txt"
+  },
+  {
+    "task_id": "A3_top_region",
+    "probe": "noop",
+    "should_pass": false,
+    "output_file": "probes/A3_top_region/noop.txt"
+  },
+  {
+    "task_id": "A3_top_region",
+    "probe": "substring_trap",
+    "should_pass": false,
+    "output_file": "probes/A3_top_region/substring_trap.txt"
+  },
+  {
+    "task_id": "A3_top_region",
+    "probe": "look_done",
+    "should_pass": false,
+    "output_file": "probes/A3_top_region/look_done.txt"
+  },
+  {
+    "task_id": "A3_top_region",
+    "probe": "shuffled",
+    "should_pass": true,
+    "output_file": "probes/A3_top_region/shuffled.txt"
+  },
+  {
+    "task_id": "A3_top_region",
+    "probe": "partial",
+    "should_pass": false,
+    "output_file": "probes/A3_top_region/partial.txt"
+  },
+  {
+    "task_id": "A4_distinct_customers",
+    "probe": "gold",
+    "should_pass": true,
+    "output_file": "probes/A4_distinct_customers/gold.txt"
+  },
+  {
+    "task_id": "A4_distinct_customers",
+    "probe": "paraphrase",
+    "should_pass": true,
+    "output_file": "probes/A4_distinct_customers/paraphrase.txt"
+  },
+  {
+    "task_id": "A4_distinct_customers",
+    "probe": "format_variant",
+    "should_pass": true,
+    "output_file": "probes/A4_distinct_customers/format_variant.txt"
+  },
+  {
+    "task_id": "A4_distinct_customers",
+    "probe": "noop",
+    "should_pass": false,
+    "output_file": "probes/A4_distinct_customers/noop.txt"
+  },
+  {
+    "task_id": "A4_distinct_customers",
+    "probe": "substring_trap",
+    "should_pass": false,
+    "output_file": "probes/A4_distinct_customers/substring_trap.txt"
+  },
+  {
+    "task_id": "A4_distinct_customers",
+    "probe": "look_done",
+    "should_pass": false,
+    "output_file": "probes/A4_distinct_customers/look_done.txt"
+  },
+  {
+    "task_id": "A4_distinct_customers",
+    "probe": "shuffled",
+    "should_pass": true,
+    "output_file": "probes/A4_distinct_customers/shuffled.txt"
+  },
+  {
+    "task_id": "A4_distinct_customers",
+    "probe": "partial",
+    "should_pass": false,
+    "output_file": "probes/A4_distinct_customers/partial.txt"
+  },
+  {
+    "task_id": "T1_dedupe_customers",
+    "probe": "gold",
+    "should_pass": true,
+    "output_file": "probes/T1_dedupe_customers/gold.csv"
+  },
+  {
+    "task_id": "T1_dedupe_customers",
+    "probe": "paraphrase",
+    "should_pass": true,
+    "output_file": "probes/T1_dedupe_customers/paraphrase.csv"
+  },
+  {
+    "task_id": "T1_dedupe_customers",
+    "probe": "format_variant",
+    "should_pass": true,
+    "output_file": "probes/T1_dedupe_customers/format_variant.csv"
+  },
+  {
+    "task_id": "T1_dedupe_customers",
+    "probe": "noop",
+    "should_pass": false,
+    "output_file": "probes/T1_dedupe_customers/noop.csv"
+  },
+  {
+    "task_id": "T1_dedupe_customers",
+    "probe": "substring_trap",
+    "should_pass": false,
+    "output_file": "probes/T1_dedupe_customers/substring_trap.csv"
+  },
+  {
+    "task_id": "T1_dedupe_customers",
+    "probe": "look_done",
+    "should_pass": false,
+    "output_file": "probes/T1_dedupe_customers/look_done.csv"
+  },
+  {
+    "task_id": "T1_dedupe_customers",
+    "probe": "shuffled",
+    "should_pass": true,
+    "output_file": "probes/T1_dedupe_customers/shuffled.csv"
+  },
+  {
+    "task_id": "T1_dedupe_customers",
+    "probe": "partial",
+    "should_pass": false,
+    "output_file": "probes/T1_dedupe_customers/partial.csv"
+  },
+  {
+    "task_id": "T2_join_orders_customers",
+    "probe": "gold",
+    "should_pass": true,
+    "output_file": "probes/T2_join_orders_customers/gold.csv"
+  },
+  {
+    "task_id": "T2_join_orders_customers",
+    "probe": "paraphrase",
+    "should_pass": true,
+    "output_file": "probes/T2_join_orders_customers/paraphrase.csv"
+  },
+  {
+    "task_id": "T2_join_orders_customers",
+    "probe": "format_variant",
+    "should_pass": true,
+    "output_file": "probes/T2_join_orders_customers/format_variant.csv"
+  },
+  {
+    "task_id": "T2_join_orders_customers",
+    "probe": "noop",
+    "should_pass": false,
+    "output_file": "probes/T2_join_orders_customers/noop.csv"
+  },
+  {
+    "task_id": "T2_join_orders_customers",
+    "probe": "substring_trap",
+    "should_pass": false,
+    "output_file": "probes/T2_join_orders_customers/substring_trap.csv"
+  },
+  {
+    "task_id": "T2_join_orders_customers",
+    "probe": "look_done",
+    "should_pass": false,
+    "output_file": "probes/T2_join_orders_customers/look_done.csv"
+  },
+  {
+    "task_id": "T2_join_orders_customers",
+    "probe": "shuffled",
+    "should_pass": true,
+    "output_file": "probes/T2_join_orders_customers/shuffled.csv"
+  },
+  {
+    "task_id": "T2_join_orders_customers",
+    "probe": "partial",
+    "should_pass": false,
+    "output_file": "probes/T2_join_orders_customers/partial.csv"
+  },
+  {
+    "task_id": "T3_cast_types",
+    "probe": "gold",
+    "should_pass": true,
+    "output_file": "probes/T3_cast_types/gold.csv"
+  },
+  {
+    "task_id": "T3_cast_types",
+    "probe": "paraphrase",
+    "should_pass": true,
+    "output_file": "probes/T3_cast_types/paraphrase.csv"
+  },
+  {
+    "task_id": "T3_cast_types",
+    "probe": "format_variant",
+    "should_pass": true,
+    "output_file": "probes/T3_cast_types/format_variant.csv"
+  },
+  {
+    "task_id": "T3_cast_types",
+    "probe": "noop",
+    "should_pass": false,
+    "output_file": "probes/T3_cast_types/noop.csv"
+  },
+  {
+    "task_id": "T3_cast_types",
+    "probe": "substring_trap",
+    "should_pass": false,
+    "output_file": "probes/T3_cast_types/substring_trap.csv"
+  },
+  {
+    "task_id": "T3_cast_types",
+    "probe": "look_done",
+    "should_pass": false,
+    "output_file": "probes/T3_cast_types/look_done.csv"
+  },
+  {
+    "task_id": "T3_cast_types",
+    "probe": "shuffled",
+    "should_pass": true,
+    "output_file": "probes/T3_cast_types/shuffled.csv"
+  },
+  {
+    "task_id": "T3_cast_types",
+    "probe": "partial",
+    "should_pass": false,
+    "output_file": "probes/T3_cast_types/partial.csv"
+  },
+  {
+    "task_id": "T4_revenue_by_region",
+    "probe": "gold",
+    "should_pass": true,
+    "output_file": "probes/T4_revenue_by_region/gold.csv"
+  },
+  {
+    "task_id": "T4_revenue_by_region",
+    "probe": "paraphrase",
+    "should_pass": true,
+    "output_file": "probes/T4_revenue_by_region/paraphrase.csv"
+  },
+  {
+    "task_id": "T4_revenue_by_region",
+    "probe": "format_variant",
+    "should_pass": true,
+    "output_file": "probes/T4_revenue_by_region/format_variant.csv"
+  },
+  {
+    "task_id": "T4_revenue_by_region",
+    "probe": "noop",
+    "should_pass": false,
+    "output_file": "probes/T4_revenue_by_region/noop.csv"
+  },
+  {
+    "task_id": "T4_revenue_by_region",
+    "probe": "substring_trap",
+    "should_pass": false,
+    "output_file": "probes/T4_revenue_by_region/substring_trap.csv"
+  },
+  {
+    "task_id": "T4_revenue_by_region",
+    "probe": "look_done",
+    "should_pass": false,
+    "output_file": "probes/T4_revenue_by_region/look_done.csv"
+  },
+  {
+    "task_id": "T4_revenue_by_region",
+    "probe": "shuffled",
+    "should_pass": true,
+    "output_file": "probes/T4_revenue_by_region/shuffled.csv"
+  },
+  {
+    "task_id": "T4_revenue_by_region",
+    "probe": "partial",
+    "should_pass": false,
+    "output_file": "probes/T4_revenue_by_region/partial.csv"
+  },
+  {
+    "task_id": "T5_top_customers",
+    "probe": "gold",
+    "should_pass": true,
+    "output_file": "probes/T5_top_customers/gold.csv"
+  },
+  {
+    "task_id": "T5_top_customers",
+    "probe": "paraphrase",
+    "should_pass": true,
+    "output_file": "probes/T5_top_customers/paraphrase.csv"
+  },
+  {
+    "task_id": "T5_top_customers",
+    "probe": "format_variant",
+    "should_pass": true,
+    "output_file": "probes/T5_top_customers/format_variant.csv"
+  },
+  {
+    "task_id": "T5_top_customers",
+    "probe": "noop",
+    "should_pass": false,
+    "output_file": "probes/T5_top_customers/noop.csv"
+  },
+  {
+    "task_id": "T5_top_customers",
+    "probe": "substring_trap",
+    "should_pass": false,
+    "output_file": "probes/T5_top_customers/substring_trap.csv"
+  },
+  {
+    "task_id": "T5_top_customers",
+    "probe": "look_done",
+    "should_pass": false,
+    "output_file": "probes/T5_top_customers/look_done.csv"
+  },
+  {
+    "task_id": "T5_top_customers",
+    "probe": "shuffled",
+    "should_pass": false,
+    "output_file": "probes/T5_top_customers/shuffled.csv"
+  },
+  {
+    "task_id": "T5_top_customers",
+    "probe": "partial",
+    "should_pass": false,
+    "output_file": "probes/T5_top_customers/partial.csv"
+  },
+  {
+    "task_id": "S1_finalize_run",
+    "probe": "gold",
+    "should_pass": true,
+    "output_file": "probes/S1_finalize_run/gold.json"
+  },
+  {
+    "task_id": "S1_finalize_run",
+    "probe": "paraphrase",
+    "should_pass": true,
+    "output_file": "probes/S1_finalize_run/paraphrase.json"
+  },
+  {
+    "task_id": "S1_finalize_run",
+    "probe": "format_variant",
+    "should_pass": true,
+    "output_file": "probes/S1_finalize_run/format_variant.json"
+  },
+  {
+    "task_id": "S1_finalize_run",
+    "probe": "noop",
+    "should_pass": false,
+    "output_file": "probes/S1_finalize_run/noop.json"
+  },
+  {
+    "task_id": "S1_finalize_run",
+    "probe": "substring_trap",
+    "should_pass": false,
+    "output_file": "probes/S1_finalize_run/substring_trap.json"
+  },
+  {
+    "task_id": "S1_finalize_run",
+    "probe": "look_done",
+    "should_pass": false,
+    "output_file": "probes/S1_finalize_run/look_done.json"
+  },
+  {
+    "task_id": "S1_finalize_run",
+    "probe": "shuffled",
+    "should_pass": true,
+    "output_file": "probes/S1_finalize_run/shuffled.json"
+  },
+  {
+    "task_id": "S1_finalize_run",
+    "probe": "partial",
+    "should_pass": false,
+    "output_file": "probes/S1_finalize_run/partial.json"
+  },
+  {
+    "task_id": "S2_requeue_failed_run",
+    "probe": "gold",
+    "should_pass": true,
+    "output_file": "probes/S2_requeue_failed_run/gold.json"
+  },
+  {
+    "task_id": "S2_requeue_failed_run",
+    "probe": "paraphrase",
+    "should_pass": true,
+    "output_file": "probes/S2_requeue_failed_run/paraphrase.json"
+  },
+  {
+    "task_id": "S2_requeue_failed_run",
+    "probe": "format_variant",
+    "should_pass": true,
+    "output_file": "probes/S2_requeue_failed_run/format_variant.json"
+  },
+  {
+    "task_id": "S2_requeue_failed_run",
+    "probe": "noop",
+    "should_pass": false,
+    "output_file": "probes/S2_requeue_failed_run/noop.json"
+  },
+  {
+    "task_id": "S2_requeue_failed_run",
+    "probe": "substring_trap",
+    "should_pass": false,
+    "output_file": "probes/S2_requeue_failed_run/substring_trap.json"
+  },
+  {
+    "task_id": "S2_requeue_failed_run",
+    "probe": "look_done",
+    "should_pass": false,
+    "output_file": "probes/S2_requeue_failed_run/look_done.json"
+  },
+  {
+    "task_id": "S2_requeue_failed_run",
+    "probe": "shuffled",
+    "should_pass": true,
+    "output_file": "probes/S2_requeue_failed_run/shuffled.json"
+  },
+  {
+    "task_id": "S2_requeue_failed_run",
+    "probe": "partial",
+    "should_pass": false,
+    "output_file": "probes/S2_requeue_failed_run/partial.json"
+  },
+  {
+    "task_id": "S3_advance_watermark",
+    "probe": "gold",
+    "should_pass": true,
+    "output_file": "probes/S3_advance_watermark/gold.json"
+  },
+  {
+    "task_id": "S3_advance_watermark",
+    "probe": "paraphrase",
+    "should_pass": true,
+    "output_file": "probes/S3_advance_watermark/paraphrase.json"
+  },
+  {
+    "task_id": "S3_advance_watermark",
+    "probe": "format_variant",
+    "should_pass": true,
+    "output_file": "probes/S3_advance_watermark/format_variant.json"
+  },
+  {
+    "task_id": "S3_advance_watermark",
+    "probe": "noop",
+    "should_pass": false,
+    "output_file": "probes/S3_advance_watermark/noop.json"
+  },
+  {
+    "task_id": "S3_advance_watermark",
+    "probe": "substring_trap",
+    "should_pass": false,
+    "output_file": "probes/S3_advance_watermark/substring_trap.json"
+  },
+  {
+    "task_id": "S3_advance_watermark",
+    "probe": "look_done",
+    "should_pass": false,
+    "output_file": "probes/S3_advance_watermark/look_done.json"
+  },
+  {
+    "task_id": "S3_advance_watermark",
+    "probe": "shuffled",
+    "should_pass": true,
+    "output_file": "probes/S3_advance_watermark/shuffled.json"
+  },
+  {
+    "task_id": "S3_advance_watermark",
+    "probe": "partial",
+    "should_pass": false,
+    "output_file": "probes/S3_advance_watermark/partial.json"
+  }
+]
