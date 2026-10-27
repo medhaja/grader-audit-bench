@@ -1,0 +1,100 @@
+# Grader Audit: measuring false positives, false negatives and flakiness in agent benchmark graders
+
+**One-liner**
+A small harness that throws scripted probe agents (correct, paraphrased, no-op, gamed) at benchmark graders. It reports how often each grader gets the verdict wrong and why.
+
+## Problem (outside-in)
+From the outside, the hardest part of a credible benchmark looks like the grader, not the agent.
+
+- HUD's post [What is a good task?](https://www.hud.ai/research/what-is-a-good-task) says benchmarks lose trust mostly because of the task itself. Examples are graders that score the wrong thing, like a correct answer scored 0% because it was worded differently, and tasks with reward-hacking paths.
+- The [Browserbase x HUD post](https://www.browserbase.com/blog/browserbase-hud-frontier-evals) warns that agents can edit pages to fool graders that only check whether a task *looks* done.
+- On [OSWorld](https://github.com/xlang-ai/OSWorld/issues), which HUD hosts, issue #518 reports reward=1 from loose substring matching and #487 reports flaky scores from non-deterministic tests. The [OSWorld 2.0 release](https://github.com/xlang-ai/OSWorld-V2/releases) changed 14 tasks to stop reward hacking.
+- [HUD](https://www.hud.ai) already sells QA agents that audit traces for false positives, false negatives and reward hacking.
+
+The job post asks for benchmarks "credible to frontier labs." I want a repeatable way to show a grader is fair before a single model gets run against it.
+
+## Users and the job to be done
+- **Benchmark engineer:** "Before I ship a task, show me every way its grader can be fooled or can wrongly fail a correct answer."
+- **Reviewer or lab reader:** "Give me one table showing grader error rates so I can trust the scores."
+
+## Goals / Non-goals
+**Goals**
+- Measure false-positive rate, false-negative rate and flakiness per grader, using probes whose correct verdict we already know.
+- Compare a naive grader against a hardened one on the same tasks.
+- Show which probe type broke which grader.
+
+**Non-goals**
+- Running real frontier models.
+- Auditing HUD's actual benchmarks. This is independent work. It uses only public information and synthetic data. I have no access to HUD's data, systems or users.
+
+## Prototype scope
+The repo contains:
+1. A synthetic mini-benchmark of 12 data-engineering tasks. I picked this domain because I work in it every day: ADF-to-PySpark migration at Bizmetric.
+2. Two graders per task: `naive` (built from the failure patterns above) and `hardened`.
+3. Eight scripted probe agents, each producing an output with a known true label.
+4. An audit runner that computes the metrics and writes JSON plus a Markdown report.
+5. An optional semantic judge for free-text answers. It runs on a deterministic mock unless an API key is set.
+6. A one-page web UI.
+
+## Functional requirements
+1. `make demo` (or `python -m audit.serve`) generates data, runs the audit and serves the UI at `localhost:8000`. No API key is required.
+2. Each task defines: an instruction, input files, a gold output, a task type (`answer`, `table`, `state`), and two graders that return `{score: 0|1, reason}`.
+3. Probes: `gold`, `paraphrase` (same meaning, different wording), `format_variant` (column order, whitespace, `1.50` vs `1.5`, date formats), `noop` (empty or untouched output), `substring_trap` (wrong answer that contains the right token, like "not 42"), `look_done` (sets `status: "done"` or writes the right header with no rows), `shuffled` (correct rows in a different order), `partial` (right schema, 1 wrong row).
+4. Each probe/task pair carries a ground-truth label `should_pass`. False positive = scored 1 when `should_pass=false`. False negative = scored 0 when `should_pass=true`.
+5. Flakiness: each grader runs K=5 times with different seeds. Any verdict that changes across runs gets flagged. One task ships with a deliberately time-dependent grader so the check has something to catch.
+6. The runner outputs per-grader FP rate, FN rate and flaky rate, plus a probe × grader confusion matrix.
+7. `report.md` lists every wrong verdict with the task, probe, output snippet and grader reason.
+8. The semantic judge only gets called for `answer` tasks where the exact check fails. The mock judge uses normalized token overlap plus a numeric-equivalence rule. The judge's verdicts are logged separately so they can be checked against labels.
+9. Unit tests cover each hardened grader against all 8 probes.
+
+## Demo UI
+1. **Summary:** naive vs hardened side by side: FP %, FN %, flaky %. One sentence underneath, e.g. "Naive graders passed 3 of 12 no-op agents."
+2. **Matrix:** a probe × grader heatmap. Clicking a cell lists the cases behind it.
+3. **Case view:** task instruction, probe output, gold output, both grader verdicts and reasons, and a diff for table tasks.
+4. **Report:** the rendered `report.md` with a download button.
+
+## Data
+- 12 tasks generated by a seeded script: 4 `answer` (e.g. "How many rows have null `customer_id`?"), 5 `table` (dedupe, join, type-cast and aggregate small CSVs of 20-200 rows), 3 `state` (a JSON pipeline-run record the agent must update).
+- 96 probe outputs (12 × 8), each with a label.
+- Edge cases built in: nulls vs empty strings, floats that need tolerance, duplicate keys, Unicode names, a gold answer that is a substring of a wrong one, and a table whose correct row order doesn't matter.
+
+## Architecture
+`tasks/` (generator) → `probes/` (scripted agents) → `graders/` (naive, hardened, judge) → `runner` (K repeats, metrics) → `results.json` + `report.md` → FastAPI → static UI.
+
+Plain code handles almost everything: parsing CSVs, schema and data-equality checks, normalization, invariants (row counts, key uniqueness), and checking real data instead of a `done` flag. An LLM only helps with free-text answers where wording varies and an exact check gives false negatives. This is the same split I use at Bizmetric: deterministic translation first, LLM semantic validation only where it adds signal.
+
+## Tech choices
+- **Python + FastAPI:** what I ship with day to day, and Python matches HUD's SDK.
+- **Static HTML + a small amount of vanilla JS:** no build step, so the demo starts with one command. React (which HUD uses) would be easy to add later but isn't the point here.
+- **pandas** for table comparison. **pytest** for tests.
+- **LiteLLM** behind a flag for the optional judge. I've used it for multi-provider routing across Claude and OpenAI.
+- **Dockerfile** included, since HUD runs environments in Docker.
+
+## How we'd know it works
+- Hardened graders reach 0 FP and 0 FN on all 96 labeled probes. Naive graders show the failure modes I expect (substring, look-done, no-op passing, format false negatives).
+- The flakiness check flags the planted time-dependent grader, and only that one.
+- **Judge evaluation:** agreement with labels on the `answer` probes, reported separately for the mock and a real model if a key is present. Every disagreement is listed.
+- A mutation test: inject a known bug into a hardened grader (e.g. swap equality for `in`) and confirm the audit catches it.
+
+## Risks and open questions
+- Hand-written probes only find the failure modes I thought of. A next step would be LLM-generated adversarial probes, checked by a human.
+- Synthetic tasks are cleaner than real ones. Real graders run over browser or desktop state, not CSVs.
+- Open question: how does HUD label ground truth for its QA agents today? This harness assumes the labels are known.
+- About me: I'm in Bengaluru and would need US visa sponsorship to work in SF. I'm open to relocating, or to remote work on Singapore-overlap hours. I have no published papers or blogs yet. I plan to publish this audit as a write-up.
+
+## Build plan
+1. Scaffold the repo, `Makefile`, Dockerfile and seeded task generator.
+2. Write the 12 tasks with gold outputs.
+3. Write the 8 probe generators and their labels.
+4. Write the naive graders, then the hardened ones.
+5. Write the mock judge and the optional LiteLLM judge.
+6. Write the runner: K repeats, metrics, `results.json`, `report.md`.
+7. Write pytest tests, including the mutation test.
+8. Build the FastAPI endpoints and the 4 UI screens.
+9. Write the README with a 2-minute demo script.
+
+## Out of scope for the prototype
+- Running real agents or browsers.
+- Integrating with HUD's SDK or platform.
+- Large-scale or parallel execution.
+- Auditing any public benchmark's real graders. That is the natural follow-up, and it would be the published write-up.
