@@ -3,11 +3,15 @@
 import filecmp
 from pathlib import Path
 
+import pytest
+
 from audit import DATA_DIR
 from audit.generate import generate
 from audit.graders import hardened
 from audit.graders.judge import MockJudge
 from audit.runner import render_report, run_audit
+
+pytestmark = pytest.mark.integration
 
 
 def _case(results, task_id, probe):

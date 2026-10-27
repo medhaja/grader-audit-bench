@@ -87,18 +87,28 @@ Other commands: `make generate`, `make audit` (CLI summary + `results/`), `make 
 ## Tests
 
 ```bash
-python -m pytest -q     # 112 tests
+python -m pytest -q                  # all 152 tests (~7 s)
+python -m pytest -q -m unit          # 139 unit tests (or: make test-unit)
+python -m pytest -q -m integration   # 13 integration tests (or: make test-integration)
 ```
 
-The tests cover:
+**Unit tests** (`tests/test_units.py`, `tests/test_hardened.py`) cover:
 
 - every hardened grader against all 8 probes (96 parametrized cases)
+- the type normalizers: floats, nulls, dates, UTC timestamps, Unicode NFC
+- each naive grader's known blind spot
+- the seeded clock
+- the mock judge's rules
+- the optional LLM judge, against a fake `litellm` module (reply parsing and the fallback when the call fails), with no network
+
+**Integration tests** (`tests/test_audit.py`, `tests/test_integration_cli.py`, `tests/test_api.py`) cover:
+
+- the full generate → audit → report pipeline
 - the expected naive failure modes
 - the flakiness check flagging only the planted grader
-- the judge rules
-- the mutation test
-- the generator reproducing the committed data byte-for-byte
-- the API endpoints
+- the mutation test (`==` swapped for `in`)
+- the real CLI commands run in subprocesses, which must reproduce the committed `results/` byte-for-byte
+- every HTTP endpoint the UI uses
 
 ## Limitations and next steps
 

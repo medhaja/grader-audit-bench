@@ -9,6 +9,8 @@ from audit.generate import load_cases
 from audit.graders import GradeContext, hardened
 from audit.graders.judge import MockJudge
 
+pytestmark = pytest.mark.unit
+
 CASES = load_cases()
 
 

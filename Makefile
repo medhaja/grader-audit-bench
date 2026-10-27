@@ -1,4 +1,4 @@
-.PHONY: demo install generate audit test
+.PHONY: demo install generate audit test test-unit test-integration
 
 demo:
 	python -m audit.serve
@@ -14,3 +14,9 @@ audit:
 
 test:
 	python -m pytest -q
+
+test-unit:
+	python -m pytest -q -m unit
+
+test-integration:
+	python -m pytest -q -m integration
