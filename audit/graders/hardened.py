@@ -66,7 +66,7 @@ def normalize_cell(value: str, col_type: str):
         return None
     try:
         if col_type == "float":
-            return f"{round(float(v.replace(',', '')), 6):.6f}"
+            return repr(round(float(v.replace(",", "")), 6))  # 1.50, 1.5 and 1.5000001 -> "1.5"
         if col_type == "int":
             f = float(v)
             if not f.is_integer():

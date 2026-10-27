@@ -2291,7 +2291,7 @@
       0
      ],
      "flaky": false,
-     "reason": "a row differs (amount: expected '27.200000', got '28.200000')",
+     "reason": "a row differs (amount: expected '27.2', got '28.2')",
      "graded_by": null,
      "judge": null,
      "error": null
@@ -2603,7 +2603,7 @@
       0
      ],
      "flaky": false,
-     "reason": "a row differs (amount: expected '205.780000', got '206.780000')",
+     "reason": "a row differs (amount: expected '205.78', got '206.78')",
      "graded_by": null,
      "judge": null,
      "error": null
@@ -2915,7 +2915,7 @@
       0
      ],
      "flaky": false,
-     "reason": "a row differs (total_amount: expected '1537.270000', got '1538.270000')",
+     "reason": "a row differs (total_amount: expected '1537.27', got '1538.27')",
      "graded_by": null,
      "judge": null,
      "error": null
@@ -3227,7 +3227,7 @@
       0
      ],
      "flaky": false,
-     "reason": "row 5 differs (total_amount: expected '486.820000', got '487.820000')",
+     "reason": "row 5 differs (total_amount: expected '486.82', got '487.82')",
      "graded_by": null,
      "judge": null,
      "error": null

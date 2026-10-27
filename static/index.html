@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grader Audit</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%233b5bdb'/%3E%3Cpath d='M4 8.5l2.5 2.5L12 5' stroke='white' stroke-width='2' fill='none'/%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #f7f7f5; --panel: #ffffff; --ink: #1b1d21; --muted: #646a73; --line: #e3e3df;
+    --accent: #3b5bdb; --bad: #c92a2a; --bad-bg: #fff0f0; --good: #2b8a3e; --good-bg: #ebfbee;
+    --warn: #b35c00; --warn-bg: #fff4e6; --code: #f1f1ee;
+    --heat: 201, 42, 42;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #141518; --panel: #1c1e22; --ink: #e8e8e6; --muted: #9aa0a8; --line: #2e3137;
+      --accent: #7c97ff; --bad: #ff8787; --bad-bg: #3a1d1f; --good: #69db7c; --good-bg: #1b3022;
+      --warn: #ffc078; --warn-bg: #3a2b17; --code: #24272c;
+      --heat: 255, 107, 107;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 28px 20px 64px; }
+  header h1 { margin: 0; font-size: 26px; letter-spacing: -0.01em; }
+  header p { margin: 6px 0 0; color: var(--muted); max-width: 760px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .chip { font-size: 12.5px; padding: 3px 10px; border: 1px solid var(--line); border-radius: 999px;
+          background: var(--panel); color: var(--muted); }
+  nav { position: sticky; top: 0; z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line);
+        margin: 22px -20px 0; padding: 0 20px; display: flex; gap: 22px; }
+  nav a { color: var(--muted); text-decoration: none; padding: 10px 0; font-weight: 500; font-size: 14px;
+          border-bottom: 2px solid transparent; }
+  nav a:hover { color: var(--ink); }
+  section { margin-top: 30px; }
+  h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 12px; }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px; }
+
+  .summary { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .gcard h3 { margin: 0 0 12px; font-size: 17px; display: flex; align-items: center; gap: 8px; }
+  .gcard h3 small { font-weight: 400; color: var(--muted); font-size: 13px; }
+  .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .metric .v { font-size: 30px; font-weight: 650; font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .metric .l { font-size: 12.5px; color: var(--muted); }
+  .metric .c { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .v.bad { color: var(--bad); } .v.ok { color: var(--good); }
+  .headline { margin: 14px 2px 0; font-size: 16px; }
+
+  .split { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+  table.matrix { width: 100%; border-collapse: separate; border-spacing: 0 6px; }
+  .matrix th { text-align: left; font-size: 12.5px; color: var(--muted); font-weight: 500; padding: 0 8px; }
+  .matrix td { padding: 0; vertical-align: middle; }
+  .probe-name { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13.5px; }
+  .probe-desc { font-size: 12px; color: var(--muted); line-height: 1.35; }
+  .label { font-size: 12px; color: var(--muted); white-space: nowrap; padding: 0 8px !important; }
+  .cell { width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; cursor: pointer;
+          text-align: left; font: inherit; color: var(--ink); background: var(--panel); min-width: 120px; }
+  .cell:hover { border-color: var(--accent); }
+  .cell.sel { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .cell b { font-size: 15px; font-variant-numeric: tabular-nums; }
+  .cell span { display: block; font-size: 11.5px; color: var(--muted); }
+  .cell.zero b { color: var(--good); }
+  td.pcol { padding-right: 10px !important; }
+
+  .caselist h3 { margin: 0 0 4px; font-size: 15px; }
+  .caselist .sub { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
+  .crow { display: grid; grid-template-columns: 1fr auto auto; gap: 10px; align-items: center; width: 100%;
+          padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; margin-bottom: 6px;
+          background: var(--panel); color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
+  .crow:hover { border-color: var(--accent); }
+  .crow.sel { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .crow .tid { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; }
+  .crow .tt { font-size: 11.5px; color: var(--muted); }
+  .badge { font-size: 11.5px; font-weight: 600; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+  .b-pass { background: var(--good-bg); color: var(--good); }
+  .b-fail { background: var(--code); color: var(--muted); }
+  .b-FP, .b-FN { background: var(--bad-bg); color: var(--bad); }
+  .b-flaky { background: var(--warn-bg); color: var(--warn); }
+  .b-ok { background: transparent; color: var(--muted); font-weight: 500; }
+  .empty { color: var(--muted); font-size: 14px; padding: 18px 4px; }
+
+  .case-head { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: baseline; margin-bottom: 10px; }
+  .case-head .tid { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 15px; font-weight: 600; }
+  .instr { background: var(--code); border-radius: 8px; padding: 10px 12px; margin: 0 0 14px; }
+  .instr small { color: var(--muted); display: block; font-size: 12px; }
+  .verdicts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+  .vcard { border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
+  .vcard.err { border-color: var(--bad); }
+  .vcard h4 { margin: 0 0 6px; font-size: 14px; display: flex; gap: 8px; align-items: center; }
+  .vcard p { margin: 0; font-size: 13.5px; }
+  .runs { display: flex; gap: 4px; margin-top: 8px; align-items: center; font-size: 12px; color: var(--muted); }
+  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .dot.p { background: var(--good); } .dot.f { background: var(--line); border: 1px solid var(--muted); }
+  .io { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .io h4, .diff h4 { margin: 0 0 6px; font-size: 13px; color: var(--muted); font-weight: 500; }
+  pre { margin: 0; background: var(--code); border-radius: 8px; padding: 10px 12px; overflow: auto; max-height: 300px;
+        font: 12.5px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space: pre; }
+  .diff { margin-top: 14px; }
+  .diff table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
+  .diff th, .diff td { text-align: left; padding: 4px 8px; border-bottom: 1px solid var(--line);
+                       font-family: ui-monospace, Menlo, Consolas, monospace; }
+  .diff tr.out td { background: var(--bad-bg); } .diff tr.gold td { background: var(--good-bg); }
+  .diff .note { font-size: 13px; color: var(--muted); margin: 0; }
+
+  .report-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .btn { display: inline-block; background: var(--accent); color: #fff; text-decoration: none; font-weight: 550;
+         padding: 7px 14px; border-radius: 8px; font-size: 14px; }
+  .report { max-height: 640px; overflow: auto; }
+  .report h1 { font-size: 20px; margin-top: 0; } .report h2 { font-size: 16px; text-transform: none;
+         letter-spacing: 0; color: var(--ink); margin-top: 24px; } .report h3 { font-size: 14.5px; }
+  .report table { border-collapse: collapse; font-size: 13.5px; margin: 8px 0; }
+  .report th, .report td { border: 1px solid var(--line); padding: 4px 10px; text-align: left; }
+  .report code { background: var(--code); padding: 1px 4px; border-radius: 4px; font-size: 12.5px; }
+  .report pre code { background: none; padding: 0; }
+  footer { margin-top: 40px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); padding-top: 14px; }
+
+  @media (max-width: 860px) {
+    .summary, .split, .verdicts, .io { grid-template-columns: 1fr; }
+    .metric .v { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Grader Audit</h1>
+    <p>Scripted probe agents with known correct verdicts are run against two graders per task.
+       The audit counts how often each grader passes a wrong output (false positive), fails a correct one
+       (false negative), or changes its mind between runs (flaky).</p>
+    <div class="chips" id="chips"></div>
+  </header>
+
+  <nav>
+    <a href="#summary">Summary</a><a href="#matrix">Matrix</a><a href="#case">Case</a><a href="#report">Report</a>
+  </nav>
+
+  <section id="summary">
+    <h2>Summary</h2>
+    <div class="summary" id="cards"></div>
+    <p class="headline" id="headline"></p>
+  </section>
+
+  <section id="matrix">
+    <h2>Probe × grader</h2>
+    <div class="split">
+      <div class="panel">
+        <table class="matrix" id="matrixTable"></table>
+      </div>
+      <div class="panel caselist" id="caseList">
+        <div class="empty">Click a cell to list the 12 cases behind it.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="case">
+    <h2>Case</h2>
+    <div class="panel" id="caseView"><div class="empty">Pick a case from the list above.</div></div>
+  </section>
+
+  <section id="report">
+    <h2>Report</h2>
+    <div class="panel">
+      <div class="report-bar">
+        <span style="color:var(--muted);font-size:13.5px">The full <code>report.md</code>: every wrong verdict with its reason.</span>
+        <a class="btn" href="/report.md" download>Download report.md</a>
+      </div>
+      <div class="report" id="reportBody"></div>
+    </div>
+  </section>
+
+  <footer>Independent prototype built from public information and synthetic data. Not affiliated with HUD.</footer>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
+const pct = (x) => (100 * x).toFixed(1) + "%";
+const GRADERS = ["naive", "hardened"];
+let R = null, selCell = null, selCase = null;
+
+async function main() {
+  R = await (await fetch("/api/results")).json();
+  const m = R.meta;
+  $("chips").innerHTML = [
+    `${m.n_tasks} synthetic tasks`, `${m.probes.length} probes`, `${m.n_cases} labeled cases`,
+    `K = ${m.k} runs per grader`, `judge: ${m.judge_backend}`,
+  ].map((t) => `<span class="chip">${esc(t)}</span>`).join("");
+  renderSummary();
+  renderMatrix();
+  const rep = await (await fetch("/api/report")).json();
+  $("reportBody").innerHTML = rep.html;
+  // Open a striking cell by default so the page shows something useful immediately.
+  selectCell("substring_trap", "naive");
+}
+
+function renderSummary() {
+  $("cards").innerHTML = GRADERS.map((g) => {
+    const s = R.summary[g];
+    const metric = (label, rate, n, d) =>
+      `<div class="metric"><div class="v ${n ? "bad" : "ok"}">${pct(rate)}</div>
+        <div class="l">${label}</div><div class="c">${n} of ${d}</div></div>`;
+    const desc = g === "naive" ? "substring · header + row count · status flag" : "typed equality · invariants · judge";
+    return `<div class="panel gcard"><h3>${g[0].toUpperCase() + g.slice(1)} <small>${desc}</small></h3>
+      <div class="metrics">
+        ${metric("False positives", s.fp_rate, s.fp, s.negatives + " should-fail")}
+        ${metric("False negatives", s.fn_rate, s.fn, s.positives + " should-pass")}
+        ${metric("Flaky", s.flaky_rate, s.flaky, s.total + " cases")}
+      </div></div>`;
+  }).join("");
+  $("headline").textContent = R.headline;
+}
+
+function renderMatrix() {
+  const d = R.meta.probe_descriptions;
+  let html = `<tr><th>Probe</th><th>Should pass</th>${GRADERS.map((g) => `<th>${g}</th>`).join("")}</tr>`;
+  for (const p of R.meta.probes) {
+    const row = R.matrix[p];
+    html += `<tr><td class="pcol"><div class="probe-name">${p}</div><div class="probe-desc">${esc(d[p])}</div></td>
+      <td class="label">${row.naive.should_pass}/${row.naive.total}</td>`;
+    for (const g of GRADERS) {
+      const c = row[g];
+      const alpha = c.wrong ? 0.12 + 0.6 * (c.wrong / c.total) : 0;
+      const parts = [];
+      if (c.fp) parts.push(`${c.fp} FP`);
+      if (c.fn) parts.push(`${c.fn} FN`);
+      if (c.flaky) parts.push(`${c.flaky} flaky`);
+      html += `<td><button class="cell ${c.wrong ? "" : "zero"}" data-p="${p}" data-g="${g}"
+        style="background: ${c.wrong ? `rgba(var(--heat), ${alpha.toFixed(2)})` : "var(--panel)"}">
+        <b>${c.wrong} wrong</b><span>${parts.join(" · ") || "all correct"}</span></button></td>`;
+    }
+    html += `</tr>`;
+  }
+  $("matrixTable").innerHTML = html;
+  $("matrixTable").querySelectorAll(".cell").forEach((b) => b.onclick = () => selectCell(b.dataset.p, b.dataset.g));
+}
+
+function selectCell(probe, grader) {
+  selCell = {probe, grader};
+  document.querySelectorAll(".cell").forEach((b) => b.classList.toggle("sel", b.dataset.p === probe && b.dataset.g === grader));
+  const cases = R.cases.filter((c) => c.probe === probe)
+    .sort((a, b) => (!!b.verdicts[grader].error - !!a.verdicts[grader].error) || a.task_id.localeCompare(b.task_id));
+  const wrong = cases.filter((c) => c.verdicts[grader].error).length;
+  $("caseList").innerHTML = `<h3><span class="probe-name">${probe}</span> × ${grader}</h3>
+    <div class="sub">${wrong} of ${cases.length} verdicts wrong. Wrong ones first.</div>` +
+    cases.map((c) => {
+      const v = c.verdicts[grader];
+      const verdict = `<span class="badge ${v.score ? "b-pass" : "b-fail"}">${v.score ? "passed" : "failed"}</span>`;
+      const tag = v.error ? `<span class="badge b-${v.error}">${v.error}</span>`
+        : v.flaky ? `<span class="badge b-flaky">flaky</span>` : `<span class="badge b-ok">correct</span>`;
+      return `<button class="crow" data-t="${c.task_id}" data-p="${c.probe}">
+        <span><span class="tid">${c.task_id}</span><br><span class="tt">${c.task_type} · should ${c.should_pass ? "pass" : "fail"}</span></span>
+        ${verdict}${tag}</button>`;
+    }).join("");
+  $("caseList").querySelectorAll(".crow").forEach((b) => b.onclick = () => showCase(b.dataset.t, b.dataset.p, true));
+  const first = cases[0];
+  showCase(first.task_id, first.probe, false);
+}
+
+async function showCase(taskId, probe, scroll) {
+  selCase = {taskId, probe};
+  document.querySelectorAll(".crow").forEach((b) => b.classList.toggle("sel", b.dataset.t === taskId && b.dataset.p === probe));
+  const c = await (await fetch(`/api/case/${encodeURIComponent(taskId)}/${encodeURIComponent(probe)}`)).json();
+  const vcards = GRADERS.map((g) => {
+    const v = c.verdicts[g];
+    const tag = v.error ? `<span class="badge b-${v.error}">${v.error === "FP" ? "false positive" : "false negative"}</span>`
+      : `<span class="badge b-ok">correct</span>`;
+    const flaky = v.flaky ? `<span class="badge b-flaky">flaky</span>` : "";
+    const dots = v.runs.map((s) => `<span class="dot ${s ? "p" : "f"}" title="${s ? "pass" : "fail"}"></span>`).join("");
+    return `<div class="vcard ${v.error ? "err" : ""}">
+      <h4>${g} <span class="badge ${v.score ? "b-pass" : "b-fail"}">${v.score ? "passed" : "failed"}</span> ${tag} ${flaky}</h4>
+      <p>${esc(v.reason)}</p>
+      <div class="runs">${dots}<span>&nbsp;${v.runs.length} runs (seeds 0–${v.runs.length - 1})</span></div></div>`;
+  }).join("");
+  let diff = "";
+  if (c.diff) {
+    const d = c.diff;
+    if (d.error) {
+      diff = `<div class="diff"><h4>Table diff (hardened normalization)</h4><p class="note">Could not normalize output: ${esc(d.error)}</p></div>`;
+    } else if (!d.only_in_output.length && !d.only_in_gold.length) {
+      diff = `<div class="diff"><h4>Table diff (hardened normalization)</h4><p class="note">Same rows as gold after normalization${d.order_differs ? ", but in a different order, and order matters for this task." : "."}</p></div>`;
+    } else {
+      const rows = (list, cls, label) => list.slice(0, 20).map((r) =>
+        `<tr class="${cls}"><td>${label}</td>${r.map((v) => `<td>${v === null ? "<i>null</i>" : esc(v)}</td>`).join("")}</tr>`).join("");
+      const more = Math.max(0, d.only_in_output.length - 20) + Math.max(0, d.only_in_gold.length - 20);
+      diff = `<div class="diff"><h4>Table diff (hardened normalization): ${d.only_in_output.length} row(s) only in output, ${d.only_in_gold.length} only in gold</h4>
+        <table><tr><th></th>${d.columns.map((x) => `<th>${esc(x)}</th>`).join("")}</tr>
+        ${rows(d.only_in_output, "out", "− output")}${rows(d.only_in_gold, "gold", "+ gold")}</table>
+        ${more ? `<p class="note">…and ${more} more.</p>` : ""}</div>`;
+    }
+  }
+  const show = (s) => s === "" ? "(empty output)" : s.replace(/\r\n/g, "↵\n");
+  $("caseView").innerHTML = `
+    <div class="case-head"><span class="tid">${esc(c.task_id)}</span>
+      <span class="probe-name">probe: ${esc(c.probe)}</span>
+      <span class="badge ${c.should_pass ? "b-pass" : "b-fail"}">label: should ${c.should_pass ? "pass" : "fail"}</span>
+      <span class="chip">${c.task_type}</span></div>
+    <div class="instr"><small>Task instruction · inputs: ${c.input_files.map(esc).join(", ")}</small>${esc(c.instruction)}</div>
+    <div class="verdicts">${vcards}</div>
+    <div class="io"><div><h4>Probe output</h4><pre>${esc(show(c.output))}</pre></div>
+      <div><h4>Gold output</h4><pre>${esc(show(c.gold))}</pre></div></div>
+    ${diff}`;
+  if (scroll) $("case").scrollIntoView({behavior: "smooth"});
+}
+
+main().catch((e) => { document.body.insertAdjacentHTML("afterbegin", `<p style="color:red;padding:20px">Failed to load: ${esc(e)}</p>`); });
+</script>
+</body>
+</html>
