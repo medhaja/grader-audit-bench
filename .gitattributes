@@ -1,0 +1,3 @@
+* text=auto eol=lf
+# Fixtures are compared byte-for-byte (one probe uses CRLF on purpose): never convert them.
+data/** -text
