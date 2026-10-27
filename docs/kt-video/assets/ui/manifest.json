@@ -1,0 +1,374 @@
+{
+  "source": "http://localhost:8000",
+  "snapshot_sha256": "de8c65a465aa0af86bbad30e434a2394a2f409fc9044c76a062d5505c10eabc0",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "device_scale_factor": 2,
+  "color_scheme": "dark",
+  "captures": {
+    "summary": {
+      "file": "summary.png",
+      "root": "#summary",
+      "w": 1140,
+      "h": 215.5,
+      "rects": {
+        "naive_card": {
+          "x": 0,
+          "y": 31.5,
+          "w": 562,
+          "h": 146
+        },
+        "hardened_card": {
+          "x": 578,
+          "y": 31.5,
+          "w": 562,
+          "h": 146
+        },
+        "naive_fp": {
+          "x": 19,
+          "y": 88,
+          "w": 166.65625,
+          "h": 70.5
+        },
+        "naive_fn": {
+          "x": 197.65625,
+          "y": 88,
+          "w": 166.671875,
+          "h": 70.5
+        },
+        "naive_flaky": {
+          "x": 376.328125,
+          "y": 88,
+          "w": 166.671875,
+          "h": 70.5
+        },
+        "headline": {
+          "x": 2,
+          "y": 191.5,
+          "w": 1136,
+          "h": 24
+        }
+      }
+    },
+    "matrix": {
+      "file": "matrix.png",
+      "root": "#matrix .split",
+      "w": 1140,
+      "h": 922.75,
+      "rects": {
+        "heatmap": {
+          "x": 19,
+          "y": 19,
+          "w": 537.703125,
+          "h": 592.6875
+        },
+        "cell_trap_naive": {
+          "x": 316.6875,
+          "y": 351.15625,
+          "w": 120,
+          "h": 57.75
+        },
+        "naive_col_head": {
+          "x": 316.6875,
+          "y": 25,
+          "w": 120,
+          "h": 37.5
+        },
+        "case_list": {
+          "x": 591.703125,
+          "y": 0,
+          "w": 548.296875,
+          "h": 922.75
+        },
+        "row_A1": {
+          "x": 610.703125,
+          "y": 75.75,
+          "w": 510.296875,
+          "h": 63
+        }
+      }
+    },
+    "case_A1_substring_trap": {
+      "file": "case_A1_substring_trap.png",
+      "root": "#caseView",
+      "w": 1140,
+      "h": 326.375,
+      "rects": {
+        "instr": {
+          "x": 19,
+          "y": 55.75,
+          "w": 1102,
+          "h": 60.5
+        },
+        "naive": {
+          "x": 19,
+          "y": 130.25,
+          "w": 545,
+          "h": 99.5
+        },
+        "hardened": {
+          "x": 576,
+          "y": 130.25,
+          "w": 545,
+          "h": 99.5
+        },
+        "naive_runs": {
+          "x": 32,
+          "y": 198.75,
+          "w": 519,
+          "h": 18
+        },
+        "output": {
+          "x": 19,
+          "y": 243.75,
+          "w": 545,
+          "h": 63.625
+        },
+        "gold": {
+          "x": 576,
+          "y": 243.75,
+          "w": 545,
+          "h": 63.625
+        },
+        "diff": null
+      }
+    },
+    "case_T4_partial": {
+      "file": "case_T4_partial.png",
+      "root": "#caseView",
+      "w": 1140,
+      "h": 544.125,
+      "rects": {
+        "instr": {
+          "x": 19,
+          "y": 55.75,
+          "w": 1102,
+          "h": 83
+        },
+        "naive": {
+          "x": 19,
+          "y": 152.75,
+          "w": 545,
+          "h": 99.5
+        },
+        "hardened": {
+          "x": 576,
+          "y": 152.75,
+          "w": 545,
+          "h": 99.5
+        },
+        "naive_runs": {
+          "x": 32,
+          "y": 221.25,
+          "w": 519,
+          "h": 18
+        },
+        "output": {
+          "x": 19,
+          "y": 266.25,
+          "w": 545,
+          "h": 136.125
+        },
+        "gold": {
+          "x": 576,
+          "y": 266.25,
+          "w": 545,
+          "h": 136.125
+        },
+        "diff": {
+          "x": 19,
+          "y": 416.375,
+          "w": 1102,
+          "h": 108.75
+        }
+      }
+    },
+    "case_A2_paraphrase": {
+      "file": "case_A2_paraphrase.png",
+      "root": "#caseView",
+      "w": 1140,
+      "h": 326.375,
+      "rects": {
+        "instr": {
+          "x": 19,
+          "y": 55.75,
+          "w": 1102,
+          "h": 60.5
+        },
+        "naive": {
+          "x": 19,
+          "y": 130.25,
+          "w": 545,
+          "h": 99.5
+        },
+        "hardened": {
+          "x": 576,
+          "y": 130.25,
+          "w": 545,
+          "h": 99.5
+        },
+        "naive_runs": {
+          "x": 32,
+          "y": 198.75,
+          "w": 519,
+          "h": 18
+        },
+        "output": {
+          "x": 19,
+          "y": 243.75,
+          "w": 545,
+          "h": 63.625
+        },
+        "gold": {
+          "x": 576,
+          "y": 243.75,
+          "w": 545,
+          "h": 63.625
+        },
+        "diff": null
+      }
+    },
+    "case_T5_shuffled": {
+      "file": "case_T5_shuffled.png",
+      "root": "#caseView",
+      "w": 1140,
+      "h": 518.75,
+      "rects": {
+        "instr": {
+          "x": 19,
+          "y": 55.75,
+          "w": 1102,
+          "h": 83
+        },
+        "naive": {
+          "x": 19,
+          "y": 152.75,
+          "w": 545,
+          "h": 119.75
+        },
+        "hardened": {
+          "x": 576,
+          "y": 152.75,
+          "w": 545,
+          "h": 119.75
+        },
+        "naive_runs": {
+          "x": 32,
+          "y": 221.25,
+          "w": 519,
+          "h": 18
+        },
+        "output": {
+          "x": 19,
+          "y": 286.5,
+          "w": 545,
+          "h": 154.25
+        },
+        "gold": {
+          "x": 576,
+          "y": 286.5,
+          "w": 545,
+          "h": 154.25
+        },
+        "diff": {
+          "x": 19,
+          "y": 454.75,
+          "w": 1102,
+          "h": 45
+        }
+      }
+    },
+    "case_S1_gold": {
+      "file": "case_S1_gold.png",
+      "root": "#caseView",
+      "w": 1140,
+      "h": 584.5,
+      "rects": {
+        "instr": {
+          "x": 19,
+          "y": 55.75,
+          "w": 1102,
+          "h": 83
+        },
+        "naive": {
+          "x": 19,
+          "y": 152.75,
+          "w": 545,
+          "h": 99.5
+        },
+        "hardened": {
+          "x": 576,
+          "y": 152.75,
+          "w": 545,
+          "h": 99.5
+        },
+        "naive_runs": {
+          "x": 32,
+          "y": 221.25,
+          "w": 519,
+          "h": 18
+        },
+        "output": {
+          "x": 19,
+          "y": 266.25,
+          "w": 545,
+          "h": 299.25
+        },
+        "gold": {
+          "x": 576,
+          "y": 266.25,
+          "w": 545,
+          "h": 299.25
+        },
+        "diff": null
+      }
+    },
+    "report_top": {
+      "file": "report_top.png",
+      "root": "#report .panel",
+      "w": 1140,
+      "h": 723,
+      "rects": {
+        "download": {
+          "x": 960.234375,
+          "y": 19,
+          "w": 160.765625,
+          "h": 35
+        },
+        "summary_table": {
+          "x": 19,
+          "y": 267.75,
+          "w": 395.265625,
+          "h": 88.75
+        }
+      }
+    },
+    "report_flaky": {
+      "file": "report_flaky.png",
+      "root": "#report .panel",
+      "w": 1140,
+      "h": 723,
+      "rects": {
+        "flaky_heading": {
+          "x": 19,
+          "y": 308,
+          "w": 1102,
+          "h": 24
+        },
+        "flaky_table": {
+          "x": 19,
+          "y": 344,
+          "w": 432.890625,
+          "h": 220.75
+        }
+      }
+    }
+  },
+  "report_download": {
+    "status": 200,
+    "content_disposition": "attachment; filename=\"grader-audit-report.md\"",
+    "matches_snapshot_report": true
+  }
+}

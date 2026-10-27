@@ -1,0 +1,9 @@
+# Local voiceover environment (Python 3.12). Install with:
+#   uv venv --python 3.12 .venv && uv pip install --python .venv/Scripts/python.exe -r requirements-tts.txt
+# (on macOS/Linux use .venv/bin/python). CPU-only torch is enough.
+# espeak-ng is NOT installed system-wide: misaki uses the espeak-ng library bundled in espeakng-loader.
+# First run downloads the Kokoro-82M weights from Hugging Face and spaCy's en_core_web_sm model.
+kokoro==0.9.4
+misaki==0.9.4
+soundfile==0.13.1
+torch==2.14.1

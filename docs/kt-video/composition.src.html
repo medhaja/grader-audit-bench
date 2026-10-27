@@ -1,0 +1,652 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Grader Audit KT video</title>
+<!--
+  Deterministic 1920x1080 composition. render.mjs inlines data, fonts and images in place of the
+  two placeholders below and writes out/composition.html. Every frame is a pure function of time:
+  window.renderAt(seconds). No CSS transitions, no animations, no randomness, no network.
+-->
+<style>
+/*__FONTS__*/
+:root {
+  --bg: #0B1020; --panel: #111933; --panel2: #16203F; --line: #24304F;
+  --ink: #F8FAFC; --muted: #94A3B8; --cyan: #38BDF8; --green: #34D399; --amber: #FBBF24; --red: #F87171;
+  --sans: "Inter", "Segoe UI", system-ui, sans-serif; --mono: "JetBrains Mono", Consolas, monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; transition: none !important; animation: none !important;
+  font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; } /* show real text verbatim (no != → ≠) */
+html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); color: var(--ink);
+  font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+#stage { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); }
+.scene { position: absolute; inset: 0; opacity: 0; }
+.abs { position: absolute; }
+.chapter { position: absolute; left: 120px; top: 56px; font-size: 22px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); font-weight: 600; }
+.chapter b { color: var(--cyan); font-weight: 600; margin-right: 14px; }
+.foot { position: absolute; right: 120px; bottom: 40px; font-size: 18px; color: var(--muted); letter-spacing: .04em; }
+.card { position: absolute; background: var(--panel); border: 1.5px solid var(--line); border-radius: 18px; padding: 28px 34px; }
+.mono { font-family: var(--mono); }
+.muted { color: var(--muted); }
+.lbl { font-size: 22px; color: var(--muted); letter-spacing: .03em; }
+.big { font-family: var(--mono); font-size: 120px; font-weight: 500; line-height: 1; }
+.badge { display: inline-block; font-size: 22px; font-weight: 700; padding: 6px 16px; border-radius: 999px; letter-spacing: .03em; }
+.b-red { background: rgba(248,113,113,.16); color: var(--red); border: 1.5px solid rgba(248,113,113,.6); }
+.b-green { background: rgba(52,211,153,.14); color: var(--green); border: 1.5px solid rgba(52,211,153,.55); }
+.b-amber { background: rgba(251,191,36,.14); color: var(--amber); border: 1.5px solid rgba(251,191,36,.6); }
+.b-cyan { background: rgba(56,189,248,.12); color: var(--cyan); border: 1.5px solid rgba(56,189,248,.55); }
+.edge-red { border-color: var(--red) !important; box-shadow: 0 0 0 1px var(--red) inset; }
+.edge-amber { border-color: var(--amber) !important; }
+.edge-cyan { border-color: var(--cyan) !important; }
+.edge-green { border-color: var(--green) !important; }
+.shot { position: absolute; overflow: hidden; border-radius: 16px; border: 1.5px solid var(--line); background: #0E1424;
+  box-shadow: 0 30px 80px rgba(0,0,0,.45); }
+.shot img { position: absolute; left: 0; top: 0; transform-origin: 0 0; image-rendering: auto; }
+.shot .hl { position: absolute; border-radius: 10px; border: 4px solid var(--cyan); }
+.shot .tag { position: absolute; left: 18px; top: 16px; }
+.note { position: absolute; font-size: 22px; color: var(--muted); }
+.callout { position: absolute; font-size: 24px; line-height: 1.45; }
+.callout code, .q { font-family: var(--mono); font-size: 22px; color: var(--ink); background: var(--panel2);
+  padding: 3px 10px; border-radius: 8px; }
+.arrow { position: absolute; height: 3px; background: var(--cyan); }
+.arrow::after { content: ""; position: absolute; right: -2px; top: -7px; border-left: 14px solid var(--cyan);
+  border-top: 8px solid transparent; border-bottom: 8px solid transparent; }
+.dot { display: inline-block; width: 26px; height: 26px; border-radius: 50%; margin-right: 10px; vertical-align: middle; }
+.d-pass { background: var(--green); } .d-fail { background: transparent; border: 3px solid var(--red); }
+.grid-cell { position: absolute; border-radius: 8px; font-family: var(--mono); font-size: 17px; display: flex;
+  align-items: center; justify-content: center; }
+.code { position: absolute; background: #0D1428; border: 1.5px solid var(--line); border-radius: 16px; padding: 26px 0; }
+.code .ln { position: relative; display: block; font-family: var(--mono); font-size: 21px; line-height: 40px;
+  white-space: pre; padding: 0 30px 0 92px; color: #CBD5E1; }
+.code .ln i { position: absolute; left: 24px; width: 50px; text-align: right; font-style: normal; color: #475569; }
+.code .ln .hlbar { position: absolute; left: 0; right: 0; top: 0; bottom: 0; background: rgba(56,189,248,.14);
+  border-left: 5px solid var(--cyan); opacity: 0; }
+.code .ln span.t { position: relative; }
+.node { position: absolute; width: 300px; height: 118px; background: var(--panel); border: 2px solid var(--line);
+  border-radius: 16px; padding: 18px 20px; }
+.node .fn { font-family: var(--mono); font-size: 21px; color: var(--ink); white-space: nowrap; }
+.node .sub { font-size: 18px; color: var(--muted); margin-top: 8px; line-height: 1.3; }
+.node .num { position: absolute; right: 14px; top: 12px; font-size: 16px; color: #475569; font-family: var(--mono); }
+.col h3 { font-size: 26px; margin-bottom: 18px; letter-spacing: .02em; }
+.col li { font-size: 24px; line-height: 1.4; margin: 0 0 14px 28px; color: #E2E8F0; }
+#controls { display: none; }
+body.preview #controls { display: flex; position: fixed; left: 0; right: 0; bottom: 0; height: 56px; z-index: 99;
+  background: rgba(0,0,0,.85); align-items: center; gap: 14px; padding: 0 16px; font: 16px var(--sans); color: #fff; }
+#controls input[type=range] { flex: 1; }
+#controls button { font: 16px var(--sans); padding: 6px 14px; }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="controls"><button id="play">Play</button><input id="scrub" type="range" min="0" step="0.01" value="0"><span id="clock">0:00.00</span></div>
+<script>
+/*__DATA__*/
+</script>
+<script>
+"use strict";
+// ---------------------------------------------------------------------------------------------
+// Data injected by render.mjs: TIMING (timing.json), RESULTS (subset of snapshot/results.json),
+// TASKS (instructions), MANIFEST (capture rects), CODE (verbatim source excerpt), ASSETS (images),
+// EVIDENCE (values recorded in evidence.md that are not in results.json).
+// ---------------------------------------------------------------------------------------------
+const T = window.TIMING, R = window.RESULTS, M = window.MANIFEST, A = window.ASSETS, EV = window.EVIDENCE;
+const W = 1920, H = 1080;
+
+// ---- math helpers -------------------------------------------------------------------------------
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const ease = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+const ramp = (t, t0, d = 0.5) => ease(clamp((t - t0) / d));
+const lerp = (a, b, k) => a + (b - a) * k;
+const caseOf = (task, probe) => R.cases.find((c) => c.task_id === task && c.probe === probe);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+// ---- word-timestamp beats -----------------------------------------------------------------------
+// at(sceneNo, phrase) returns the global time (s) at which Kokoro started speaking `phrase` in that
+// scene, from timing.json word timestamps. A missing phrase throws, so a script edit can't silently
+// desynchronize a beat.
+const norm = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "");
+const wordIndex = {};
+function at(n, phrase) {
+  const sc = T.scenes[n - 1];
+  if (!wordIndex[n]) {
+    let s = "", map = [];
+    sc.words.forEach((w, i) => { const k = norm(w[0]); s += k; for (let j = 0; j < k.length; j++) map.push(i); });
+    wordIndex[n] = { s, map };
+  }
+  const { s, map } = wordIndex[n];
+  const pos = s.indexOf(norm(phrase));
+  if (pos < 0) throw new Error(`beat phrase not found in scene ${n}: "${phrase}"`);
+  return sc.words[map[pos]][1];
+}
+
+// ---- DOM helpers --------------------------------------------------------------------------------
+const stage = document.getElementById("stage");
+function el(parent, cls, html = "", style = {}) {
+  const e = document.createElement("div");
+  if (cls) e.className = cls;
+  e.innerHTML = html;
+  Object.assign(e.style, style);
+  parent.appendChild(e);
+  return e;
+}
+const px = (v) => `${v}px`;
+function show(e, k, dy = 18) {
+  e.style.opacity = k.toFixed(4);
+  e.style.transform = `translateY(${((1 - k) * dy).toFixed(2)}px)`;
+}
+
+// ---- screenshot frames with deterministic zoom and highlights ------------------------------------
+class Shot {
+  constructor(parent, name, x, y, w, h) {
+    const cap = M.captures[name];
+    if (!cap) throw new Error(`no capture ${name}`);
+    this.cap = cap; this.w = w; this.h = h;
+    this.root = el(parent, "shot", "", { left: px(x), top: px(y), width: px(w), height: px(h) });
+    this.img = document.createElement("img");
+    this.img.src = A[cap.file];
+    this.img.style.width = px(cap.w);
+    this.img.style.height = px(cap.h);
+    this.root.appendChild(this.img);
+    this.hls = [];
+  }
+  rect(name) {
+    const r = this.cap.rects[name];
+    if (!r) throw new Error(`no rect ${name} in ${this.cap.file}`);
+    return r;
+  }
+  // focus: rect (css px of the capture) or null; k: 0 = whole capture, 1 = fully focused.
+  view(focus, k, pad = 24, maxScale = 2.4) {
+    const cw = this.cap.w, ch = this.cap.h;
+    const s0 = Math.min(this.w / cw, this.h / ch);
+    let s = s0, cx = cw / 2, cy = ch / 2;
+    if (focus && k > 0) {
+      const sf = Math.min(this.w / (focus.w + 2 * pad), this.h / (focus.h + 2 * pad), maxScale);
+      s = lerp(s0, Math.max(s0, sf), k);
+      cx = lerp(cw / 2, focus.x + focus.w / 2, k);
+      cy = lerp(ch / 2, focus.y + focus.h / 2, k);
+    }
+    // Keep the capture covering the frame where possible.
+    const vw = this.w / s, vh = this.h / s;
+    if (vw < cw) cx = clamp(cx, vw / 2, cw - vw / 2); else cx = cw / 2;
+    if (vh < ch) cy = clamp(cy, vh / 2, ch - vh / 2); else cy = ch / 2;
+    this.s = s; this.tx = this.w / 2 - cx * s; this.ty = this.h / 2 - cy * s;
+    this.img.style.transform = `translate(${this.tx.toFixed(2)}px, ${this.ty.toFixed(2)}px) scale(${s.toFixed(5)})`;
+    return this;
+  }
+  // Draw highlight i around a capture rect with a given color and opacity.
+  hl(i, r, color, alpha, pad = 6) {
+    while (this.hls.length <= i) this.hls.push(el(this.root, "hl"));
+    const h = this.hls[i];
+    // Clamp to the frame so a highlight is never clipped by the frame edge.
+    const x0 = Math.max(3, r.x * this.s + this.tx - pad), y0 = Math.max(3, r.y * this.s + this.ty - pad);
+    const x1 = Math.min(this.w - 3, (r.x + r.w) * this.s + this.tx + pad), y1 = Math.min(this.h - 3, (r.y + r.h) * this.s + this.ty + pad);
+    h.style.left = px(x0); h.style.top = px(y0); h.style.width = px(x1 - x0); h.style.height = px(y1 - y0);
+    h.style.borderColor = color;
+    h.style.opacity = alpha.toFixed(4);
+    return this;
+  }
+  hide(fromIndex = 0) { for (let i = fromIndex; i < this.hls.length; i++) this.hls[i].style.opacity = "0"; return this; }
+  opacity(k) { this.root.style.opacity = k.toFixed(4); return this; }
+}
+const union = (...rs) => {
+  const x = Math.min(...rs.map((r) => r.x)), y = Math.min(...rs.map((r) => r.y));
+  const x2 = Math.max(...rs.map((r) => r.x + r.w)), y2 = Math.max(...rs.map((r) => r.y + r.h));
+  return { x, y, w: x2 - x, h: y2 - y };
+};
+
+const COLORS = { cyan: "#38BDF8", green: "#34D399", amber: "#FBBF24", red: "#F87171" };
+const SHORT = ["Can we trust the grader?", "What Grader Audit tests", "The synthetic test bench", "Run the audit",
+  "A false positive", "A false negative", "Flakiness", "How the report is produced", "Why the hardened checks differ",
+  "Evidence and limits"];
+
+// ---- scene construction -------------------------------------------------------------------------
+const scenes = [];
+function scene(n, build) {
+  const root = el(stage, "scene");
+  el(root, "chapter", `<b>${String(n).padStart(2, "0")}</b>${esc(SHORT[n - 1])}`);
+  el(root, "foot", "Synthetic tasks · scripted probes · mock judge");
+  const render = build(root, T.scenes[n - 1]);
+  scenes.push({ n, root, render, sc: T.scenes[n - 1] });
+}
+
+// 1 · Can we trust the grader? ----------------------------------------------------------------------
+scene(1, (root, sc) => {
+  const c = caseOf("A1_null_customer_ids", "substring_trap");
+  const v = c.verdicts.naive;
+  const q = el(root, "card", `<div class="lbl">Synthetic task · A1_null_customer_ids</div>
+    <div style="font-size:38px;margin-top:14px;line-height:1.35">${esc(window.TASKS.A1_null_customer_ids)}</div>`,
+    { left: "160px", top: "150px", width: "1600px" });
+  const gold = el(root, "card", `<div class="lbl">Correct (gold) answer</div><div class="big" style="margin-top:16px">7</div>`,
+    { left: "160px", top: "400px", width: "520px", height: "230px" });
+  const probe = el(root, "card", `<div class="lbl">Scripted probe output</div>
+    <div class="big" style="margin-top:16px">1<span style="border-bottom:8px solid var(--amber)">7</span></div>`,
+    { left: "720px", top: "400px", width: "520px", height: "230px" });
+  const verdict = el(root, "card edge-red", `<div class="lbl">naive grader</div>
+    <div style="margin-top:16px"><span class="badge b-red">PASSED</span></div>
+    <div class="mono" style="font-size:22px;margin-top:20px;color:#E2E8F0">${esc(v.reason)}</div>`,
+    { left: "1280px", top: "400px", width: "480px", height: "230px" });
+  const tag = el(root, "callout", `Label: <span class="badge b-amber">should fail</span> &nbsp;→&nbsp;
+    verdict disagrees: <span class="badge b-red">false positive</span>`, { left: "160px", top: "680px" });
+  const line = el(root, "callout", `<span style="font-size:40px;font-weight:600">A wrong verdict becomes a wrong score.</span>`,
+    { left: "160px", top: "800px" });
+  const B = { gold: at(1, "The correct answer"), probe: at(1, "probe answers"), verdict: at(1, "marks it correct"),
+    tag: at(1, "because the digit"), line: at(1, "inherits the error") };
+  return (t) => {
+    show(q, ramp(t, 0.1));
+    show(gold, ramp(t, B.gold)); show(probe, ramp(t, B.probe)); show(verdict, ramp(t, B.verdict));
+    show(tag, ramp(t, B.tag)); show(line, ramp(t, B.line));
+  };
+});
+
+// 2 · What Grader Audit tests -----------------------------------------------------------------------
+scene(2, (root, sc) => {
+  const s = R.summary.naive;
+  const probeBox = el(root, "card edge-cyan", `<div class="lbl">Scripted probe</div>
+    <div style="font-size:28px;margin-top:10px">fixed output + label <span class="q">should_pass</span></div>`,
+    { left: "160px", top: "170px", width: "560px" });
+  const a1 = el(root, "arrow", "", { left: "740px", top: "232px", width: "130px" });
+  const grader = el(root, "card", `<div class="lbl">Grader under test</div><div style="font-size:28px;margin-top:10px">score 0 or 1 + reason</div>`,
+    { left: "890px", top: "170px", width: "440px" });
+  const a2 = el(root, "arrow", "", { left: "1350px", top: "232px", width: "110px" });
+  const cmp = el(root, "card", `<div class="lbl">Compare</div><div style="font-size:28px;margin-top:10px">verdict vs label</div>`,
+    { left: "1480px", top: "170px", width: "280px" });
+  const mk = (x, cls, title, body, den) => el(root, `card ${cls}`, `<div style="font-size:34px;font-weight:700">${title}</div>
+    <div style="font-size:26px;margin-top:16px;line-height:1.4">${body}</div>
+    <div class="lbl" style="margin-top:22px">${den}</div>`, { left: px(x), top: "420px", width: "500px", height: "330px" });
+  const fp = mk(160, "edge-red", '<span style="color:var(--red)">False positive</span>',
+    "passed, but the label says <b>should fail</b>", `rate over the ${s.negatives} should-fail cases`);
+  const fn = mk(710, "edge-red", '<span style="color:var(--red)">False negative</span>',
+    "failed, but the label says <b>should pass</b>", `rate over the ${s.positives} should-pass cases`);
+  const fl = mk(1260, "edge-amber", '<span style="color:var(--amber)">Flaky</span>',
+    "the verdict changes across repeated runs of the same input", `rate over all ${s.total} cases`);
+  const disc = el(root, "callout", `<span class="muted">Independent prototype · synthetic tasks · scripted probes · does not audit HUD's actual benchmarks</span>`,
+    { left: "160px", top: "830px", width: "1600px" });
+  const B = { probes: at(2, "scripted probes"), wrong: at(2, "three ways"), fp: at(2, "A false positive"),
+    fn: at(2, "A false negative"), fl: at(2, "A flaky verdict"), disc: at(2, "This is an independent") };
+  return (t) => {
+    show(probeBox, ramp(t, B.probes)); show(a1, ramp(t, B.probes + 0.4), 0); show(grader, ramp(t, B.probes + 0.6));
+    show(a2, ramp(t, B.wrong - 0.4), 0); show(cmp, ramp(t, B.wrong - 0.2));
+    show(fp, ramp(t, B.fp)); show(fn, ramp(t, B.fn)); show(fl, ramp(t, B.fl)); show(disc, ramp(t, B.disc));
+  };
+});
+
+// 3 · The synthetic test bench ----------------------------------------------------------------------
+scene(3, (root, sc) => {
+  const probes = R.meta.probes;
+  const tasks = [...new Set(R.cases.map((c) => c.task_id))];
+  const order = (id) => ({ A: 0, T: 1, S: 2 }[id[0]]) * 100 + Number(id[1]);
+  tasks.sort((a, b) => order(a) - order(b));
+  const x0 = 520, colW = 152, y0 = 205, rowH = 50;
+  const yOf = (i) => y0 + 46 + i * rowH + (i >= 4 ? 14 : 0) + (i >= 9 ? 14 : 0);
+  const heads = probes.map((p, j) => el(root, "abs mono", esc(p), { left: px(x0 + j * colW), top: px(y0), width: px(colW - 8),
+    textAlign: "center", fontSize: "17px", color: "#CBD5E1" }));
+  const rows = tasks.map((id, i) => el(root, "abs mono", esc(id), { left: "160px", top: px(yOf(i) + 10), fontSize: "19px", color: "#E2E8F0" }));
+  const cells = [];
+  let special = null;
+  tasks.forEach((id, i) => probes.forEach((p, j) => {
+    const c = caseOf(id, p);
+    const e = el(root, "grid-cell", c.should_pass ? "pass" : "fail", {
+      left: px(x0 + j * colW), top: px(yOf(i)), width: px(colW - 8), height: px(rowH - 8),
+      border: c.should_pass ? "2px solid rgba(56,189,248,.7)" : "2px solid #24304F",
+      background: c.should_pass ? "rgba(56,189,248,.10)" : "#16203F", color: c.should_pass ? "#7DD3FC" : "#64748B" });
+    cells.push({ e, i, j });
+    if (id === "T5_top_customers" && p === "shuffled") special = e;
+  }));
+  const ring = el(root, "abs", "", { left: px(parseFloat(special.style.left) - 6), top: px(parseFloat(special.style.top) - 6),
+    width: px(colW + 4), height: px(rowH + 4), border: "4px solid var(--amber)", borderRadius: "12px" });
+  const callout = el(root, "callout", `<span style="color:var(--amber)">T5 × shuffled:</span> row order is part of the answer → <b>should fail</b>`,
+    { left: "160px", top: "905px" });
+  const pos = R.summary.naive.positives, neg = R.summary.naive.negatives;
+  const totals = el(root, "callout", `<b>${tasks.length} tasks × ${probes.length} probes = ${R.meta.n_cases} cases</b>
+    &nbsp;·&nbsp; <span style="color:#7DD3FC">${pos} should pass</span> &nbsp;·&nbsp; <span class="muted">${neg} should fail</span>`,
+    { left: "160px", top: "965px", fontSize: "30px" });
+  const B = { rows: at(3, "twelve synthetic"), probes: at(3, "eight probes"), labels: at(3, "Labels depend"),
+    t5: at(3, "except in a top five"), totals: at(3, "ninety-six cases") };
+  return (t) => {
+    rows.forEach((r, i) => show(r, ramp(t, B.rows + i * 0.08, 0.35), 8));
+    heads.forEach((h, j) => show(h, ramp(t, B.probes + j * 0.12, 0.35), 8));
+    cells.forEach(({ e, i, j }) => { e.style.opacity = ramp(t, B.labels + (i + j) * 0.04, 0.35).toFixed(4); });
+    show(ring, ramp(t, B.t5), 0); show(callout, ramp(t, B.t5 + 0.2)); show(totals, ramp(t, B.totals));
+  };
+});
+
+// 4 · Run the audit -------------------------------------------------------------------------------
+scene(4, (root, sc) => {
+  const s = R.summary;
+  const line = (name) => `  ${name.padEnd(9)} FP ${s[name].fp}/${s[name].negatives}  FN ${s[name].fn}/${s[name].positives}  flaky ${s[name].flaky}/${s[name].total}`;
+  const term = el(root, "card", `<div class="lbl" style="margin-bottom:16px">Terminal · recorded run (JUDGE_MODEL unset → mock judge, k = 5)</div>
+    <pre class="mono" style="font-size:28px;line-height:1.6;color:#E2E8F0"><span style="color:var(--cyan)">$</span> python -m audit.serve
+${esc(line("naive"))}
+${esc(line("hardened"))}
+  Grader Audit UI: http://localhost:8000</pre>`, { left: "260px", top: "300px", width: "1400px" });
+  const shot = new Shot(root, "summary", 120, 170, 1680, 1680 * M.captures.summary.h / M.captures.summary.w);
+  const maj = el(root, "callout", `<span class="dot d-fail"></span><span class="dot d-pass"></span><span class="dot d-fail"></span><span class="dot d-pass"></span><span class="dot d-pass"></span>
+    <span style="font-size:30px;margin:0 16px;color:var(--cyan)">→</span><span class="dot d-pass" style="width:34px;height:34px"></span>
+    <div style="margin-top:14px">Five runs per case → one <b>majority verdict</b>.<br>FP and FN counts use that verdict.</div>`,
+    { left: "160px", top: "560px", width: "760px" });
+  const fr = shot.view(null, 0).rect("naive_flaky");
+  const round = el(root, "note", `<span style="color:var(--amber)">6/96 cases;</span> percentage rounding differs between views.`,
+    { left: px(120 + fr.x * shot.s + shot.tx), top: px(170 + shot.h + 14), fontSize: "20px" });
+  const scope = el(root, "callout", `<span style="border-left:5px solid var(--amber);padding-left:16px">Scope: these 96 synthetic cases only.</span>`,
+    { left: "1060px", top: "600px", fontSize: "30px" });
+  const B = { serve: at(4, "serves this page"), maj: at(4, "majority vote"), fp: at(4, "twenty of"),
+    fn: at(4, "fourteen of"), fl: at(4, "Six of"), hard: at(4, "hardened graders made"), scope: at(4, "synthetic cases only") };
+  return (t) => {
+    const k = ramp(t, B.serve, 0.6);
+    term.style.opacity = ((t < 0.3 ? ramp(t, 0.1) : 1) * (1 - k)).toFixed(4);
+    shot.opacity(k).view(null, 0);
+    show(maj, ramp(t, B.maj));
+    shot.hl(0, shot.rect("naive_fp"), COLORS.red, ramp(t, B.fp) * (1 - ramp(t, B.fn)));
+    shot.hl(1, shot.rect("naive_fn"), COLORS.red, ramp(t, B.fn) * (1 - ramp(t, B.fl)));
+    shot.hl(2, shot.rect("naive_flaky"), COLORS.amber, ramp(t, B.fl) * (1 - ramp(t, B.hard)));
+    shot.hl(3, shot.rect("hardened_card"), COLORS.green, ramp(t, B.hard));
+    show(round, ramp(t, B.fl)); show(scope, ramp(t, B.scope));
+  };
+});
+
+// 5 · A false positive, inspected -------------------------------------------------------------------
+scene(5, (root, sc) => {
+  const mcap = M.captures.matrix;
+  const matH = 880, matW = Math.round(matH * mcap.w / mcap.h);
+  const mat = new Shot(root, "matrix", Math.round((W - matW) / 2), 140, matW, matH);
+  const heatTag = el(root, "abs", `<span class="badge b-cyan">error-count heatmap</span>`, { left: "120px", top: "150px" });
+  const a1 = new Shot(root, "case_A1_substring_trap", 120, 150, 1680, 1680 * M.captures.case_A1_substring_trap.h / M.captures.case_A1_substring_trap.w);
+  const c1 = caseOf("A1_null_customer_ids", "substring_trap");
+  const a1note = el(root, "callout", `naive: <code>${esc(c1.verdicts.naive.reason)}</code> <span class="badge b-red">false positive</span><br>
+    hardened: <code>${esc(c1.verdicts.hardened.reason)}</code> <span class="badge b-green">agrees with label</span>`,
+    { left: "120px", top: "690px", lineHeight: "2.1" });
+  const t4cap = M.captures.case_T4_partial;
+  const t4 = new Shot(root, "case_T4_partial", 120, 130, 1680, 820);
+  const c4 = caseOf("T4_revenue_by_region", "partial");
+  const t4note = el(root, "callout", `naive: <code>${esc(c4.verdicts.naive.reason)}</code> <span class="badge b-red">false positive</span>`,
+    { left: "120px", top: "975px" });
+  const B = { heat: at(5, "error-count heatmap"), click: at(5, "Click a cell"), trap: at(5, "substring trap"),
+    a1: at(5, "Case A1"), out: at(5, "probes seventeen"), label: at(5, "The label says"), naive: at(5, "naive grader passed"),
+    hard: at(5, "hardened grader failed"), t4: at(5, "In table case"), t4naive: at(5, "naive check sees"), diff: at(5, "The diff shows") };
+  return (t) => {
+    const kA1 = ramp(t, B.a1, 0.5), kT4 = ramp(t, B.t4, 0.5);
+    mat.opacity(1 - kA1).view(null, 0);
+    show(heatTag, ramp(t, B.heat) * (1 - kA1), 0);
+    mat.hl(0, mat.rect("naive_col_head"), COLORS.cyan, 0);
+    mat.hl(1, mat.rect("cell_trap_naive"), COLORS.red, ramp(t, B.click));
+    mat.hl(2, mat.rect("row_A1"), COLORS.red, ramp(t, B.trap + 0.6));
+    a1.opacity(kA1 * (1 - kT4));
+    const f = a1.cap.rects;
+    const focus = t < B.naive ? union(f.output, f.gold) : union(f.naive, f.hardened);
+    a1.view(focus, ramp(t, B.out) * 0.0, 24);
+    a1.hl(0, union(f.output, f.gold), COLORS.cyan, ramp(t, B.out) * (1 - ramp(t, B.naive)));
+    a1.hl(1, f.naive, COLORS.red, ramp(t, B.naive));
+    a1.hl(2, f.hardened, COLORS.green, ramp(t, B.hard));
+    show(a1note, ramp(t, B.naive) * (1 - kT4));
+    t4.opacity(kT4);
+    const g = t4.cap.rects;
+    t4.view(g.diff, ramp(t, B.diff, 0.8) * 0.75, 30);
+    t4.hl(0, g.naive, COLORS.red, ramp(t, B.t4naive) * (1 - ramp(t, B.diff)));
+    t4.hl(1, g.diff, COLORS.cyan, ramp(t, B.diff + 0.5));
+    show(t4note, ramp(t, B.t4naive) * (1 - ramp(t, B.diff)));
+  };
+});
+
+// 6 · A false negative, inspected -------------------------------------------------------------------
+scene(6, (root, sc) => {
+  const cap = M.captures.case_A2_paraphrase;
+  const a2 = new Shot(root, "case_A2_paraphrase", 120, 150, 1680, 1680 * cap.h / cap.w);
+  const c = caseOf("A2_completed_revenue", "paraphrase");
+  const mock = el(root, "abs", `<span class="badge b-amber">MOCK JUDGE · deterministic rules, not a model</span>`, { left: "980px", top: "100px" });
+  const vals = el(root, "callout", `Gold <code>9469.30</code> &nbsp; Probe <code>Completed orders total $9,469.30.</code> &nbsp; Label <span class="badge b-cyan">should pass</span>`,
+    { left: "120px", top: "690px" });
+  const reasons = el(root, "callout", `naive: <code>${esc(c.verdicts.naive.reason)}</code> <span class="badge b-red">false negative</span><br>
+    hardened: <code>${esc(c.verdicts.hardened.reason)}</code> <span class="badge b-green">agrees with label</span>`,
+    { left: "120px", top: "770px", lineHeight: "2.1" });
+  const rule = el(root, "card edge-amber", `<div class="lbl">Mock judge numeric rule</div>
+    <div class="mono" style="font-size:26px;margin-top:10px">exactly one number · |value − gold| ≤ 0.005</div>`,
+    { left: "1140px", top: "890px", width: "660px", padding: "18px 26px" });
+  const t5cap = M.captures.case_T5_shuffled;
+  const t5 = new Shot(root, "case_T5_shuffled", 120, 150, 1680, 700);
+  const c5 = caseOf("T5_top_customers", "shuffled");
+  const t5note = el(root, "callout", `T5 × shuffled · label <span class="badge b-amber">should fail</span> (row order matters) · hardened verdict <span class="badge b-green">agrees with label</span>`,
+    { left: "120px", top: "885px" });
+  const B = { a2: at(6, "Task A2"), dollar: at(6, "dollar sign"), naive: at(6, "naive substring check"),
+    hard: at(6, "hardened exact check"), mock: at(6, "mock judge"), rule: at(6, "half a cent"), order: at(6, "Order is different") };
+  return (t) => {
+    const kO = ramp(t, B.order, 0.5);
+    const f = a2.cap.rects;
+    a2.opacity(1 - kO).view(null, 0);
+    a2.hl(0, f.instr, COLORS.cyan, ramp(t, B.a2 + 0.3) * (1 - ramp(t, B.dollar)));
+    a2.hl(1, f.output, COLORS.cyan, ramp(t, B.dollar) * (1 - ramp(t, B.naive)));
+    a2.hl(2, f.naive, COLORS.red, ramp(t, B.naive));
+    a2.hl(3, f.hardened, COLORS.green, ramp(t, B.hard));
+    show(vals, ramp(t, B.dollar) * (1 - kO)); show(reasons, ramp(t, B.naive) * (1 - kO));
+    show(mock, ramp(t, B.mock) * (1 - kO), 0); show(rule, ramp(t, B.rule) * (1 - kO));
+    const g = t5.cap.rects;
+    t5.opacity(kO).view(union(g.instr, g.hardened), 0.0);
+    t5.hl(0, g.hardened, COLORS.green, ramp(t, B.order + 0.6));
+    show(t5note, ramp(t, B.order + 0.3));
+  };
+});
+
+// 7 · Flakiness and repeatability -----------------------------------------------------------------
+scene(7, (root, sc) => {
+  const rule = el(root, "card edge-amber", `<div class="lbl">Planted naive check on S1_finalize_run</div>
+    <div class="mono" style="font-size:30px;margin-top:10px">now − finished_at ≤ 300 s</div>`, { left: "160px", top: "130px", width: "760px" });
+  const clockLbl = el(root, "callout", `<span class="mono">GradeContext.for_seed(seed)</span> → simulated delay after <span class="mono">finished_at</span>`,
+    { left: "980px", top: "160px", width: "800px" });
+  const ax0 = 220, ax1 = 1700, ay = 400, sec = (v) => ax0 + (ax1 - ax0) * v / 600;
+  const axis = el(root, "abs", "", { left: px(ax0), top: px(ay), width: px(ax1 - ax0), height: "3px", background: "#475569" });
+  const ticks = [0, 100, 200, 300, 400, 500, 600].map((v) => el(root, "abs mono", `${v} s`, { left: px(sec(v) - 30), top: px(ay + 18), width: "60px",
+    textAlign: "center", fontSize: "18px", color: "#64748B" }));
+  const thr = el(root, "abs", `<div class="mono" style="position:absolute;top:150px;left:-60px;width:120px;text-align:center;font-size:20px;color:var(--amber)">300 s limit</div>`,
+    { left: px(sec(300)), top: px(ay - 70), width: "0", height: "140px", borderLeft: "3px dashed var(--amber)" });
+  // Green = run verdict agrees with the label (S1 gold should pass); red = disagrees.
+  // Seeds 3 and 4 are 1.2 s apart, so seed 4's label sits one level higher.
+  const marks = EV.delays.map((d, i) => {
+    const fail = d > 300, color = fail ? "var(--red)" : "var(--green)", level = i === 4 ? 1 : 0;
+    return el(root, "abs", `<div class="mono" style="position:absolute;left:-68px;width:136px;bottom:${26 + level * 62}px;text-align:center;font-size:18px;line-height:1.3;color:${color}">seed ${i}<br>${d.toFixed(1)} s ${fail ? "✗" : "✓"}</div>
+      <div style="position:absolute;left:-15px;top:-15px;width:30px;height:30px;border-radius:50%;${fail ? "border:4px solid var(--red);background:var(--bg)" : "background:var(--green)"}"></div>`,
+      { left: px(sec(d)), top: px(ay + 1), width: "0", height: "0" });
+  });
+  const s1cap = M.captures.case_S1_gold;
+  const nr = M.captures.case_S1_gold.rects.naive, s1W = 860, s1Pad = 10;
+  const s1H = Math.round(s1W * (nr.h + 2 * s1Pad) / (nr.w + 2 * s1Pad));
+  const s1 = new Shot(root, "case_S1_gold", 120, 620, s1W, s1H);
+  const s1lbl = el(root, "note", "S1_finalize_run × gold (label: should pass) · naive grader, 5 runs", { left: "120px", top: px(620 + s1H + 16) });
+  const rep = new Shot(root, "report_flaky", 1020, 560, 780, 400);
+  const repLbl = el(root, "note", "report.md § Flaky verdicts", { left: "1020px", top: "975px" });
+  const cav1 = el(root, "card edge-amber", `<div style="font-size:30px;font-weight:700;color:var(--amber)">Controlled variation</div>
+    <div style="font-size:26px;margin-top:12px;line-height:1.4">The clock is simulated and seeded, so detecting this grader is <b>by construction</b>. Real nondeterminism needs real repeated runs.</div>`,
+    { left: "160px", top: "560px", width: "780px", height: "330px" });
+  const cav2 = el(root, "card edge-amber", `<div style="font-size:30px;font-weight:700;color:var(--amber)">Majority vote hides some errors</div>
+    <div style="font-size:26px;margin-top:12px;line-height:1.4">S1 × gold failed <b>2 of 5</b> runs, yet its majority verdict passes, so it is <b>not counted</b> as a false negative.</div>`,
+    { left: "980px", top: "560px", width: "780px", height: "330px" });
+  const B = { clock: at(7, "simulated clock"), delays: at(7, "Two of the five"), fpf: at(7, "fail, pass"),
+    six: at(7, "six flaky"), cav: at(7, "Two caveats"), c1: at(7, "clock variation"), c2: at(7, "majority vote hides") };
+  return (t) => {
+    show(rule, ramp(t, sc.start + 0.2)); show(clockLbl, ramp(t, B.clock));
+    const kAx = ramp(t, B.clock);
+    axis.style.opacity = kAx.toFixed(4); ticks.forEach((e) => (e.style.opacity = kAx.toFixed(4))); show(thr, ramp(t, B.clock + 0.4), 0);
+    marks.forEach((m, i) => (m.style.opacity = ramp(t, B.delays + i * 0.3, 0.4).toFixed(4)));
+    const kC = ramp(t, B.cav, 0.6);
+    const f = s1.cap.rects;
+    s1.opacity(ramp(t, B.fpf) * (1 - kC)).view(f.naive, 1, s1Pad, 3);
+    s1.hl(0, f.naive_runs, COLORS.amber, ramp(t, B.fpf + 0.4));
+    show(s1lbl, ramp(t, B.fpf) * (1 - kC), 0);
+    const g = rep.cap.rects;
+    rep.opacity(ramp(t, B.six) * (1 - kC)).view(union(g.flaky_heading, g.flaky_table), 1, 14, 3);
+    show(repLbl, ramp(t, B.six) * (1 - kC), 0);
+    show(cav1, ramp(t, B.c1)); show(cav2, ramp(t, B.c2));
+  };
+});
+
+// 8 · How the code produces the report ------------------------------------------------------------
+scene(8, (root, sc) => {
+  const N = [
+    ["tasks.build_tasks()", 'task A1, gold "7"'],
+    ["probes.build_probes()", 'output "17", should_pass=false'],
+    ["generate.generate()", "data/ + labels.json"],
+    ["runner.run_audit()", "loads all 96 cases"],
+    ["runner._grade_k()", "5 seeded runs per grader"],
+    ["majority → error", 'error = "FP"'],
+    ["_summarize() · _cell()", "summary + heatmap"],
+    ["write_results()", "results.json · report.md"],
+    ["serve.py  /api/case", "FastAPI endpoint"],
+    ["index.html  showCase()", "the case view"],
+  ];
+  const pos = N.map((_, i) => i < 5 ? { x: 120 + i * 345, y: 260 } : { x: 120 + (9 - i) * 345, y: 600 });
+  const nodes = N.map(([fn, sub], i) => el(root, "node", `<div class="fn">${esc(fn)}</div><div class="sub">${esc(sub)}</div>`,
+    { left: px(pos[i].x), top: px(pos[i].y) }));
+  const links = [];
+  for (let i = 0; i < 9; i++) {
+    const a = pos[i], b = pos[i + 1];
+    if (a.y === b.y) {
+      const left = Math.min(a.x, b.x) + 300, w = 45;
+      links.push(el(root, "abs", "", { left: px(left), top: px(a.y + 58), width: px(w), height: "3px", background: "#334155" }));
+    } else {
+      links.push(el(root, "abs", "", { left: px(a.x + 148), top: px(a.y + 118), width: "3px", height: px(b.y - a.y - 118), background: "#334155" }));
+    }
+  }
+  const token = el(root, "abs", "", { width: "34px", height: "34px", borderRadius: "50%", background: "var(--cyan)", boxShadow: "0 0 30px rgba(56,189,248,.7)" });
+  const tokLbl = el(root, "abs mono", 'A1 × substring_trap · "17"', { fontSize: "19px", color: "var(--cyan)", whiteSpace: "nowrap" });
+  const fives = el(root, "abs", [0, 1, 2, 3, 4].map(() => '<span class="dot" style="width:16px;height:16px;background:var(--cyan)"></span>').join(""),
+    { left: px(pos[4].x - 10), top: px(pos[4].y + 135) });
+  const thumbCap = M.captures.case_A1_substring_trap;
+  const thumb = new Shot(root, "case_A1_substring_trap", 120, 770, 600, 600 * thumbCap.h / thumbCap.w);
+  const B = [at(8, "Build tasks"), at(8, "Build probes"), at(8, "Generate writes"), at(8, "Run audit"), at(8, "grade k"),
+    at(8, "majority verdict"), at(8, "counted in the summary"), at(8, "written to results"), at(8, "FastAPI serves"), at(8, "to this page")];
+  return (t) => {
+    nodes.forEach((n, i) => {
+      show(n, ramp(t, sc.start + 0.1 + i * 0.06, 0.4), 10);
+      const active = t >= B[i] && (i === 9 || t < B[i + 1]);
+      n.style.borderColor = active ? (i >= 5 ? "#F87171" : "#38BDF8") : (t >= B[i] ? "#334155" : "#24304F");
+    });
+    links.forEach((l, i) => (l.style.opacity = ramp(t, sc.start + 0.3 + i * 0.06, 0.4).toFixed(4)));
+    let i = 0;
+    while (i < 9 && t >= B[i + 1]) i++;
+    const k = i < 9 ? ramp(t, B[i + 1] - 0.45, 0.45) : 0;
+    const from = pos[i], to = pos[Math.min(9, i + 1)];
+    const cx = lerp(from.x, to.x, k) + 150, cy = lerp(from.y, to.y, k) - 26;
+    const red = t >= B[5];
+    token.style.left = px(cx - 17); token.style.top = px(cy - 17);
+    token.style.background = red ? "var(--red)" : "var(--cyan)";
+    token.style.boxShadow = red ? "0 0 30px rgba(248,113,113,.7)" : "0 0 30px rgba(56,189,248,.7)";
+    token.style.opacity = ramp(t, B[0] - 0.3, 0.3).toFixed(4);
+    // Keep the label on screen: put it left of the token near the right edge.
+    const lw = tokLbl.offsetWidth;
+    tokLbl.style.left = px(cx + 26 + lw > W - 40 ? cx - 26 - lw : cx + 26); tokLbl.style.top = px(cy - 13);
+    tokLbl.style.color = red ? "var(--red)" : "var(--cyan)";
+    tokLbl.style.opacity = token.style.opacity;
+    const pulses = [...fives.children];
+    pulses.forEach((d, j) => (d.style.opacity = (t >= B[4] + j * 0.25 ? 1 : 0.15).toFixed(2)));
+    fives.style.opacity = ramp(t, B[4] - 0.2, 0.3).toFixed(4);
+    thumb.opacity(ramp(t, B[9])).view(null, 0);
+  };
+});
+
+// 9 · Why the hardened checks differ --------------------------------------------------------------
+scene(9, (root, sc) => {
+  const C = window.CODE;
+  const code = el(root, "code", C.lines.map((ln, i) => `<span class="ln"><span class="hlbar"></span><i>${C.start + i}</i><span class="t">${esc(ln)}</span></span>`).join(""),
+    { left: "120px", top: "150px", width: "1680px" });
+  const cap = el(root, "note", `${esc(C.file)} · lines ${C.start}–${C.start + C.lines.length - 1} (verbatim)`, { left: "120px", top: "112px" });
+  const bars = [...code.querySelectorAll(".hlbar")];
+  const lane1 = el(root, "card edge-cyan col", `<h3 style="color:var(--cyan)">Deterministic checks</h3><ul>
+    <li>parse by declared type: float tolerance, null markers, date formats</li>
+    <li>row order only when the task requires it</li>
+    <li class="st">state: every field compared, never just a "done" flag</li></ul>`,
+    { left: "120px", top: "530px", width: "880px", height: "320px" });
+  const lane2 = el(root, "card edge-amber col", `<h3 style="color:var(--amber)">Semantic judge</h3><ul>
+    <li>answer tasks only, after the exact check fails</li>
+    <li>this run: <b>mock judge</b>, deterministic rules</li>
+    <li class="llm">real model judge (LiteLLM): supported, <b>not run</b></li></ul>`,
+    { left: "1040px", top: "530px", width: "760px", height: "320px" });
+  const stLi = lane1.querySelector(".st"), llmLi = lane2.querySelector(".llm");
+  const stat = el(root, "callout", `Judge calls in this run: <b>${R.judge_calls}</b> · backend: <span class="badge b-amber">${esc(R.meta.judge_backend)}</span>`,
+    { left: "120px", top: "925px", fontSize: "28px" });
+  const cav = el(root, "callout", `<span style="border-left:5px solid var(--amber);padding-left:16px">Mock agreement with labels ≠ independent validation</span>`,
+    { left: "1040px", top: "925px", fontSize: "28px" });
+  const iExact = C.lines.findIndex((l) => l.includes("_exact(")), iJudge = C.lines.findIndex((l) => l.includes("judge.judge("));
+  if (iExact < 0 || iJudge < 0) throw new Error("code excerpt does not contain the expected lines");
+  const B = { parse: at(9, "parse each output"), state: at(9, "State checks"), exact: at(9, "exact check runs first"),
+    fails: at(9, "only when it fails"), n: at(9, "twenty-six"), real: at(9, "real model judge"), cav: at(9, "not independent") };
+  return (t) => {
+    show(code, ramp(t, sc.start + 0.1)); show(cap, ramp(t, sc.start + 0.1), 0);
+    show(lane1, ramp(t, B.parse)); stLi.style.opacity = ramp(t, B.state).toFixed(4);
+    bars[iExact].style.opacity = (ramp(t, B.exact) * (1 - ramp(t, B.fails))).toFixed(4);
+    bars[iJudge].style.opacity = ramp(t, B.fails).toFixed(4);
+    show(lane2, ramp(t, B.fails)); llmLi.style.opacity = ramp(t, B.real).toFixed(4);
+    show(stat, ramp(t, B.n)); show(cav, ramp(t, B.cav));
+  };
+});
+
+// 10 · Evidence and limits ------------------------------------------------------------------------
+scene(10, (root, sc) => {
+  const tests = el(root, "card", `<div class="lbl">Tests (commit ${esc(EV.commit)}, mock mode)</div>
+    <pre class="mono" style="font-size:25px;line-height:1.7;margin-top:12px">pytest -m unit         → <span style="color:var(--green)">${EV.tests.unit} passed</span>
+pytest -m integration  → <span style="color:var(--green)">${EV.tests.integration} passed</span></pre>`,
+    { left: "120px", top: "130px", width: "800px", height: "230px" });
+  const mut = el(root, "card", `<div class="lbl">Mutation test · tests/test_audit.py</div>
+    <div class="mono" style="font-size:24px;margin-top:16px">_exact: gold_norm <span class="eq" style="position:relative">==<span class="strike" style="position:absolute;left:-4px;right:-4px;top:50%;height:3px;background:var(--red)"></span></span> out_norm
+      <span class="inop" style="color:var(--amber)">→ gold in out</span></div>
+    <div style="font-size:24px;margin-top:18px">audit reports <span class="badge b-red">hardened FP</span> on <span class="mono">A1 × substring_trap</span></div>`,
+    { left: "960px", top: "130px", width: "840px", height: "230px" });
+  const strike = mut.querySelector(".strike"), inop = mut.querySelector(".inop"), fpb = mut.querySelector(".badge").parentElement;
+  const col = (x, w, color, title, items) => el(root, `card col`, `<h3 style="color:${color}">${title}</h3><ul>${items.map((i) => `<li>${i}</li>`).join("")}</ul>`,
+    { left: px(x), top: "400px", width: px(w), height: "430px", borderColor: color });
+  const c1 = col(120, 540, "var(--green)", "Demonstrated", ["FP, FN and flaky verdicts measured against known labels",
+    `naive vs hardened separated on these ${R.meta.n_cases} synthetic cases`]);
+  const c2 = col(690, 540, "var(--amber)", "Not established", ["general correctness of the hardened graders (written knowing these probe types)",
+    "real browser or desktop environments", "a real model judge"]);
+  const c3 = col(1260, 540, "var(--cyan)", "Future work", ["model-generated adversarial probes, reviewed by a person", "adapters for graders over real environments"]);
+  const end = el(root, "callout", `<span class="muted">Independent prototype · synthetic data · not affiliated with HUD</span>`,
+    { left: "120px", top: "880px", fontSize: "26px" });
+  const B = { tests: at(10, "One hundred fifty-two"), mut: at(10, "A mutation test"), swap: at(10, "swaps an equality"),
+    fp: at(10, "reports a false positive"), c1: at(10, "So the harness"), c2: at(10, "doesnt show"), c3: at(10, "Future work"), end: at(10, "adapters") };
+  return (t) => {
+    show(tests, ramp(t, B.tests)); show(mut, ramp(t, B.mut));
+    strike.style.opacity = ramp(t, B.swap + 0.6).toFixed(4); inop.style.opacity = ramp(t, B.swap + 0.9).toFixed(4);
+    fpb.style.opacity = ramp(t, B.fp).toFixed(4);
+    show(c1, ramp(t, B.c1)); show(c2, ramp(t, B.c2)); show(c3, ramp(t, B.c3)); show(end, ramp(t, B.end));
+  };
+});
+
+// ---- the deterministic frame function --------------------------------------------------------------
+// Transition: the outgoing scene fades out over the last 0.3 s of its trailing silence and the
+// incoming scene fades in from 0.1 s before its first word, so the stage passes briefly through the
+// background instead of stacking two dense layouts on top of each other.
+const OUT_D = 0.3, OUT_END = 0.0, IN_D = 0.25, IN_LEAD = 0.1;
+window.renderAt = function renderAt(t) {
+  const last = scenes.length - 1;
+  scenes.forEach((s, i) => {
+    const a = s.sc.start, b = s.sc.end;
+    const kin = i === 0 ? 1 : ramp(t, a - IN_LEAD, IN_D);
+    const kout = i === last ? 1 : 1 - ramp(t, b - OUT_END - OUT_D, OUT_D);
+    const k = Math.min(kin, kout);
+    s.root.style.opacity = k.toFixed(4);
+    s.root.style.visibility = k > 0 ? "visible" : "hidden";
+    if (k > 0) s.render(t);
+  });
+  // Total scene opacity: ~1 everywhere if crossfades never dip to an empty frame (used by QA).
+  return scenes.reduce((a, s) => a + parseFloat(s.root.style.opacity), 0);
+};
+window.DURATION = T.total;
+
+// Every image decoded and every font loaded before the first frame is captured.
+window.ready = Promise.all([document.fonts.ready, ...[...document.images].map((i) => i.decode())]).then(() => {
+  window.renderAt(0);
+  return true;
+});
+
+// ---- preview controls (not used by the renderer) ------------------------------------------------
+if (location.hash.includes("preview")) {
+  document.body.classList.add("preview");
+  const scrub = document.getElementById("scrub"), clock = document.getElementById("clock"), play = document.getElementById("play");
+  scrub.max = T.total;
+  const audio = new Audio("../audio/narration.wav");
+  const fmt = (t) => `${Math.floor(t / 60)}:${(t % 60).toFixed(2).padStart(5, "0")}`;
+  const tick = () => { const t = audio.currentTime; window.renderAt(t); scrub.value = t; clock.textContent = fmt(t); if (!audio.paused) requestAnimationFrame(tick); };
+  play.onclick = () => { if (audio.paused) { audio.play(); play.textContent = "Pause"; requestAnimationFrame(tick); } else { audio.pause(); play.textContent = "Play"; } };
+  scrub.oninput = () => { audio.currentTime = +scrub.value; window.renderAt(+scrub.value); clock.textContent = fmt(+scrub.value); };
+}
+</script>
+</body>
+</html>

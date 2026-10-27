@@ -1,0 +1,15 @@
+{
+  "name": "grader-audit-kt-video",
+  "private": true,
+  "type": "module",
+  "description": "Build scripts for the Grader Audit KT video. Not part of the application.",
+  "scripts": {
+    "capture": "node capture.mjs",
+    "render": "node render.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.57.0",
+    "@fontsource/inter": "5.1.1",
+    "@fontsource/jetbrains-mono": "5.1.2"
+  }
+}
