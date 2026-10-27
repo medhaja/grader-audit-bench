@@ -1,0 +1,2 @@
+# Optional: only needed for the real LLM judge (set JUDGE_MODEL and a provider key).
+litellm==1.55.0
