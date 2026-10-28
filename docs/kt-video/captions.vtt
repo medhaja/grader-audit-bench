@@ -1,0 +1,292 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:02.050
+Here's a benchmark task.
+
+2
+00:00:02.170 --> 00:00:05.195
+How many orders have a null customer ID?
+
+3
+00:00:05.315 --> 00:00:07.215
+The answer is 7.
+
+4
+00:00:07.335 --> 00:00:10.915
+A scripted agent answers 17, and the naive
+
+5
+00:00:10.915 --> 00:00:14.835
+grader passes it, because 7 appears inside
+17.
+
+6
+00:00:14.955 --> 00:00:20.380
+Public reports, like OSWorld issue #518,
+describe exactly this.
+
+7
+00:00:20.500 --> 00:00:24.850
+When the grader is wrong, the score
+measures the grader, not the agent.
+
+8
+00:00:25.450 --> 00:00:29.175
+This prototype grades the grader, without
+running a model.
+
+9
+00:00:29.295 --> 00:00:34.345
+Twelve synthetic data-engineering tasks
+each get eight scripted probe outputs.
+
+10
+00:00:34.465 --> 00:00:39.890
+Gold, paraphrase, no-op, substring trap, a
+fake that only looks done, and more.
+
+11
+00:00:40.010 --> 00:00:43.135
+All 96 cases have a known label.
+
+12
+00:00:43.255 --> 00:00:46.480
+A false positive passes a case that should
+fail.
+
+13
+00:00:46.600 --> 00:00:49.675
+A false negative fails one that should
+pass.
+
+14
+00:00:49.795 --> 00:00:52.620
+A flaky verdict changes between runs.
+
+15
+00:00:53.220 --> 00:00:55.120
+It's a straight pipeline.
+
+16
+00:00:55.240 --> 00:00:59.365
+tasks.py generates 12 tasks from one fixed
+seed.
+
+17
+00:00:59.485 --> 00:01:03.022
+probes.py adds eight labeled outputs per
+task,
+
+18
+00:01:03.022 --> 00:01:06.635
+and generate.py writes them to the data
+folder.
+
+19
+00:01:06.755 --> 00:01:12.855
+runner.py grades every case five times per
+grader, then writes results and a report.
+
+20
+00:01:12.975 --> 00:01:17.950
+serve.py, a FastAPI app, serves them to
+one static page.
+
+21
+00:01:18.550 --> 00:01:21.250
+Let's follow that 17 through the code.
+
+22
+00:01:21.370 --> 00:01:26.395
+run_audit loads each labeled case, and
+calls _grade_k for every grader.
+
+23
+00:01:26.515 --> 00:01:32.265
+_grade_k runs it five times, with seeds
+zero to four, and takes the majority vote.
+
+24
+00:01:32.385 --> 00:01:36.960
+The naive grader asks one question: is the
+gold string in the output?
+
+25
+00:01:37.080 --> 00:01:39.280
+It is, so it scores one.
+
+26
+00:01:39.400 --> 00:01:44.150
+The hardened grader normalizes both
+strings and needs an exact match.
+
+27
+00:01:44.270 --> 00:01:46.820
+That fails, so it asks the judge.
+
+28
+00:01:46.940 --> 00:01:50.074
+That's a deterministic mock by default,
+
+29
+00:01:50.074 --> 00:01:53.690
+and it returns numeric mismatch, 17 versus
+7.
+
+30
+00:01:53.810 --> 00:01:55.410
+Score zero.
+
+31
+00:01:55.530 --> 00:02:00.455
+Finally, a pass on a should-fail case is
+recorded as a false positive.
+
+32
+00:02:01.055 --> 00:02:03.480
+Tables show the same contrast.
+
+33
+00:02:03.600 --> 00:02:06.557
+The naive grader checks the header and the
+row
+
+34
+00:02:06.557 --> 00:02:09.900
+count, so a table with one wrong total
+still passes.
+
+35
+00:02:10.020 --> 00:02:14.220
+The hardened grader normalizes each cell
+by its declared type.
+
+36
+00:02:14.340 --> 00:02:21.090
+So 1.50 equals 1.5, and month-first dates
+are rejected as ambiguous.
+
+37
+00:02:21.210 --> 00:02:24.960
+Then it checks the row count, unique keys,
+and every row.
+
+38
+00:02:25.560 --> 00:02:27.360
+Why five runs?
+
+39
+00:02:27.480 --> 00:02:29.855
+Some graders depend on time.
+
+40
+00:02:29.975 --> 00:02:32.050
+Task S1 plants one.
+
+41
+00:02:32.170 --> 00:02:34.602
+Its naive grader fails a run when
+
+42
+00:02:34.602 --> 00:02:37.770
+"finished at" is more than 300 seconds
+old.
+
+43
+00:02:37.890 --> 00:02:42.740
+The clock is simulated from the seed, up
+to ten minutes after a fixed time.
+
+44
+00:02:42.860 --> 00:02:46.585
+So the correct answer passes three runs
+and fails two.
+
+45
+00:02:46.705 --> 00:02:49.930
+The majority says pass, but it's flagged
+flaky.
+
+46
+00:02:50.050 --> 00:02:52.325
+It's the only grader flagged.
+
+47
+00:02:52.925 --> 00:02:58.025
+To run it, install the requirements, then
+python -m audit.serve.
+
+48
+00:02:58.145 --> 00:03:00.961
+That regenerates the data, runs the audit,
+
+49
+00:03:00.961 --> 00:03:03.845
+and serves the page on port eight
+thousand.
+
+50
+00:03:03.965 --> 00:03:06.265
+No API key is needed.
+
+51
+00:03:06.385 --> 00:03:11.028
+On these 96 synthetic cases, the naive
+graders pass
+
+52
+00:03:11.028 --> 00:03:16.035
+20 of 49 wrong outputs, and fail 14 of 47
+correct ones.
+
+53
+00:03:16.155 --> 00:03:18.880
+The hardened graders make zero errors.
+
+54
+00:03:19.000 --> 00:03:23.450
+152 tests pass, including a mutation test.
+
+55
+00:03:24.050 --> 00:03:25.850
+Now, the caveats.
+
+56
+00:03:25.970 --> 00:03:28.799
+The hardened graders score zero by
+construction,
+
+57
+00:03:28.799 --> 00:03:31.570
+because they were written knowing these
+probes.
+
+58
+00:03:31.690 --> 00:03:34.579
+One gotcha: the naive state grader checks
+
+59
+00:03:34.579 --> 00:03:37.890
+status by substring, so "not succeeded"
+passes.
+
+60
+00:03:38.010 --> 00:03:42.960
+The flakiness is simulated, and the real
+LLM judge was never run.
+
+61
+00:03:43.080 --> 00:03:48.580
+Labels are assumed known, and the tasks
+are synthetic files, not browser state.
+
+62
+00:03:48.700 --> 00:03:53.275
+Next: adversarial probes from an LLM,
+reviewed by a human.
+
+63
+00:03:53.395 --> 00:03:58.545
+To recap: known labels, two graders, five
+seeded runs, one command.
