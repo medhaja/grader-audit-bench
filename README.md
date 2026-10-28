@@ -7,6 +7,8 @@ pip install -r requirements.txt && python -m audit.serve     # or: make install 
 
 Independent prototype built from public information and synthetic data. Not affiliated with HUD.
 
+**Walkthrough video:** [docs/kt-video/kt-video.mp4](docs/kt-video/kt-video.mp4) (3:59, narrated): the problem, the architecture, one case traced through the code, how to run it, and the limits. Captions and chapters can be rebuilt with `make kt-video` (see [docs/kt-video/README.md](docs/kt-video/README.md)).
+
 ## What it is
 
 A small harness that runs scripted **probe agents** against benchmark **graders** and measures how often

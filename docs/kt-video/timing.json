@@ -5,4626 +5,3157 @@
   "speed": 1.0,
   "sample_rate": 24000,
   "repo_id": "hexgrad/Kokoro-82M",
-  "sentence_gap": 0.18,
+  "sentence_gap": 0.12,
   "scene_pad": 0.6,
   "kokoro": "0.9.4",
   "misaki": "0.9.4"
  },
- "total": 351.1,
+ "total": 239.145,
  "word_timestamps": "Kokoro token start/end per sentence, offset to the global timeline",
  "scenes": [
   {
    "n": 1,
-   "title": "Can we trust the grader?",
+   "title": "The grader can be the bug",
+   "label": "01 / The problem",
    "start": 0.0,
-   "speech": 26.53,
-   "end": 27.13,
+   "speech": 24.85,
+   "end": 25.45,
    "sentences": [
     {
-     "text": "Here is a synthetic task.",
+     "text": "Here's a benchmark task.",
      "start": 0.0,
-     "end": 2.175
+     "end": 2.05
     },
     {
-     "text": "How many rows in orders dot C S V have a null customer I D?",
-     "start": 2.355,
-     "end": 7.18
+     "text": "How many orders have a null customer ID?",
+     "start": 2.17,
+     "end": 5.195
     },
     {
-     "text": "The correct answer is seven.",
-     "start": 7.36,
-     "end": 9.485
+     "text": "The answer is seven.",
+     "start": 5.315,
+     "end": 7.215
     },
     {
-     "text": "A scripted probe answers seventeen.",
-     "start": 9.665,
-     "end": 12.34
+     "text": "A scripted agent answers seventeen, and the naive grader passes it, because seven appears inside seventeen.",
+     "start": 7.335,
+     "end": 14.835
     },
     {
-     "text": "The naive grader marks it correct, because the digit seven appears somewhere in the answer.",
-     "start": 12.52,
-     "end": 18.045
+     "text": "Public reports, like O-S World issue five eighteen, describe exactly this.",
+     "start": 14.955,
+     "end": 20.38
     },
     {
-     "text": "Every score built on that grader inherits the error.",
-     "start": 18.225,
-     "end": 21.775
-    },
-    {
-     "text": "So before trusting a benchmark score, it's worth testing the grader.",
-     "start": 21.955,
-     "end": 26.53
+     "text": "When the grader is wrong, the score measures the grader, not the agent.",
+     "start": 20.5,
+     "end": 24.85
     }
    ],
    "words": [
     [
-     "Here",
+     "Here's",
      0.275,
-     0.5
-    ],
-    [
-     "is",
-     0.5,
-     0.613
+     0.512
     ],
     [
      "a",
-     0.613,
-     0.675
-    ],
-    [
-     "synthetic",
-     0.675,
-     1.225
-    ],
-    [
-     "task",
-     1.225,
-     1.9
-    ],
-    [
-     "How",
-     2.63,
-     2.743
-    ],
-    [
-     "many",
-     2.743,
-     2.955
-    ],
-    [
-     "rows",
-     2.955,
-     3.267
-    ],
-    [
-     "in",
-     3.267,
-     3.355
-    ],
-    [
-     "orders",
-     3.355,
-     3.78
-    ],
-    [
-     "dot",
-     3.78,
-     4.067
-    ],
-    [
-     "C",
-     4.067,
-     4.58
-    ],
-    [
-     "S",
-     4.58,
-     4.805
-    ],
-    [
-     "V",
-     4.805,
-     5.243
-    ],
-    [
-     "have",
-     5.243,
-     5.417
-    ],
-    [
-     "a",
-     5.417,
-     5.518
-    ],
-    [
-     "null",
-     5.518,
-     5.805
-    ],
-    [
-     "customer",
-     5.805,
-     6.243
-    ],
-    [
-     "I",
-     6.243,
-     6.38
-    ],
-    [
-     "D",
-     6.38,
-     6.93
-    ],
-    [
-     "The",
-     7.61,
-     7.685
-    ],
-    [
-     "correct",
-     7.685,
-     8.06
-    ],
-    [
-     "answer",
-     8.06,
-     8.41
-    ],
-    [
-     "is",
-     8.41,
-     8.548
-    ],
-    [
-     "seven",
-     8.548,
-     9.21
-    ],
-    [
-     "A",
-     9.94,
-     10.015
-    ],
-    [
-     "scripted",
-     10.015,
-     10.465
-    ],
-    [
-     "probe",
-     10.465,
-     10.877
-    ],
-    [
-     "answers",
-     10.877,
-     11.24
-    ],
-    [
-     "seventeen",
-     11.24,
-     12.09
-    ],
-    [
-     "The",
-     12.795,
-     12.895
-    ],
-    [
-     "naive",
-     12.895,
-     13.295
-    ],
-    [
-     "grader",
-     13.295,
-     13.67
-    ],
-    [
-     "marks",
-     13.67,
-     13.958
-    ],
-    [
-     "it",
-     13.958,
-     14.045
-    ],
-    [
-     "correct",
-     14.045,
-     14.77
-    ],
-    [
-     "because",
-     14.87,
-     15.195
-    ],
-    [
-     "the",
-     15.195,
-     15.295
-    ],
-    [
-     "digit",
-     15.295,
-     15.62
-    ],
-    [
-     "seven",
-     15.62,
-     16.02
-    ],
-    [
-     "appears",
-     16.02,
-     16.458
-    ],
-    [
-     "somewhere",
-     16.458,
-     16.908
-    ],
-    [
-     "in",
-     16.908,
-     16.983
-    ],
-    [
-     "the",
-     16.983,
-     17.07
-    ],
-    [
-     "answer",
-     17.07,
-     17.795
-    ],
-    [
-     "Every",
-     18.5,
-     18.8
-    ],
-    [
-     "score",
-     18.8,
-     19.1
-    ],
-    [
-     "built",
-     19.1,
-     19.362
-    ],
-    [
-     "on",
-     19.362,
-     19.463
-    ],
-    [
-     "that",
-     19.463,
-     19.65
-    ],
-    [
-     "grader",
-     19.65,
-     20.225
-    ],
-    [
-     "inherits",
-     20.225,
-     20.763
-    ],
-    [
-     "the",
-     20.763,
-     20.9
-    ],
-    [
-     "error",
-     20.9,
-     21.525
-    ],
-    [
-     "So",
-     22.255,
-     22.455
-    ],
-    [
-     "before",
-     22.455,
-     22.805
-    ],
-    [
-     "trusting",
-     22.805,
-     23.205
-    ],
-    [
-     "a",
-     23.205,
-     23.28
+     0.512,
+     0.575
     ],
     [
      "benchmark",
-     23.28,
-     23.83
+     0.575,
+     1.1
     ],
     [
-     "score",
-     23.83,
-     24.43
+     "task",
+     1.1,
+     1.775
     ],
     [
-     "it's",
-     24.567,
-     24.78
+     "How",
+     2.445,
+     2.582
     ],
     [
-     "worth",
-     24.78,
-     25.093
+     "many",
+     2.582,
+     2.795
     ],
     [
-     "testing",
-     25.093,
-     25.468
+     "orders",
+     2.795,
+     3.22
+    ],
+    [
+     "have",
+     3.22,
+     3.382
+    ],
+    [
+     "a",
+     3.382,
+     3.482
+    ],
+    [
+     "null",
+     3.482,
+     3.77
+    ],
+    [
+     "customer",
+     3.77,
+     4.27
+    ],
+    [
+     "ID",
+     4.27,
+     4.945
+    ],
+    [
+     "The",
+     5.615,
+     5.753
+    ],
+    [
+     "answer",
+     5.753,
+     6.14
+    ],
+    [
+     "is",
+     6.14,
+     6.278
+    ],
+    [
+     "seven",
+     6.278,
+     6.94
+    ],
+    [
+     "A",
+     7.61,
+     7.697
+    ],
+    [
+     "scripted",
+     7.697,
+     8.173
+    ],
+    [
+     "agent",
+     8.173,
+     8.597
+    ],
+    [
+     "answers",
+     8.597,
+     9.01
+    ],
+    [
+     "seventeen",
+     9.01,
+     9.96
+    ],
+    [
+     "and",
+     10.06,
+     10.172
     ],
     [
      "the",
-     25.468,
-     25.555
+     10.172,
+     10.26
+    ],
+    [
+     "naive",
+     10.26,
+     10.685
     ],
     [
      "grader",
-     25.555,
-     26.255
+     10.685,
+     11.06
+    ],
+    [
+     "passes",
+     11.06,
+     11.497
+    ],
+    [
+     "it",
+     11.497,
+     11.885
+    ],
+    [
+     "because",
+     11.985,
+     12.31
+    ],
+    [
+     "seven",
+     12.31,
+     12.685
+    ],
+    [
+     "appears",
+     12.685,
+     13.16
+    ],
+    [
+     "inside",
+     13.16,
+     13.66
+    ],
+    [
+     "seventeen",
+     13.66,
+     14.585
+    ],
+    [
+     "Public",
+     15.205,
+     15.543
+    ],
+    [
+     "reports",
+     15.543,
+     16.18
+    ],
+    [
+     "like",
+     16.217,
+     16.417
+    ],
+    [
+     "O-S",
+     16.417,
+     16.805
+    ],
+    [
+     "World",
+     16.805,
+     17.105
+    ],
+    [
+     "issue",
+     17.105,
+     17.48
+    ],
+    [
+     "five",
+     17.48,
+     17.767
+    ],
+    [
+     "eighteen",
+     17.767,
+     18.455
+    ],
+    [
+     "describe",
+     18.555,
+     19.03
+    ],
+    [
+     "exactly",
+     19.03,
+     19.58
+    ],
+    [
+     "this",
+     19.58,
+     20.13
+    ],
+    [
+     "When",
+     20.75,
+     20.862
+    ],
+    [
+     "the",
+     20.862,
+     20.95
+    ],
+    [
+     "grader",
+     20.95,
+     21.325
+    ],
+    [
+     "is",
+     21.325,
+     21.475
+    ],
+    [
+     "wrong",
+     21.475,
+     21.95
+    ],
+    [
+     "the",
+     22.05,
+     22.163
+    ],
+    [
+     "score",
+     22.163,
+     22.525
+    ],
+    [
+     "measures",
+     22.525,
+     22.888
+    ],
+    [
+     "the",
+     22.888,
+     22.975
+    ],
+    [
+     "grader",
+     22.975,
+     23.5
+    ],
+    [
+     "not",
+     23.575,
+     23.763
+    ],
+    [
+     "the",
+     23.763,
+     23.9
+    ],
+    [
+     "agent",
+     23.9,
+     24.6
     ]
    ]
   },
   {
    "n": 2,
-   "title": "What Grader Audit tests",
-   "start": 27.13,
-   "speech": 33.585,
-   "end": 61.315,
+   "title": "Grade the grader",
+   "label": "02 / The idea",
+   "start": 25.45,
+   "speech": 27.17,
+   "end": 53.22,
    "sentences": [
     {
-     "text": "Grader Audit tests graders without running any model.",
-     "start": 27.13,
-     "end": 30.855
+     "text": "This prototype grades the grader, without running a model.",
+     "start": 25.45,
+     "end": 29.175
     },
     {
-     "text": "It feeds them scripted probes: fixed outputs with a known label, should pass or should fail.",
-     "start": 31.035,
-     "end": 36.985
+     "text": "Twelve synthetic data-engineering tasks each get eight scripted probe outputs.",
+     "start": 29.295,
+     "end": 34.345
     },
     {
-     "text": "A grader can be wrong in three ways.",
-     "start": 37.165,
-     "end": 39.79
+     "text": "Gold, paraphrase, no-op, substring trap, a fake that only looks done, and more.",
+     "start": 34.465,
+     "end": 39.89
     },
     {
-     "text": "A false positive passes an output that should fail.",
-     "start": 39.97,
-     "end": 43.495
+     "text": "All ninety-six cases have a known label.",
+     "start": 40.01,
+     "end": 43.135
     },
     {
-     "text": "A false negative fails an output that should pass.",
-     "start": 43.675,
-     "end": 47.175
+     "text": "A false positive passes a case that should fail.",
+     "start": 43.255,
+     "end": 46.48
     },
     {
-     "text": "A flaky verdict changes between repeated runs of the same input.",
-     "start": 47.355,
-     "end": 51.955
+     "text": "A false negative fails one that should pass.",
+     "start": 46.6,
+     "end": 49.675
     },
     {
-     "text": "This is an independent prototype using synthetic tasks and scripted probes.",
-     "start": 52.135,
-     "end": 57.585
-    },
-    {
-     "text": "It does not audit HUD's actual benchmarks.",
-     "start": 57.765,
-     "end": 60.715
+     "text": "A flaky verdict changes between runs.",
+     "start": 49.795,
+     "end": 52.62
     }
    ],
    "words": [
     [
-     "Grader",
-     27.405,
-     27.78
-    ],
-    [
-     "Audit",
-     27.78,
-     28.08
-    ],
-    [
-     "tests",
-     28.08,
-     28.43
-    ],
-    [
-     "graders",
-     28.43,
-     29.143
-    ],
-    [
-     "without",
-     29.143,
-     29.48
-    ],
-    [
-     "running",
-     29.48,
-     29.755
-    ],
-    [
-     "any",
-     29.755,
-     29.955
-    ],
-    [
-     "model",
-     29.955,
-     30.605
-    ],
-    [
-     "It",
-     31.285,
-     31.435
-    ],
-    [
-     "feeds",
-     31.435,
-     31.723
-    ],
-    [
-     "them",
-     31.723,
-     31.922
-    ],
-    [
-     "scripted",
-     31.922,
-     32.385
-    ],
-    [
-     "probes",
-     32.385,
-     33.135
-    ],
-    [
-     "fixed",
-     33.272,
-     33.56
-    ],
-    [
-     "outputs",
-     33.56,
-     34.048
-    ],
-    [
-     "with",
-     34.048,
-     34.173
-    ],
-    [
-     "a",
-     34.173,
-     34.235
-    ],
-    [
-     "known",
-     34.235,
-     34.51
-    ],
-    [
-     "label",
-     34.51,
-     35.01
-    ],
-    [
-     "should",
-     35.11,
-     35.285
-    ],
-    [
-     "pass",
-     35.285,
-     35.735
-    ],
-    [
-     "or",
-     35.735,
-     35.885
-    ],
-    [
-     "should",
-     35.885,
-     36.085
-    ],
-    [
-     "fail",
-     36.085,
-     36.735
-    ],
-    [
-     "A",
-     37.44,
-     37.515
-    ],
-    [
-     "grader",
-     37.515,
-     37.915
-    ],
-    [
-     "can",
-     37.915,
-     38.028
-    ],
-    [
-     "be",
-     38.028,
-     38.165
-    ],
-    [
-     "wrong",
-     38.165,
-     38.49
-    ],
-    [
-     "in",
-     38.49,
-     38.653
-    ],
-    [
-     "three",
-     38.653,
-     38.89
-    ],
-    [
-     "ways",
-     38.89,
-     39.54
-    ],
-    [
-     "A",
-     40.245,
-     40.332
-    ],
-    [
-     "false",
-     40.332,
-     40.645
-    ],
-    [
-     "positive",
-     40.645,
-     41.333
-    ],
-    [
-     "passes",
-     41.333,
-     41.708
-    ],
-    [
-     "an",
-     41.708,
-     41.833
-    ],
-    [
-     "output",
-     41.833,
-     42.32
-    ],
-    [
-     "that",
-     42.32,
-     42.47
-    ],
-    [
-     "should",
-     42.47,
-     42.645
-    ],
-    [
-     "fail",
-     42.645,
-     43.245
-    ],
-    [
-     "A",
-     43.95,
-     44.037
-    ],
-    [
-     "false",
-     44.037,
-     44.375
-    ],
-    [
-     "negative",
-     44.375,
-     45.05
-    ],
-    [
-     "fails",
-     45.05,
-     45.387
-    ],
-    [
-     "an",
-     45.387,
-     45.512
-    ],
-    [
-     "output",
-     45.512,
-     45.975
-    ],
-    [
-     "that",
-     45.975,
-     46.125
-    ],
-    [
-     "should",
-     46.125,
-     46.275
-    ],
-    [
-     "pass",
-     46.275,
-     46.9
-    ],
-    [
-     "A",
-     47.63,
-     47.717
-    ],
-    [
-     "flaky",
-     47.717,
-     48.105
-    ],
-    [
-     "verdict",
-     48.105,
-     48.755
-    ],
-    [
-     "changes",
-     48.755,
-     49.205
-    ],
-    [
-     "between",
-     49.205,
-     49.555
-    ],
-    [
-     "repeated",
-     49.555,
-     50.055
-    ],
-    [
-     "runs",
-     50.055,
-     50.455
-    ],
-    [
-     "of",
-     50.455,
-     50.543
-    ],
-    [
-     "the",
-     50.543,
-     50.667
-    ],
-    [
-     "same",
-     50.667,
-     51.005
-    ],
-    [
-     "input",
-     51.005,
-     51.705
-    ],
-    [
      "This",
-     52.41,
-     52.672
-    ],
-    [
-     "is",
-     52.672,
-     52.823
-    ],
-    [
-     "an",
-     52.823,
-     52.947
-    ],
-    [
-     "independent",
-     52.947,
-     53.535
+     25.725,
+     25.925
     ],
     [
      "prototype",
-     53.535,
-     54.41
+     25.925,
+     26.475
     ],
     [
-     "using",
-     54.41,
-     54.76
+     "grades",
+     26.475,
+     26.837
+    ],
+    [
+     "the",
+     26.837,
+     26.925
+    ],
+    [
+     "grader",
+     26.925,
+     27.525
+    ],
+    [
+     "without",
+     27.625,
+     27.95
+    ],
+    [
+     "running",
+     27.95,
+     28.213
+    ],
+    [
+     "a",
+     28.213,
+     28.275
+    ],
+    [
+     "model",
+     28.275,
+     28.925
+    ],
+    [
+     "Twelve",
+     29.545,
+     29.845
     ],
     [
      "synthetic",
-     54.76,
-     55.323
+     29.845,
+     30.345
+    ],
+    [
+     "data-engineering",
+     30.345,
+     31.045
     ],
     [
      "tasks",
-     55.323,
-     55.997
+     31.045,
+     31.845
     ],
     [
-     "and",
-     55.997,
-     56.135
+     "each",
+     31.845,
+     32.095
+    ],
+    [
+     "get",
+     32.095,
+     32.308
+    ],
+    [
+     "eight",
+     32.308,
+     32.57
     ],
     [
      "scripted",
-     56.135,
-     56.56
+     32.57,
+     33.02
     ],
     [
-     "probes",
-     56.56,
-     57.335
+     "probe",
+     33.02,
+     33.32
     ],
     [
-     "It",
-     58.015,
-     58.127
+     "outputs",
+     33.32,
+     34.095
     ],
     [
-     "does",
-     58.127,
-     58.29
+     "Gold",
+     34.74,
+     35.165
     ],
     [
-     "not",
-     58.29,
-     58.552
+     "paraphrase",
+     35.215,
+     35.89
     ],
     [
-     "audit",
-     58.552,
-     58.89
+     "no-op",
+     35.94,
+     36.365
     ],
     [
-     "HUD's",
-     58.89,
-     59.227
+     "substring",
+     36.415,
+     36.915
     ],
     [
-     "actual",
-     59.227,
-     59.615
+     "trap",
+     36.915,
+     37.44
     ],
     [
-     "benchmarks",
-     59.615,
-     60.465
+     "a",
+     37.54,
+     37.653
+    ],
+    [
+     "fake",
+     37.653,
+     37.927
+    ],
+    [
+     "that",
+     37.927,
+     38.04
+    ],
+    [
+     "only",
+     38.04,
+     38.34
+    ],
+    [
+     "looks",
+     38.34,
+     38.59
+    ],
+    [
+     "done",
+     38.59,
+     38.865
+    ],
+    [
+     "and",
+     38.915,
+     39.04
+    ],
+    [
+     "more",
+     39.04,
+     39.64
+    ],
+    [
+     "All",
+     40.31,
+     40.535
+    ],
+    [
+     "ninety-six",
+     40.535,
+     41.135
+    ],
+    [
+     "cases",
+     41.135,
+     41.735
+    ],
+    [
+     "have",
+     41.735,
+     41.897
+    ],
+    [
+     "a",
+     41.897,
+     41.96
+    ],
+    [
+     "known",
+     41.96,
+     42.235
+    ],
+    [
+     "label",
+     42.235,
+     42.885
+    ],
+    [
+     "A",
+     43.53,
+     43.617
+    ],
+    [
+     "false",
+     43.617,
+     43.93
+    ],
+    [
+     "positive",
+     43.93,
+     44.567
+    ],
+    [
+     "passes",
+     44.567,
+     44.943
+    ],
+    [
+     "a",
+     44.943,
+     45.005
+    ],
+    [
+     "case",
+     45.005,
+     45.305
+    ],
+    [
+     "that",
+     45.305,
+     45.455
+    ],
+    [
+     "should",
+     45.455,
+     45.63
+    ],
+    [
+     "fail",
+     45.63,
+     46.23
+    ],
+    [
+     "A",
+     46.875,
+     46.962
+    ],
+    [
+     "false",
+     46.962,
+     47.362
+    ],
+    [
+     "negative",
+     47.362,
+     47.862
+    ],
+    [
+     "fails",
+     47.862,
+     48.225
+    ],
+    [
+     "one",
+     48.225,
+     48.45
+    ],
+    [
+     "that",
+     48.45,
+     48.6
+    ],
+    [
+     "should",
+     48.6,
+     48.75
+    ],
+    [
+     "pass",
+     48.75,
+     49.4
+    ],
+    [
+     "A",
+     50.07,
+     50.157
+    ],
+    [
+     "flaky",
+     50.157,
+     50.52
+    ],
+    [
+     "verdict",
+     50.52,
+     50.958
+    ],
+    [
+     "changes",
+     50.958,
+     51.37
+    ],
+    [
+     "between",
+     51.37,
+     51.72
+    ],
+    [
+     "runs",
+     51.72,
+     52.37
     ]
    ]
   },
   {
    "n": 3,
-   "title": "The synthetic test bench",
-   "start": 61.315,
-   "speech": 29.15,
-   "end": 91.065,
+   "title": "Architecture",
+   "label": "03 / Architecture",
+   "start": 53.22,
+   "speech": 24.73,
+   "end": 78.55,
    "sentences": [
     {
-     "text": "The bench has twelve synthetic data engineering tasks: four questions, five tables, and three pipeline run records to update.",
-     "start": 61.315,
-     "end": 70.19
+     "text": "It's a straight pipeline.",
+     "start": 53.22,
+     "end": 55.12
     },
     {
-     "text": "Each task gets eight probes, from the exact gold output to traps and partly wrong answers.",
-     "start": 70.37,
-     "end": 76.32
+     "text": "Tasks dot py generates twelve tasks from one fixed seed.",
+     "start": 55.24,
+     "end": 59.365
     },
     {
-     "text": "Labels depend on the task.",
-     "start": 76.5,
-     "end": 78.825
+     "text": "Probes dot py adds eight labeled outputs per task, and generate dot py writes them to the data folder.",
+     "start": 59.485,
+     "end": 66.635
     },
     {
-     "text": "Shuffled rows are fine, except in a top five ranking, where order is the answer.",
-     "start": 79.005,
-     "end": 84.33
+     "text": "Runner dot py grades every case five times per grader, then writes results and a report.",
+     "start": 66.755,
+     "end": 72.855
     },
     {
-     "text": "That makes ninety-six cases.",
-     "start": 84.51,
-     "end": 86.885
-    },
-    {
-     "text": "Forty-seven should pass, and forty-nine should fail.",
-     "start": 87.065,
-     "end": 90.465
+     "text": "Serve dot py, a Fast A-P-I app, serves them to one static page.",
+     "start": 72.975,
+     "end": 77.95
     }
    ],
    "words": [
     [
-     "The",
-     61.59,
-     61.665
-    ],
-    [
-     "bench",
-     61.665,
-     61.99
-    ],
-    [
-     "has",
-     61.99,
-     62.202
-    ],
-    [
-     "twelve",
-     62.202,
-     62.652
-    ],
-    [
-     "synthetic",
-     62.652,
-     63.19
-    ],
-    [
-     "data",
-     63.19,
-     63.49
-    ],
-    [
-     "engineering",
-     63.49,
-     64.09
-    ],
-    [
-     "tasks",
-     64.09,
-     64.94
-    ],
-    [
-     "four",
-     65.078,
-     65.315
-    ],
-    [
-     "questions",
-     65.315,
-     66.115
-    ],
-    [
-     "five",
-     66.227,
-     66.59
-    ],
-    [
-     "tables",
-     66.59,
-     67.29
-    ],
-    [
-     "and",
-     67.365,
-     67.503
-    ],
-    [
-     "three",
-     67.503,
-     67.753
-    ],
-    [
-     "pipeline",
-     67.753,
-     68.377
-    ],
-    [
-     "run",
-     68.377,
-     68.64
-    ],
-    [
-     "records",
-     68.64,
-     69.065
-    ],
-    [
-     "to",
-     69.065,
-     69.19
-    ],
-    [
-     "update",
-     69.19,
-     69.94
-    ],
-    [
-     "Each",
-     70.645,
-     70.845
-    ],
-    [
-     "task",
-     70.845,
-     71.195
-    ],
-    [
-     "gets",
-     71.195,
-     71.42
-    ],
-    [
-     "eight",
-     71.42,
-     71.62
-    ],
-    [
-     "probes",
-     71.62,
-     72.295
-    ],
-    [
-     "from",
-     72.395,
-     72.533
-    ],
-    [
-     "the",
-     72.533,
-     72.645
-    ],
-    [
-     "exact",
-     72.645,
-     73.12
-    ],
-    [
-     "gold",
-     73.12,
-     73.395
-    ],
-    [
-     "output",
-     73.395,
-     73.82
-    ],
-    [
-     "to",
-     73.82,
-     73.945
-    ],
-    [
-     "traps",
-     73.945,
-     74.47
-    ],
-    [
-     "and",
-     74.47,
-     74.595
-    ],
-    [
-     "partly",
-     74.595,
-     74.995
-    ],
-    [
-     "wrong",
-     74.995,
-     75.27
-    ],
-    [
-     "answers",
-     75.27,
-     76.07
-    ],
-    [
-     "Labels",
-     76.825,
-     77.275
-    ],
-    [
-     "depend",
-     77.275,
-     77.663
-    ],
-    [
-     "on",
-     77.663,
-     77.762
-    ],
-    [
-     "the",
-     77.762,
-     77.85
-    ],
-    [
-     "task",
-     77.85,
-     78.55
-    ],
-    [
-     "Shuffled",
-     79.33,
-     79.705
-    ],
-    [
-     "rows",
-     79.705,
-     80.08
-    ],
-    [
-     "are",
-     80.08,
-     80.217
-    ],
-    [
-     "fine",
-     80.217,
-     80.73
-    ],
-    [
-     "except",
-     80.83,
-     81.217
-    ],
-    [
-     "in",
-     81.217,
-     81.293
+     "It's",
+     53.47,
+     53.632
     ],
     [
      "a",
-     81.293,
-     81.355
+     53.632,
+     53.72
     ],
     [
-     "top",
-     81.355,
-     81.63
+     "straight",
+     53.72,
+     54.045
     ],
     [
-     "five",
-     81.63,
-     81.88
+     "pipeline",
+     54.045,
+     54.845
     ],
     [
-     "ranking",
-     81.88,
-     82.43
+     "Tasks",
+     55.515,
+     55.89
     ],
     [
-     "where",
-     82.53,
-     82.742
+     "dot",
+     55.89,
+     56.14
     ],
     [
-     "order",
-     82.742,
-     83.105
+     "py",
+     56.14,
+     56.615
     ],
     [
-     "is",
-     83.105,
-     83.218
+     "generates",
+     56.615,
+     57.09
     ],
     [
-     "the",
-     83.218,
-     83.355
+     "twelve",
+     57.09,
+     57.415
     ],
     [
-     "answer",
-     83.355,
-     84.08
+     "tasks",
+     57.415,
+     57.865
     ],
     [
-     "That",
-     84.785,
-     84.973
+     "from",
+     57.865,
+     58.065
     ],
     [
-     "makes",
-     84.973,
-     85.235
+     "one",
+     58.065,
+     58.29
     ],
     [
-     "ninety-six",
-     85.235,
-     85.835
+     "fixed",
+     58.29,
+     58.54
     ],
     [
-     "cases",
-     85.835,
-     86.635
+     "seed",
+     58.54,
+     59.115
     ],
     [
-     "Forty-seven",
-     87.365,
-     87.965
+     "Probes",
+     59.735,
+     60.11
     ],
     [
-     "should",
-     87.965,
-     88.115
+     "dot",
+     60.11,
+     60.385
     ],
     [
-     "pass",
-     88.115,
-     88.665
+     "py",
+     60.385,
+     60.935
+    ],
+    [
+     "adds",
+     60.935,
+     61.247
+    ],
+    [
+     "eight",
+     61.247,
+     61.523
+    ],
+    [
+     "labeled",
+     61.523,
+     61.985
+    ],
+    [
+     "outputs",
+     61.985,
+     62.46
+    ],
+    [
+     "per",
+     62.46,
+     62.61
+    ],
+    [
+     "task",
+     62.61,
+     63.385
     ],
     [
      "and",
-     88.765,
-     88.902
+     63.485,
+     63.623
     ],
     [
-     "forty-nine",
-     88.902,
-     89.44
+     "generate",
+     63.623,
+     64.085
     ],
     [
-     "should",
-     89.44,
-     89.615
+     "dot",
+     64.085,
+     64.36
     ],
     [
-     "fail",
-     89.615,
-     90.215
+     "py",
+     64.36,
+     64.722
+    ],
+    [
+     "writes",
+     64.722,
+     65.022
+    ],
+    [
+     "them",
+     65.022,
+     65.21
+    ],
+    [
+     "to",
+     65.21,
+     65.297
+    ],
+    [
+     "the",
+     65.297,
+     65.385
+    ],
+    [
+     "data",
+     65.385,
+     65.71
+    ],
+    [
+     "folder",
+     65.71,
+     66.385
+    ],
+    [
+     "Runner",
+     67.055,
+     67.355
+    ],
+    [
+     "dot",
+     67.355,
+     67.605
+    ],
+    [
+     "py",
+     67.605,
+     67.88
+    ],
+    [
+     "grades",
+     67.88,
+     68.28
+    ],
+    [
+     "every",
+     68.28,
+     68.555
+    ],
+    [
+     "case",
+     68.555,
+     68.893
+    ],
+    [
+     "five",
+     68.893,
+     69.255
+    ],
+    [
+     "times",
+     69.255,
+     69.605
+    ],
+    [
+     "per",
+     69.605,
+     69.73
+    ],
+    [
+     "grader",
+     69.73,
+     70.43
+    ],
+    [
+     "then",
+     70.555,
+     70.78
+    ],
+    [
+     "writes",
+     70.78,
+     71.08
+    ],
+    [
+     "results",
+     71.08,
+     71.667
+    ],
+    [
+     "and",
+     71.667,
+     71.792
+    ],
+    [
+     "a",
+     71.792,
+     71.855
+    ],
+    [
+     "report",
+     71.855,
+     72.605
+    ],
+    [
+     "Serve",
+     73.275,
+     73.525
+    ],
+    [
+     "dot",
+     73.525,
+     73.775
+    ],
+    [
+     "py",
+     73.775,
+     74.2
+    ],
+    [
+     "a",
+     74.3,
+     74.4
+    ],
+    [
+     "Fast",
+     74.4,
+     74.75
+    ],
+    [
+     "A-P-I",
+     74.75,
+     75.25
+    ],
+    [
+     "app",
+     75.25,
+     75.6
+    ],
+    [
+     "serves",
+     75.712,
+     76.037
+    ],
+    [
+     "them",
+     76.037,
+     76.225
+    ],
+    [
+     "to",
+     76.225,
+     76.35
+    ],
+    [
+     "one",
+     76.35,
+     76.6
+    ],
+    [
+     "static",
+     76.6,
+     77.025
+    ],
+    [
+     "page",
+     77.025,
+     77.675
     ]
    ]
   },
   {
    "n": 4,
-   "title": "Run the audit",
-   "start": 91.065,
-   "speech": 33.9,
-   "end": 125.565,
+   "title": "One case, end to end",
+   "label": "04 / Tracing one case",
+   "start": 78.55,
+   "speech": 41.905,
+   "end": 121.055,
    "sentences": [
     {
-     "text": "One command runs everything: Python, dash m, audit dot serve.",
-     "start": 91.065,
-     "end": 95.865
+     "text": "Let's follow that seventeen through the code.",
+     "start": 78.55,
+     "end": 81.25
     },
     {
-     "text": "It generates the data, runs both graders five times per case, and serves this page.",
-     "start": 96.045,
-     "end": 101.845
+     "text": "Run audit loads each labeled case, and calls grade K for every grader.",
+     "start": 81.37,
+     "end": 86.395
     },
     {
-     "text": "The five runs are combined by majority vote into one verdict per case, and that verdict is what gets counted.",
-     "start": 102.025,
-     "end": 108.975
+     "text": "Grade K runs it five times, with seeds zero to four, and takes the majority vote.",
+     "start": 86.515,
+     "end": 92.265
     },
     {
-     "text": "The naive graders passed twenty of forty-nine should-fail cases, and failed fourteen of forty-seven should-pass cases.",
-     "start": 109.155,
-     "end": 116.68
+     "text": "The naive grader asks one question: is the gold string in the output?",
+     "start": 92.385,
+     "end": 96.96
     },
     {
-     "text": "Six of ninety-six were flaky.",
-     "start": 116.86,
-     "end": 119.31
+     "text": "It is, so it scores one.",
+     "start": 97.08,
+     "end": 99.28
     },
     {
-     "text": "The hardened graders made no errors, on these ninety-six synthetic cases only.",
-     "start": 119.49,
-     "end": 124.965
+     "text": "The hardened grader normalizes both strings and needs an exact match.",
+     "start": 99.4,
+     "end": 104.15
+    },
+    {
+     "text": "That fails, so it asks the judge.",
+     "start": 104.27,
+     "end": 106.82
+    },
+    {
+     "text": "That's a deterministic mock by default, and it returns numeric mismatch, seventeen versus seven.",
+     "start": 106.94,
+     "end": 113.69
+    },
+    {
+     "text": "Score zero.",
+     "start": 113.81,
+     "end": 115.41
+    },
+    {
+     "text": "Finally, a pass on a should-fail case is recorded as a false positive.",
+     "start": 115.53,
+     "end": 120.455
     }
    ],
    "words": [
     [
-     "One",
-     91.365,
-     91.59
+     "Let's",
+     78.825,
+     79.05
     ],
     [
-     "command",
-     91.59,
-     91.99
-    ],
-    [
-     "runs",
-     91.99,
-     92.265
-    ],
-    [
-     "everything",
-     92.265,
-     93.015
-    ],
-    [
-     "Python",
-     93.152,
-     93.69
-    ],
-    [
-     "dash",
-     93.765,
-     94.09
-    ],
-    [
-     "m",
-     94.09,
-     94.365
-    ],
-    [
-     "audit",
-     94.44,
-     94.74
-    ],
-    [
-     "dot",
-     94.74,
-     95.015
-    ],
-    [
-     "serve",
-     95.015,
-     95.615
-    ],
-    [
-     "It",
-     96.295,
-     96.457
-    ],
-    [
-     "generates",
-     96.457,
-     96.983
-    ],
-    [
-     "the",
-     96.983,
-     97.07
-    ],
-    [
-     "data",
-     97.07,
-     97.67
-    ],
-    [
-     "runs",
-     97.795,
-     98.12
-    ],
-    [
-     "both",
-     98.12,
-     98.42
-    ],
-    [
-     "graders",
-     98.42,
-     98.857
-    ],
-    [
-     "five",
-     98.857,
-     99.17
-    ],
-    [
-     "times",
-     99.17,
-     99.52
-    ],
-    [
-     "per",
-     99.52,
-     99.67
-    ],
-    [
-     "case",
-     99.67,
-     100.145
-    ],
-    [
-     "and",
-     100.22,
-     100.357
-    ],
-    [
-     "serves",
-     100.357,
-     100.745
-    ],
-    [
-     "this",
-     100.745,
-     100.92
-    ],
-    [
-     "page",
-     100.92,
-     101.57
-    ],
-    [
-     "The",
-     102.275,
-     102.387
-    ],
-    [
-     "five",
-     102.387,
-     102.75
-    ],
-    [
-     "runs",
-     102.75,
-     103.125
-    ],
-    [
-     "are",
-     103.125,
-     103.225
-    ],
-    [
-     "combined",
-     103.225,
-     103.775
-    ],
-    [
-     "by",
-     103.775,
-     103.95
-    ],
-    [
-     "majority",
-     103.95,
-     104.587
-    ],
-    [
-     "vote",
-     104.587,
-     104.887
-    ],
-    [
-     "into",
-     104.887,
-     105.137
-    ],
-    [
-     "one",
-     105.137,
-     105.4
-    ],
-    [
-     "verdict",
-     105.4,
-     105.75
-    ],
-    [
-     "per",
-     105.75,
-     105.9
-    ],
-    [
-     "case",
-     105.9,
-     106.575
-    ],
-    [
-     "and",
-     106.675,
-     106.8
+     "follow",
+     79.05,
+     79.337
     ],
     [
      "that",
-     106.8,
-     107.025
+     79.337,
+     79.525
     ],
     [
-     "verdict",
-     107.025,
-     107.425
+     "seventeen",
+     79.525,
+     80.125
     ],
     [
-     "is",
-     107.425,
-     107.575
+     "through",
+     80.125,
+     80.312
     ],
     [
-     "what",
-     107.575,
-     107.725
+     "the",
+     80.312,
+     80.4
     ],
     [
-     "gets",
-     107.725,
-     107.975
+     "code",
+     80.4,
+     81.0
     ],
     [
-     "counted",
-     107.975,
-     108.7
+     "Run",
+     81.695,
+     81.92
     ],
     [
-     "The",
-     109.405,
-     109.505
+     "audit",
+     81.92,
+     82.245
     ],
     [
-     "naive",
-     109.505,
-     109.93
+     "loads",
+     82.245,
+     82.632
     ],
     [
-     "graders",
-     109.93,
-     110.38
+     "each",
+     82.632,
+     82.895
     ],
     [
-     "passed",
-     110.38,
-     110.742
+     "labeled",
+     82.895,
+     83.245
     ],
     [
-     "twenty",
-     110.742,
-     111.205
-    ],
-    [
-     "of",
-     111.205,
-     111.343
-    ],
-    [
-     "forty-nine",
-     111.343,
-     111.905
-    ],
-    [
-     "should-fail",
-     111.905,
-     112.355
-    ],
-    [
-     "cases",
-     112.355,
-     113.205
+     "case",
+     83.245,
+     83.87
     ],
     [
      "and",
-     113.305,
-     113.43
+     83.97,
+     84.095
     ],
     [
-     "failed",
-     113.43,
-     113.73
+     "calls",
+     84.095,
+     84.395
     ],
     [
-     "fourteen",
-     113.73,
-     114.38
+     "grade",
+     84.395,
+     84.732
     ],
     [
-     "of",
-     114.38,
-     114.517
+     "K",
+     84.732,
+     85.045
     ],
     [
-     "forty-seven",
-     114.517,
-     115.192
+     "for",
+     85.045,
+     85.195
     ],
     [
-     "should-pass",
-     115.192,
-     115.655
+     "every",
+     85.195,
+     85.495
     ],
     [
-     "cases",
-     115.655,
-     116.43
+     "grader",
+     85.495,
+     86.145
     ],
     [
-     "Six",
-     117.185,
-     117.448
+     "Grade",
+     86.79,
+     87.09
     ],
     [
-     "of",
-     117.448,
-     117.535
+     "K",
+     87.09,
+     87.365
     ],
     [
-     "ninety-six",
-     117.535,
-     118.172
+     "runs",
+     87.365,
+     87.602
     ],
     [
-     "were",
-     118.172,
-     118.322
+     "it",
+     87.602,
+     87.74
     ],
     [
-     "flaky",
-     118.322,
-     119.035
+     "five",
+     87.74,
+     88.09
+    ],
+    [
+     "times",
+     88.09,
+     88.74
+    ],
+    [
+     "with",
+     88.84,
+     89.028
+    ],
+    [
+     "seeds",
+     89.028,
+     89.365
+    ],
+    [
+     "zero",
+     89.365,
+     89.69
+    ],
+    [
+     "to",
+     89.69,
+     89.827
+    ],
+    [
+     "four",
+     89.827,
+     90.34
+    ],
+    [
+     "and",
+     90.44,
+     90.565
+    ],
+    [
+     "takes",
+     90.565,
+     90.853
+    ],
+    [
+     "the",
+     90.853,
+     90.927
+    ],
+    [
+     "majority",
+     90.927,
+     91.415
+    ],
+    [
+     "vote",
+     91.415,
+     92.015
     ],
     [
      "The",
-     119.74,
-     119.815
+     92.66,
+     92.735
+    ],
+    [
+     "naive",
+     92.735,
+     93.135
+    ],
+    [
+     "grader",
+     93.135,
+     93.548
+    ],
+    [
+     "asks",
+     93.548,
+     93.885
+    ],
+    [
+     "one",
+     93.885,
+     94.11
+    ],
+    [
+     "question",
+     94.11,
+     94.835
+    ],
+    [
+     "is",
+     94.972,
+     95.122
+    ],
+    [
+     "the",
+     95.122,
+     95.21
+    ],
+    [
+     "gold",
+     95.21,
+     95.523
+    ],
+    [
+     "string",
+     95.523,
+     95.823
+    ],
+    [
+     "in",
+     95.823,
+     95.898
+    ],
+    [
+     "the",
+     95.898,
+     95.985
+    ],
+    [
+     "output",
+     95.985,
+     96.71
+    ],
+    [
+     "It",
+     97.355,
+     97.543
+    ],
+    [
+     "is",
+     97.543,
+     97.83
+    ],
+    [
+     "so",
+     97.905,
+     98.043
+    ],
+    [
+     "it",
+     98.043,
+     98.13
+    ],
+    [
+     "scores",
+     98.13,
+     98.505
+    ],
+    [
+     "one",
+     98.505,
+     99.03
+    ],
+    [
+     "The",
+     99.65,
+     99.725
     ],
     [
      "hardened",
-     119.815,
-     120.215
+     99.725,
+     100.1
     ],
     [
-     "graders",
-     120.215,
-     120.69
+     "grader",
+     100.1,
+     100.525
     ],
     [
-     "made",
-     120.69,
-     120.928
+     "normalizes",
+     100.525,
+     101.2
     ],
     [
-     "no",
-     120.928,
-     121.202
+     "both",
+     101.2,
+     101.475
     ],
     [
-     "errors",
-     121.202,
-     121.94
+     "strings",
+     101.475,
+     102.275
+    ],
+    [
+     "and",
+     102.275,
+     102.45
+    ],
+    [
+     "needs",
+     102.45,
+     102.788
+    ],
+    [
+     "an",
+     102.788,
+     102.862
+    ],
+    [
+     "exact",
+     102.862,
+     103.275
+    ],
+    [
+     "match",
+     103.275,
+     103.9
+    ],
+    [
+     "That",
+     104.545,
+     104.795
+    ],
+    [
+     "fails",
+     104.795,
+     105.245
+    ],
+    [
+     "so",
+     105.32,
+     105.433
+    ],
+    [
+     "it",
+     105.433,
+     105.52
+    ],
+    [
+     "asks",
+     105.52,
+     105.832
+    ],
+    [
+     "the",
+     105.832,
+     105.92
+    ],
+    [
+     "judge",
+     105.92,
+     106.545
+    ],
+    [
+     "That's",
+     107.215,
+     107.477
+    ],
+    [
+     "a",
+     107.477,
+     107.54
+    ],
+    [
+     "deterministic",
+     107.54,
+     108.365
+    ],
+    [
+     "mock",
+     108.365,
+     108.69
+    ],
+    [
+     "by",
+     108.69,
+     108.865
+    ],
+    [
+     "default",
+     108.865,
+     109.64
+    ],
+    [
+     "and",
+     109.74,
+     109.853
+    ],
+    [
+     "it",
+     109.853,
+     109.927
+    ],
+    [
+     "returns",
+     109.927,
+     110.415
+    ],
+    [
+     "numeric",
+     110.415,
+     110.89
+    ],
+    [
+     "mismatch",
+     110.89,
+     111.59
+    ],
+    [
+     "seventeen",
+     111.727,
+     112.365
+    ],
+    [
+     "versus",
+     112.365,
+     112.778
+    ],
+    [
+     "seven",
+     112.778,
+     113.44
+    ],
+    [
+     "Score",
+     114.16,
+     114.435
+    ],
+    [
+     "zero",
+     114.435,
+     115.085
+    ],
+    [
+     "Finally",
+     115.83,
+     116.38
+    ],
+    [
+     "a",
+     116.48,
+     116.592
+    ],
+    [
+     "pass",
+     116.592,
+     116.943
     ],
     [
      "on",
-     122.04,
-     122.178
+     116.943,
+     117.042
     ],
     [
-     "these",
-     122.178,
-     122.403
+     "a",
+     117.042,
+     117.143
     ],
     [
-     "ninety-six",
-     122.403,
-     123.04
+     "should-fail",
+     117.143,
+     117.63
     ],
     [
-     "synthetic",
-     123.04,
-     123.59
+     "case",
+     117.63,
+     118.168
     ],
     [
-     "cases",
-     123.59,
-     124.04
+     "is",
+     118.168,
+     118.33
     ],
     [
-     "only",
-     124.04,
-     124.715
+     "recorded",
+     118.33,
+     118.892
+    ],
+    [
+     "as",
+     118.892,
+     119.017
+    ],
+    [
+     "a",
+     119.017,
+     119.092
+    ],
+    [
+     "false",
+     119.092,
+     119.405
+    ],
+    [
+     "positive",
+     119.405,
+     120.205
     ]
    ]
   },
   {
    "n": 5,
-   "title": "A false positive, inspected",
-   "start": 125.565,
-   "speech": 37.245,
-   "end": 163.41,
+   "title": "Naive vs hardened, in code",
+   "label": "05 / The graders",
+   "start": 121.055,
+   "speech": 23.905,
+   "end": 145.56,
    "sentences": [
     {
-     "text": "The error-count heatmap shows wrong verdicts for each probe and grader.",
-     "start": 125.565,
-     "end": 130.165
+     "text": "Tables show the same contrast.",
+     "start": 121.055,
+     "end": 123.48
     },
     {
-     "text": "Click a cell to list its cases.",
-     "start": 130.345,
-     "end": 132.72
+     "text": "The naive grader checks the header and the row count, so a table with one wrong total still passes.",
+     "start": 123.6,
+     "end": 129.9
     },
     {
-     "text": "Here's the substring trap on the naive grader.",
-     "start": 132.9,
-     "end": 136.05
+     "text": "The hardened grader normalizes each cell by its declared type.",
+     "start": 130.02,
+     "end": 134.22
     },
     {
-     "text": "Case A1 shows the instruction, the probe's seventeen, and the gold seven.",
-     "start": 136.23,
-     "end": 141.48
+     "text": "So one point five zero equals one point five, and month-first dates are rejected as ambiguous.",
+     "start": 134.34,
+     "end": 141.09
     },
     {
-     "text": "The label says should fail.",
-     "start": 141.66,
-     "end": 143.61
-    },
-    {
-     "text": "The naive grader passed it, because the output contains seven.",
-     "start": 143.79,
-     "end": 148.015
-    },
-    {
-     "text": "The hardened grader failed it: numeric mismatch.",
-     "start": 148.195,
-     "end": 151.57
-    },
-    {
-     "text": "In table case T four, one regional total is off by a dollar.",
-     "start": 151.75,
-     "end": 156.175
-    },
-    {
-     "text": "The naive check sees the right header and row count, and passes.",
-     "start": 156.355,
-     "end": 160.48
-    },
-    {
-     "text": "The diff shows the changed row.",
-     "start": 160.66,
-     "end": 162.81
+     "text": "Then it checks the row count, unique keys, and every row.",
+     "start": 141.21,
+     "end": 144.96
     }
    ],
    "words": [
     [
+     "Tables",
+     121.33,
+     121.743
+    ],
+    [
+     "show",
+     121.743,
+     121.967
+    ],
+    [
+     "the",
+     121.967,
+     122.055
+    ],
+    [
+     "same",
+     122.055,
+     122.33
+    ],
+    [
+     "contrast",
+     122.33,
+     123.205
+    ],
+    [
      "The",
-     125.815,
-     125.94
-    ],
-    [
-     "error-count",
-     125.94,
-     126.49
-    ],
-    [
-     "heatmap",
-     126.49,
-     127.19
-    ],
-    [
-     "shows",
-     127.19,
-     127.527
-    ],
-    [
-     "wrong",
-     127.527,
-     127.865
-    ],
-    [
-     "verdicts",
-     127.865,
-     128.24
-    ],
-    [
-     "for",
-     128.24,
-     128.39
-    ],
-    [
-     "each",
-     128.39,
-     128.652
-    ],
-    [
-     "probe",
-     128.652,
-     129.09
-    ],
-    [
-     "and",
-     129.09,
-     129.215
-    ],
-    [
-     "grader",
-     129.215,
-     129.915
-    ],
-    [
-     "Click",
-     130.62,
-     130.808
-    ],
-    [
-     "a",
-     130.808,
-     130.907
-    ],
-    [
-     "cell",
-     130.907,
-     131.22
-    ],
-    [
-     "to",
-     131.22,
-     131.32
-    ],
-    [
-     "list",
-     131.32,
-     131.533
-    ],
-    [
-     "its",
-     131.533,
-     131.67
-    ],
-    [
-     "cases",
-     131.67,
-     132.47
-    ],
-    [
-     "Here's",
-     133.175,
-     133.462
-    ],
-    [
-     "the",
-     133.462,
-     133.575
-    ],
-    [
-     "substring",
-     133.575,
-     134.075
-    ],
-    [
-     "trap",
-     134.075,
-     134.525
-    ],
-    [
-     "on",
-     134.525,
-     134.638
-    ],
-    [
-     "the",
-     134.638,
-     134.725
+     123.875,
+     123.975
     ],
     [
      "naive",
-     134.725,
-     135.125
+     123.975,
+     124.375
     ],
     [
      "grader",
-     135.125,
-     135.775
+     124.375,
+     124.763
     ],
     [
-     "Case",
-     136.505,
-     136.818
-    ],
-    [
-     "A1",
-     136.818,
-     137.292
-    ],
-    [
-     "shows",
-     137.292,
-     137.593
+     "checks",
+     124.763,
+     125.075
     ],
     [
      "the",
-     137.593,
-     137.668
-    ],
-    [
-     "instruction",
-     137.668,
-     138.48
-    ],
-    [
-     "the",
-     138.58,
-     138.68
-    ],
-    [
-     "probe's",
-     138.68,
-     139.03
-    ],
-    [
-     "seventeen",
-     139.03,
-     139.83
-    ],
-    [
-     "and",
-     139.93,
-     140.042
-    ],
-    [
-     "the",
-     140.042,
-     140.13
-    ],
-    [
-     "gold",
-     140.13,
-     140.555
-    ],
-    [
-     "seven",
-     140.555,
-     141.23
-    ],
-    [
-     "The",
-     141.935,
-     142.035
-    ],
-    [
-     "label",
-     142.035,
-     142.385
-    ],
-    [
-     "says",
-     142.385,
-     142.61
-    ],
-    [
-     "should",
-     142.61,
-     142.785
-    ],
-    [
-     "fail",
-     142.785,
-     143.36
-    ],
-    [
-     "The",
-     144.065,
-     144.165
-    ],
-    [
-     "naive",
-     144.165,
-     144.59
-    ],
-    [
-     "grader",
-     144.59,
-     144.965
-    ],
-    [
-     "passed",
-     144.965,
-     145.34
-    ],
-    [
-     "it",
-     145.34,
-     145.64
-    ],
-    [
-     "because",
-     145.74,
-     146.078
-    ],
-    [
-     "the",
-     146.078,
-     146.19
-    ],
-    [
-     "output",
-     146.19,
-     146.615
-    ],
-    [
-     "contains",
-     146.615,
-     147.102
-    ],
-    [
-     "seven",
-     147.102,
-     147.765
-    ],
-    [
-     "The",
-     148.445,
-     148.52
-    ],
-    [
-     "hardened",
-     148.52,
-     148.92
-    ],
-    [
-     "grader",
-     148.92,
-     149.308
-    ],
-    [
-     "failed",
-     149.308,
-     149.645
-    ],
-    [
-     "it",
-     149.645,
-     149.945
-    ],
-    [
-     "numeric",
-     150.045,
-     150.52
-    ],
-    [
-     "mismatch",
-     150.52,
-     151.295
-    ],
-    [
-     "In",
-     152.025,
-     152.15
-    ],
-    [
-     "table",
-     152.15,
-     152.5
-    ],
-    [
-     "case",
-     152.5,
-     152.8
-    ],
-    [
-     "T",
-     152.8,
-     153.012
-    ],
-    [
-     "four",
-     153.012,
-     153.5
-    ],
-    [
-     "one",
-     153.637,
-     153.9
-    ],
-    [
-     "regional",
-     153.9,
-     154.325
-    ],
-    [
-     "total",
-     154.325,
-     154.7
-    ],
-    [
-     "is",
-     154.7,
-     154.825
-    ],
-    [
-     "off",
-     154.825,
-     155.05
-    ],
-    [
-     "by",
-     155.05,
-     155.188
-    ],
-    [
-     "a",
-     155.188,
-     155.25
-    ],
-    [
-     "dollar",
-     155.25,
-     155.925
-    ],
-    [
-     "The",
-     156.63,
-     156.705
-    ],
-    [
-     "naive",
-     156.705,
-     157.093
-    ],
-    [
-     "check",
-     157.093,
-     157.43
-    ],
-    [
-     "sees",
-     157.43,
-     157.692
-    ],
-    [
-     "the",
-     157.692,
-     157.78
-    ],
-    [
-     "right",
-     157.78,
-     158.03
+     125.075,
+     125.175
     ],
     [
      "header",
-     158.03,
-     158.33
+     125.175,
+     125.525
     ],
     [
      "and",
-     158.33,
-     158.455
-    ],
-    [
-     "row",
-     158.455,
-     158.68
-    ],
-    [
-     "count",
-     158.68,
-     159.18
-    ],
-    [
-     "and",
-     159.28,
-     159.405
-    ],
-    [
-     "passes",
-     159.405,
-     160.23
-    ],
-    [
-     "The",
-     160.935,
-     161.01
-    ],
-    [
-     "diff",
-     161.01,
-     161.235
-    ],
-    [
-     "shows",
-     161.235,
-     161.523
+     125.525,
+     125.638
     ],
     [
      "the",
-     161.523,
-     161.61
-    ],
-    [
-     "changed",
-     161.61,
-     161.985
+     125.638,
+     125.725
     ],
     [
      "row",
-     161.985,
-     162.535
+     125.725,
+     125.95
+    ],
+    [
+     "count",
+     125.95,
+     126.625
+    ],
+    [
+     "so",
+     126.75,
+     126.888
+    ],
+    [
+     "a",
+     126.888,
+     126.962
+    ],
+    [
+     "table",
+     126.962,
+     127.375
+    ],
+    [
+     "with",
+     127.375,
+     127.562
+    ],
+    [
+     "one",
+     127.562,
+     127.825
+    ],
+    [
+     "wrong",
+     127.825,
+     128.15
+    ],
+    [
+     "total",
+     128.15,
+     128.538
+    ],
+    [
+     "still",
+     128.538,
+     128.825
+    ],
+    [
+     "passes",
+     128.825,
+     129.65
+    ],
+    [
+     "The",
+     130.27,
+     130.345
+    ],
+    [
+     "hardened",
+     130.345,
+     130.72
+    ],
+    [
+     "grader",
+     130.72,
+     131.107
+    ],
+    [
+     "normalizes",
+     131.107,
+     131.832
+    ],
+    [
+     "each",
+     131.832,
+     132.082
+    ],
+    [
+     "cell",
+     132.082,
+     132.632
+    ],
+    [
+     "by",
+     132.632,
+     132.808
+    ],
+    [
+     "its",
+     132.808,
+     132.97
+    ],
+    [
+     "declared",
+     132.97,
+     133.395
+    ],
+    [
+     "type",
+     133.395,
+     133.97
+    ],
+    [
+     "So",
+     134.64,
+     134.852
+    ],
+    [
+     "one",
+     134.852,
+     135.09
+    ],
+    [
+     "point",
+     135.09,
+     135.365
+    ],
+    [
+     "five",
+     135.365,
+     135.69
+    ],
+    [
+     "zero",
+     135.69,
+     136.203
+    ],
+    [
+     "equals",
+     136.203,
+     136.603
+    ],
+    [
+     "one",
+     136.603,
+     136.865
+    ],
+    [
+     "point",
+     136.865,
+     137.152
+    ],
+    [
+     "five",
+     137.152,
+     137.89
+    ],
+    [
+     "and",
+     137.99,
+     138.128
+    ],
+    [
+     "month-first",
+     138.128,
+     138.74
+    ],
+    [
+     "dates",
+     138.74,
+     139.09
+    ],
+    [
+     "are",
+     139.09,
+     139.19
+    ],
+    [
+     "rejected",
+     139.19,
+     139.728
+    ],
+    [
+     "as",
+     139.728,
+     139.902
+    ],
+    [
+     "ambiguous",
+     139.902,
+     140.84
+    ],
+    [
+     "Then",
+     141.485,
+     141.598
+    ],
+    [
+     "it",
+     141.598,
+     141.685
+    ],
+    [
+     "checks",
+     141.685,
+     141.972
+    ],
+    [
+     "the",
+     141.972,
+     142.06
+    ],
+    [
+     "row",
+     142.06,
+     142.285
+    ],
+    [
+     "count",
+     142.285,
+     142.76
+    ],
+    [
+     "unique",
+     142.86,
+     143.235
+    ],
+    [
+     "keys",
+     143.235,
+     143.635
+    ],
+    [
+     "and",
+     143.685,
+     143.81
+    ],
+    [
+     "every",
+     143.81,
+     144.11
+    ],
+    [
+     "row",
+     144.11,
+     144.685
     ]
    ]
   },
   {
    "n": 6,
-   "title": "A false negative, inspected",
-   "start": 163.41,
-   "speech": 33.99,
-   "end": 198.0,
+   "title": "Flakiness from a seeded clock",
+   "label": "06 / Flakiness",
+   "start": 145.56,
+   "speech": 26.765,
+   "end": 172.925,
    "sentences": [
     {
-     "text": "Task A2 asks for the total of completed orders.",
-     "start": 163.41,
-     "end": 167.26
+     "text": "Why five runs?",
+     "start": 145.56,
+     "end": 147.36
     },
     {
-     "text": "The probe writes the gold amount with a dollar sign and a thousands comma.",
-     "start": 167.44,
-     "end": 171.94
+     "text": "Some graders depend on time.",
+     "start": 147.48,
+     "end": 149.855
     },
     {
-     "text": "The value is unchanged, so it should pass.",
-     "start": 172.12,
-     "end": 175.245
+     "text": "Task S-one plants one.",
+     "start": 149.975,
+     "end": 152.05
     },
     {
-     "text": "The naive substring check fails it.",
-     "start": 175.425,
-     "end": 177.975
+     "text": "Its naive grader fails a run when \"finished at\" is more than three hundred seconds old.",
+     "start": 152.17,
+     "end": 157.77
     },
     {
-     "text": "The hardened exact check fails too, so it asks the judge.",
-     "start": 178.155,
-     "end": 182.005
+     "text": "The clock is simulated from the seed, up to ten minutes after a fixed time.",
+     "start": 157.89,
+     "end": 162.74
     },
     {
-     "text": "In this run, that's the deterministic mock judge, not a model.",
-     "start": 182.185,
-     "end": 186.51
+     "text": "So the correct answer passes three runs and fails two.",
+     "start": 162.86,
+     "end": 166.585
     },
     {
-     "text": "It extracts one number and compares within half a cent.",
-     "start": 186.69,
-     "end": 190.415
+     "text": "The majority says pass, but it's flagged flaky.",
+     "start": 166.705,
+     "end": 169.93
     },
     {
-     "text": "Order is different.",
-     "start": 190.595,
-     "end": 192.395
-    },
-    {
-     "text": "In the top five table, the hardened grader correctly fails shuffled rows.",
-     "start": 192.575,
-     "end": 197.4
+     "text": "It's the only grader flagged.",
+     "start": 170.05,
+     "end": 172.325
     }
    ],
    "words": [
     [
-     "Task",
-     163.685,
-     164.01
-    ],
-    [
-     "A2",
-     164.01,
-     164.698
-    ],
-    [
-     "asks",
-     164.698,
-     165.085
-    ],
-    [
-     "for",
-     165.085,
-     165.198
-    ],
-    [
-     "the",
-     165.198,
-     165.285
-    ],
-    [
-     "total",
-     165.285,
-     165.685
-    ],
-    [
-     "of",
-     165.685,
-     165.785
-    ],
-    [
-     "completed",
-     165.785,
-     166.26
-    ],
-    [
-     "orders",
-     166.26,
-     167.01
-    ],
-    [
-     "The",
-     167.69,
-     167.765
-    ],
-    [
-     "probe",
-     167.765,
-     168.09
-    ],
-    [
-     "writes",
-     168.09,
-     168.365
-    ],
-    [
-     "the",
-     168.365,
-     168.465
-    ],
-    [
-     "gold",
-     168.465,
-     168.702
-    ],
-    [
-     "amount",
-     168.702,
-     169.09
-    ],
-    [
-     "with",
-     169.09,
-     169.228
-    ],
-    [
-     "a",
-     169.228,
-     169.29
-    ],
-    [
-     "dollar",
-     169.29,
-     169.677
-    ],
-    [
-     "sign",
-     169.677,
-     170.315
-    ],
-    [
-     "and",
-     170.315,
-     170.453
-    ],
-    [
-     "a",
-     170.453,
-     170.552
-    ],
-    [
-     "thousands",
-     170.552,
-     171.04
-    ],
-    [
-     "comma",
-     171.04,
-     171.665
-    ],
-    [
-     "The",
-     172.395,
-     172.47
-    ],
-    [
-     "value",
-     172.47,
-     172.87
-    ],
-    [
-     "is",
-     172.87,
-     173.02
-    ],
-    [
-     "unchanged",
-     173.02,
-     173.845
-    ],
-    [
-     "so",
-     173.945,
-     174.082
-    ],
-    [
-     "it",
-     174.082,
-     174.17
-    ],
-    [
-     "should",
-     174.17,
-     174.32
-    ],
-    [
-     "pass",
-     174.32,
-     174.97
-    ],
-    [
-     "The",
-     175.7,
-     175.8
-    ],
-    [
-     "naive",
-     175.8,
-     176.2
-    ],
-    [
-     "substring",
-     176.2,
-     176.7
-    ],
-    [
-     "check",
-     176.7,
-     176.95
-    ],
-    [
-     "fails",
-     176.95,
-     177.325
-    ],
-    [
-     "it",
-     177.325,
-     177.725
-    ],
-    [
-     "The",
-     178.405,
-     178.48
-    ],
-    [
-     "hardened",
-     178.48,
-     178.88
-    ],
-    [
-     "exact",
-     178.88,
-     179.28
-    ],
-    [
-     "check",
-     179.28,
-     179.53
-    ],
-    [
-     "fails",
-     179.53,
-     179.893
-    ],
-    [
-     "too",
-     179.893,
-     180.33
-    ],
-    [
-     "so",
-     180.455,
-     180.593
-    ],
-    [
-     "it",
-     180.593,
-     180.68
-    ],
-    [
-     "asks",
-     180.68,
-     181.005
-    ],
-    [
-     "the",
-     181.005,
-     181.105
-    ],
-    [
-     "judge",
-     181.105,
-     181.73
-    ],
-    [
-     "In",
-     182.485,
-     182.585
-    ],
-    [
-     "this",
-     182.585,
-     182.81
-    ],
-    [
-     "run",
-     182.81,
-     183.185
-    ],
-    [
-     "that's",
-     183.285,
-     183.572
-    ],
-    [
-     "the",
-     183.572,
-     183.66
-    ],
-    [
-     "deterministic",
-     183.66,
-     184.435
-    ],
-    [
-     "mock",
-     184.435,
-     184.747
-    ],
-    [
-     "judge",
-     184.747,
-     185.26
-    ],
-    [
-     "not",
-     185.385,
-     185.547
-    ],
-    [
-     "a",
-     185.547,
-     185.61
-    ],
-    [
-     "model",
-     185.61,
-     186.26
-    ],
-    [
-     "It",
-     186.94,
-     187.052
-    ],
-    [
-     "extracts",
-     187.052,
-     187.602
-    ],
-    [
-     "one",
-     187.602,
-     187.84
-    ],
-    [
-     "number",
-     187.84,
-     188.415
-    ],
-    [
-     "and",
-     188.415,
-     188.565
-    ],
-    [
-     "compares",
-     188.565,
-     189.027
-    ],
-    [
-     "within",
-     189.027,
-     189.29
-    ],
-    [
-     "half",
-     189.29,
-     189.527
-    ],
-    [
-     "a",
-     189.527,
-     189.59
-    ],
-    [
-     "cent",
-     189.59,
-     190.165
-    ],
-    [
-     "Order",
-     190.92,
-     191.27
-    ],
-    [
-     "is",
-     191.27,
-     191.433
-    ],
-    [
-     "different",
-     191.433,
-     192.145
-    ],
-    [
-     "In",
-     192.85,
-     192.913
-    ],
-    [
-     "the",
-     192.913,
-     193.0
-    ],
-    [
-     "top",
-     193.0,
-     193.275
+     "Why",
+     145.91,
+     146.097
     ],
     [
      "five",
-     193.275,
-     193.55
+     146.097,
+     146.41
     ],
     [
-     "table",
-     193.55,
-     194.15
+     "runs",
+     146.41,
+     147.085
     ],
     [
-     "the",
-     194.25,
-     194.35
+     "Some",
+     147.78,
+     148.005
     ],
     [
-     "hardened",
-     194.35,
-     194.725
+     "graders",
+     148.005,
+     148.455
+    ],
+    [
+     "depend",
+     148.455,
+     148.792
+    ],
+    [
+     "on",
+     148.792,
+     148.93
+    ],
+    [
+     "time",
+     148.93,
+     149.605
+    ],
+    [
+     "Task",
+     150.25,
+     150.575
+    ],
+    [
+     "S-one",
+     150.575,
+     150.925
+    ],
+    [
+     "plants",
+     150.925,
+     151.25
+    ],
+    [
+     "one",
+     151.25,
+     151.8
+    ],
+    [
+     "Its",
+     152.42,
+     152.645
+    ],
+    [
+     "naive",
+     152.645,
+     153.07
     ],
     [
      "grader",
-     194.725,
-     195.1
-    ],
-    [
-     "correctly",
-     195.1,
-     195.613
+     153.07,
+     153.482
     ],
     [
      "fails",
-     195.613,
-     196.075
+     153.482,
+     153.807
     ],
     [
-     "shuffled",
-     196.075,
-     196.475
+     "a",
+     153.807,
+     153.908
     ],
     [
-     "rows",
-     196.475,
-     197.15
+     "run",
+     153.908,
+     154.208
+    ],
+    [
+     "when",
+     154.208,
+     154.395
+    ],
+    [
+     "finished",
+     154.47,
+     154.82
+    ],
+    [
+     "at",
+     154.82,
+     155.245
+    ],
+    [
+     "is",
+     155.382,
+     155.545
+    ],
+    [
+     "more",
+     155.545,
+     155.757
+    ],
+    [
+     "than",
+     155.757,
+     155.945
+    ],
+    [
+     "three",
+     155.945,
+     156.22
+    ],
+    [
+     "hundred",
+     156.22,
+     156.57
+    ],
+    [
+     "seconds",
+     156.57,
+     156.945
+    ],
+    [
+     "old",
+     156.945,
+     157.52
+    ],
+    [
+     "The",
+     158.14,
+     158.252
+    ],
+    [
+     "clock",
+     158.252,
+     158.665
+    ],
+    [
+     "is",
+     158.665,
+     158.828
+    ],
+    [
+     "simulated",
+     158.828,
+     159.415
+    ],
+    [
+     "from",
+     159.415,
+     159.553
+    ],
+    [
+     "the",
+     159.553,
+     159.652
+    ],
+    [
+     "seed",
+     159.652,
+     160.265
+    ],
+    [
+     "up",
+     160.365,
+     160.565
+    ],
+    [
+     "to",
+     160.565,
+     160.702
+    ],
+    [
+     "ten",
+     160.702,
+     160.965
+    ],
+    [
+     "minutes",
+     160.965,
+     161.29
+    ],
+    [
+     "after",
+     161.29,
+     161.553
+    ],
+    [
+     "a",
+     161.553,
+     161.615
+    ],
+    [
+     "fixed",
+     161.615,
+     161.865
+    ],
+    [
+     "time",
+     161.865,
+     162.49
+    ],
+    [
+     "So",
+     163.135,
+     163.222
+    ],
+    [
+     "the",
+     163.222,
+     163.31
+    ],
+    [
+     "correct",
+     163.31,
+     163.685
+    ],
+    [
+     "answer",
+     163.685,
+     164.11
+    ],
+    [
+     "passes",
+     164.11,
+     164.51
+    ],
+    [
+     "three",
+     164.51,
+     164.735
+    ],
+    [
+     "runs",
+     164.735,
+     165.248
+    ],
+    [
+     "and",
+     165.248,
+     165.385
+    ],
+    [
+     "fails",
+     165.385,
+     165.773
+    ],
+    [
+     "two",
+     165.773,
+     166.31
+    ],
+    [
+     "The",
+     166.955,
+     167.017
+    ],
+    [
+     "majority",
+     167.017,
+     167.53
+    ],
+    [
+     "says",
+     167.53,
+     167.755
+    ],
+    [
+     "pass",
+     167.755,
+     168.255
+    ],
+    [
+     "but",
+     168.33,
+     168.467
+    ],
+    [
+     "it's",
+     168.467,
+     168.605
+    ],
+    [
+     "flagged",
+     168.605,
+     168.98
+    ],
+    [
+     "flaky",
+     168.98,
+     169.68
+    ],
+    [
+     "It's",
+     170.3,
+     170.488
+    ],
+    [
+     "the",
+     170.488,
+     170.638
+    ],
+    [
+     "only",
+     170.638,
+     170.95
+    ],
+    [
+     "grader",
+     170.95,
+     171.362
+    ],
+    [
+     "flagged",
+     171.362,
+     172.05
     ]
    ]
   },
   {
    "n": 7,
-   "title": "Flakiness and repeatability",
-   "start": 198.0,
-   "speech": 36.83,
-   "end": 235.43,
+   "title": "Run it, and what it found",
+   "label": "07 / Running the demo",
+   "start": 172.925,
+   "speech": 30.525,
+   "end": 204.05,
    "sentences": [
     {
-     "text": "Task S one has a planted naive check: the finish time must be under three hundred seconds old.",
-     "start": 198.0,
-     "end": 204.425
+     "text": "To run it, install the requirements, then python dash m audit dot serve.",
+     "start": 172.925,
+     "end": 178.025
     },
     {
-     "text": "Each of the five runs gets a simulated clock, set by its seed.",
-     "start": 204.605,
-     "end": 209.13
+     "text": "That regenerates the data, runs the audit, and serves the page on port eight thousand.",
+     "start": 178.145,
+     "end": 183.845
     },
     {
-     "text": "Two of the five delays cross the limit, so the verdicts read: fail, pass, fail, pass, pass.",
-     "start": 209.31,
-     "end": 215.61
+     "text": "No A-P-I key is needed.",
+     "start": 183.965,
+     "end": 186.265
     },
     {
-     "text": "The audit flags six flaky cases, all on this grader.",
-     "start": 215.79,
-     "end": 219.64
+     "text": "On these ninety-six synthetic cases, the naive graders pass twenty of forty-nine wrong outputs, and fail fourteen of forty-seven correct ones.",
+     "start": 186.385,
+     "end": 196.035
     },
     {
-     "text": "Two caveats.",
-     "start": 219.82,
-     "end": 221.495
+     "text": "The hardened graders make zero errors.",
+     "start": 196.155,
+     "end": 198.88
     },
     {
-     "text": "The clock variation is controlled, so detection works by construction.",
-     "start": 221.675,
-     "end": 226.425
-    },
-    {
-     "text": "And the majority vote hides some errors: this correct output failed two of five runs, but isn't counted as a false negative.",
-     "start": 226.605,
-     "end": 234.83
+     "text": "A hundred and fifty-two tests pass, including a mutation test.",
+     "start": 199.0,
+     "end": 203.45
     }
    ],
    "words": [
     [
-     "Task",
-     198.275,
-     198.65
+     "To",
+     173.2,
+     173.325
     ],
     [
-     "S",
-     198.65,
-     198.9
+     "run",
+     173.325,
+     173.575
     ],
     [
-     "one",
-     198.9,
-     199.2
+     "it",
+     173.575,
+     173.775
     ],
     [
-     "has",
-     199.2,
-     199.363
-    ],
-    [
-     "a",
-     199.363,
-     199.438
-    ],
-    [
-     "planted",
-     199.438,
-     199.875
-    ],
-    [
-     "naive",
-     199.875,
-     200.263
-    ],
-    [
-     "check",
-     200.263,
-     200.95
+     "install",
+     173.85,
+     174.262
     ],
     [
      "the",
-     201.075,
-     201.188
+     174.262,
+     174.338
     ],
     [
-     "finish",
-     201.188,
-     201.55
+     "requirements",
+     174.338,
+     175.25
     ],
     [
-     "time",
-     201.55,
-     201.95
+     "then",
+     175.35,
+     175.563
     ],
     [
-     "must",
-     201.95,
-     202.188
+     "python",
+     175.563,
+     176.063
     ],
     [
-     "be",
-     202.188,
-     202.325
+     "dash",
+     176.063,
+     176.4
     ],
     [
-     "under",
-     202.325,
-     202.575
-    ],
-    [
-     "three",
-     202.575,
-     202.85
-    ],
-    [
-     "hundred",
-     202.85,
-     203.2
-    ],
-    [
-     "seconds",
-     203.2,
-     203.575
-    ],
-    [
-     "old",
-     203.575,
-     204.175
-    ],
-    [
-     "Each",
-     204.88,
-     205.068
-    ],
-    [
-     "of",
-     205.068,
-     205.142
-    ],
-    [
-     "the",
-     205.142,
-     205.242
-    ],
-    [
-     "five",
-     205.242,
-     205.605
-    ],
-    [
-     "runs",
-     205.605,
-     205.98
-    ],
-    [
-     "gets",
-     205.98,
-     206.192
-    ],
-    [
-     "a",
-     206.192,
-     206.293
-    ],
-    [
-     "simulated",
-     206.293,
-     206.905
-    ],
-    [
-     "clock",
-     206.905,
-     207.505
-    ],
-    [
-     "set",
-     207.643,
-     207.88
-    ],
-    [
-     "by",
-     207.88,
-     208.055
-    ],
-    [
-     "its",
-     208.055,
-     208.23
-    ],
-    [
-     "seed",
-     208.23,
-     208.855
-    ],
-    [
-     "Two",
-     209.585,
-     209.748
-    ],
-    [
-     "of",
-     209.748,
-     209.822
-    ],
-    [
-     "the",
-     209.822,
-     209.91
-    ],
-    [
-     "five",
-     209.91,
-     210.21
-    ],
-    [
-     "delays",
-     210.21,
-     210.61
-    ],
-    [
-     "cross",
-     210.61,
-     210.91
-    ],
-    [
-     "the",
-     210.91,
-     211.01
-    ],
-    [
-     "limit",
-     211.01,
-     211.435
-    ],
-    [
-     "so",
-     211.51,
-     211.647
-    ],
-    [
-     "the",
-     211.647,
-     211.735
-    ],
-    [
-     "verdicts",
-     211.735,
-     212.11
-    ],
-    [
-     "read",
-     212.11,
-     212.685
-    ],
-    [
-     "fail",
-     212.86,
-     213.335
-    ],
-    [
-     "pass",
-     213.422,
-     213.785
-    ],
-    [
-     "fail",
-     213.847,
-     214.26
-    ],
-    [
-     "pass",
-     214.323,
-     214.66
-    ],
-    [
-     "pass",
-     214.71,
-     215.335
-    ],
-    [
-     "The",
-     216.04,
-     216.178
+     "m",
+     176.4,
+     176.6
     ],
     [
      "audit",
-     216.178,
-     216.515
+     176.6,
+     176.9
     ],
     [
-     "flags",
-     216.515,
-     216.852
+     "dot",
+     176.9,
+     177.175
     ],
     [
-     "six",
-     216.852,
-     217.115
+     "serve",
+     177.175,
+     177.775
     ],
     [
-     "flaky",
-     217.115,
-     217.44
+     "That",
+     178.42,
+     178.645
     ],
     [
-     "cases",
-     217.44,
-     218.115
-    ],
-    [
-     "all",
-     218.215,
-     218.402
-    ],
-    [
-     "on",
-     218.402,
-     218.502
-    ],
-    [
-     "this",
-     218.502,
-     218.665
-    ],
-    [
-     "grader",
-     218.665,
-     219.365
-    ],
-    [
-     "Two",
-     220.17,
-     220.345
-    ],
-    [
-     "caveats",
-     220.345,
-     221.22
-    ],
-    [
-     "The",
-     221.925,
-     222.0
-    ],
-    [
-     "clock",
-     222.0,
-     222.3
-    ],
-    [
-     "variation",
-     222.3,
-     222.95
-    ],
-    [
-     "is",
-     222.95,
-     223.1
-    ],
-    [
-     "controlled",
-     223.1,
-     223.95
-    ],
-    [
-     "so",
-     224.075,
-     224.2
-    ],
-    [
-     "detection",
-     224.2,
-     224.725
-    ],
-    [
-     "works",
-     224.725,
-     225.025
-    ],
-    [
-     "by",
-     225.025,
-     225.2
-    ],
-    [
-     "construction",
-     225.2,
-     226.175
-    ],
-    [
-     "And",
-     226.88,
-     226.993
+     "regenerates",
+     178.645,
+     179.32
     ],
     [
      "the",
-     226.993,
-     227.068
+     179.32,
+     179.42
     ],
     [
-     "majority",
-     227.068,
-     227.655
-    ],
-    [
-     "vote",
-     227.655,
-     227.992
-    ],
-    [
-     "hides",
-     227.992,
-     228.268
-    ],
-    [
-     "some",
-     228.268,
-     228.405
-    ],
-    [
-     "errors",
-     228.405,
-     229.255
-    ],
-    [
-     "this",
-     229.393,
-     229.605
-    ],
-    [
-     "correct",
-     229.605,
-     230.03
-    ],
-    [
-     "output",
-     230.03,
-     230.518
-    ],
-    [
-     "failed",
-     230.518,
-     230.892
-    ],
-    [
-     "two",
-     230.892,
-     231.155
-    ],
-    [
-     "of",
-     231.155,
-     231.293
-    ],
-    [
-     "five",
-     231.293,
-     231.655
+     "data",
+     179.42,
+     179.97
     ],
     [
      "runs",
-     231.655,
-     232.305
+     180.133,
+     180.457
     ],
     [
-     "but",
-     232.38,
-     232.53
+     "the",
+     180.457,
+     180.595
     ],
     [
-     "isn't",
-     232.53,
-     232.818
+     "audit",
+     180.595,
+     181.12
     ],
     [
-     "counted",
-     232.818,
-     233.28
+     "and",
+     181.195,
+     181.333
     ],
     [
-     "as",
-     233.28,
-     233.392
+     "serves",
+     181.333,
+     181.683
+    ],
+    [
+     "the",
+     181.683,
+     181.783
+    ],
+    [
+     "page",
+     181.783,
+     182.182
+    ],
+    [
+     "on",
+     182.182,
+     182.295
+    ],
+    [
+     "port",
+     182.295,
+     182.595
+    ],
+    [
+     "eight",
+     182.595,
+     182.795
+    ],
+    [
+     "thousand",
+     182.795,
+     183.595
+    ],
+    [
+     "No",
+     184.29,
+     184.527
+    ],
+    [
+     "A-P-I",
+     184.527,
+     185.04
+    ],
+    [
+     "key",
+     185.04,
+     185.24
+    ],
+    [
+     "is",
+     185.24,
+     185.39
+    ],
+    [
+     "needed",
+     185.39,
+     185.99
+    ],
+    [
+     "On",
+     186.66,
+     186.81
+    ],
+    [
+     "these",
+     186.81,
+     187.073
+    ],
+    [
+     "ninety-six",
+     187.073,
+     187.71
+    ],
+    [
+     "synthetic",
+     187.71,
+     188.21
+    ],
+    [
+     "cases",
+     188.21,
+     189.035
+    ],
+    [
+     "the",
+     189.135,
+     189.26
+    ],
+    [
+     "naive",
+     189.26,
+     189.66
+    ],
+    [
+     "graders",
+     189.66,
+     190.135
+    ],
+    [
+     "pass",
+     190.135,
+     190.422
+    ],
+    [
+     "twenty",
+     190.422,
+     190.885
+    ],
+    [
+     "of",
+     190.885,
+     191.06
+    ],
+    [
+     "forty-nine",
+     191.06,
+     191.635
+    ],
+    [
+     "wrong",
+     191.635,
+     191.91
+    ],
+    [
+     "outputs",
+     191.91,
+     192.785
+    ],
+    [
+     "and",
+     192.885,
+     193.023
+    ],
+    [
+     "fail",
+     193.023,
+     193.36
+    ],
+    [
+     "fourteen",
+     193.36,
+     193.985
+    ],
+    [
+     "of",
+     193.985,
+     194.122
+    ],
+    [
+     "forty-seven",
+     194.122,
+     194.785
+    ],
+    [
+     "correct",
+     194.785,
+     195.16
+    ],
+    [
+     "ones",
+     195.16,
+     195.785
+    ],
+    [
+     "The",
+     196.405,
+     196.48
+    ],
+    [
+     "hardened",
+     196.48,
+     196.855
+    ],
+    [
+     "graders",
+     196.855,
+     197.305
+    ],
+    [
+     "make",
+     197.305,
+     197.53
+    ],
+    [
+     "zero",
+     197.53,
+     197.893
+    ],
+    [
+     "errors",
+     197.893,
+     198.63
+    ],
+    [
+     "A",
+     199.275,
+     199.35
+    ],
+    [
+     "hundred",
+     199.35,
+     199.738
+    ],
+    [
+     "and",
+     199.738,
+     199.85
+    ],
+    [
+     "fifty-two",
+     199.85,
+     200.325
+    ],
+    [
+     "tests",
+     200.325,
+     200.675
+    ],
+    [
+     "pass",
+     200.675,
+     201.3
+    ],
+    [
+     "including",
+     201.4,
+     201.875
     ],
     [
      "a",
-     233.392,
-     233.493
+     201.875,
+     201.938
     ],
     [
-     "false",
-     233.493,
-     233.805
+     "mutation",
+     201.938,
+     202.55
     ],
     [
-     "negative",
-     233.805,
-     234.58
+     "test",
+     202.55,
+     203.2
     ]
    ]
   },
   {
    "n": 8,
-   "title": "How the code produces the report",
-   "start": 235.43,
-   "speech": 31.38,
-   "end": 267.41,
+   "title": "Limits, next steps, recap",
+   "label": "08 / Limits & recap",
+   "start": 204.05,
+   "speech": 34.495,
+   "end": 239.145,
    "sentences": [
     {
-     "text": "Here's how one case reaches the screen.",
-     "start": 235.43,
-     "end": 238.105
+     "text": "Now, the caveats.",
+     "start": 204.05,
+     "end": 205.85
     },
     {
-     "text": "Build tasks creates task A1 and its gold answer.",
-     "start": 238.285,
-     "end": 242.135
+     "text": "The hardened graders score zero by construction, because they were written knowing these probes.",
+     "start": 205.97,
+     "end": 211.57
     },
     {
-     "text": "Build probes creates the seventeen, labeled should fail.",
-     "start": 242.315,
-     "end": 246.165
+     "text": "One gotcha: the naive state grader checks status by substring, so \"not succeeded\" passes.",
+     "start": 211.69,
+     "end": 217.89
     },
     {
-     "text": "Generate writes both to disk.",
-     "start": 246.345,
-     "end": 248.67
+     "text": "The flakiness is simulated, and the real L-L-M judge was never run.",
+     "start": 218.01,
+     "end": 222.96
     },
     {
-     "text": "Run audit loads every case, and grade k calls each grader five times with a seeded context.",
-     "start": 248.85,
-     "end": 255.35
+     "text": "Labels are assumed known, and the tasks are synthetic files, not browser state.",
+     "start": 223.08,
+     "end": 228.58
     },
     {
-     "text": "The majority verdict is tagged a false positive, counted in the summary and heatmap, and written to results dot json and the report.",
-     "start": 255.53,
-     "end": 263.955
+     "text": "Next: adversarial probes from an L-L-M, reviewed by a human.",
+     "start": 228.7,
+     "end": 233.275
     },
     {
-     "text": "FastAPI serves it to this page.",
-     "start": 264.135,
-     "end": 266.81
+     "text": "To recap: known labels, two graders, five seeded runs, one command.",
+     "start": 233.395,
+     "end": 238.545
     }
    ],
    "words": [
     [
-     "Here's",
-     235.705,
-     235.93
-    ],
-    [
-     "how",
-     235.93,
-     236.118
-    ],
-    [
-     "one",
-     236.118,
-     236.38
-    ],
-    [
-     "case",
-     236.38,
-     236.73
-    ],
-    [
-     "reaches",
-     236.73,
-     237.067
+     "Now",
+     204.4,
+     204.575
     ],
     [
      "the",
-     237.067,
-     237.155
+     204.612,
+     204.7
     ],
     [
-     "screen",
-     237.155,
-     237.855
-    ],
-    [
-     "Build",
-     238.56,
-     238.81
-    ],
-    [
-     "tasks",
-     238.81,
-     239.21
-    ],
-    [
-     "creates",
-     239.21,
-     239.61
-    ],
-    [
-     "task",
-     239.61,
-     239.96
-    ],
-    [
-     "A1",
-     239.96,
-     240.66
-    ],
-    [
-     "and",
-     240.66,
-     240.798
-    ],
-    [
-     "its",
-     240.798,
-     240.935
-    ],
-    [
-     "gold",
-     240.935,
-     241.185
-    ],
-    [
-     "answer",
-     241.185,
-     241.885
-    ],
-    [
-     "Build",
-     242.59,
-     242.865
-    ],
-    [
-     "probes",
-     242.865,
-     243.24
-    ],
-    [
-     "creates",
-     243.24,
-     243.627
-    ],
-    [
-     "the",
-     243.627,
-     243.715
-    ],
-    [
-     "seventeen",
-     243.715,
-     244.54
-    ],
-    [
-     "labeled",
-     244.677,
-     245.115
-    ],
-    [
-     "should",
-     245.115,
-     245.29
-    ],
-    [
-     "fail",
-     245.29,
-     245.915
-    ],
-    [
-     "Generate",
-     246.645,
-     247.07
-    ],
-    [
-     "writes",
-     247.07,
-     247.37
-    ],
-    [
-     "both",
-     247.37,
-     247.67
-    ],
-    [
-     "to",
-     247.67,
-     247.795
-    ],
-    [
-     "disk",
-     247.795,
-     248.395
-    ],
-    [
-     "Run",
-     249.175,
-     249.4
-    ],
-    [
-     "audit",
-     249.4,
-     249.7
-    ],
-    [
-     "loads",
-     249.7,
-     250.0
-    ],
-    [
-     "every",
-     250.0,
-     250.3
-    ],
-    [
-     "case",
-     250.3,
-     250.95
-    ],
-    [
-     "and",
-     251.05,
-     251.175
-    ],
-    [
-     "grade",
-     251.175,
-     251.5
-    ],
-    [
-     "k",
-     251.5,
-     251.775
-    ],
-    [
-     "calls",
-     251.775,
-     252.087
-    ],
-    [
-     "each",
-     252.087,
-     252.325
-    ],
-    [
-     "grader",
-     252.325,
-     252.712
-    ],
-    [
-     "five",
-     252.712,
-     253.075
-    ],
-    [
-     "times",
-     253.075,
-     253.6
-    ],
-    [
-     "with",
-     253.6,
-     253.738
-    ],
-    [
-     "a",
-     253.738,
-     253.837
-    ],
-    [
-     "seeded",
-     253.837,
-     254.175
-    ],
-    [
-     "context",
-     254.175,
-     255.1
+     "caveats",
+     204.7,
+     205.575
     ],
     [
      "The",
-     255.78,
-     255.842
-    ],
-    [
-     "majority",
-     255.842,
-     256.355
-    ],
-    [
-     "verdict",
-     256.355,
-     256.78
-    ],
-    [
-     "is",
-     256.78,
-     256.943
-    ],
-    [
-     "tagged",
-     256.943,
-     257.342
-    ],
-    [
-     "a",
-     257.342,
-     257.417
-    ],
-    [
-     "false",
-     257.417,
-     257.73
-    ],
-    [
-     "positive",
-     257.73,
-     258.53
-    ],
-    [
-     "counted",
-     258.668,
-     259.043
-    ],
-    [
-     "in",
-     259.043,
-     259.117
-    ],
-    [
-     "the",
-     259.117,
-     259.218
-    ],
-    [
-     "summary",
-     259.218,
-     259.68
-    ],
-    [
-     "and",
-     259.68,
-     259.805
-    ],
-    [
-     "heatmap",
-     259.805,
-     260.58
-    ],
-    [
-     "and",
-     260.692,
-     260.842
-    ],
-    [
-     "written",
-     260.842,
-     261.13
-    ],
-    [
-     "to",
-     261.13,
-     261.255
-    ],
-    [
-     "results",
-     261.255,
-     261.743
-    ],
-    [
-     "dot",
-     261.743,
-     262.043
-    ],
-    [
-     "json",
-     262.043,
-     262.767
-    ],
-    [
-     "and",
-     262.767,
-     262.892
-    ],
-    [
-     "the",
-     262.892,
-     262.98
-    ],
-    [
-     "report",
-     262.98,
-     263.705
-    ],
-    [
-     "FastAPI",
-     264.41,
-     265.222
-    ],
-    [
-     "serves",
-     265.222,
-     265.548
-    ],
-    [
-     "it",
-     265.548,
-     265.635
-    ],
-    [
-     "to",
-     265.635,
-     265.722
-    ],
-    [
-     "this",
-     265.722,
-     265.885
-    ],
-    [
-     "page",
-     265.885,
-     266.535
-    ]
-   ]
-  },
-  {
-   "n": 9,
-   "title": "Why the hardened checks differ",
-   "start": 267.41,
-   "speech": 34.325,
-   "end": 302.335,
-   "sentences": [
-    {
-     "text": "The hardened graders parse each output by its declared type, with float tolerance, null markers, date formats, and row order only when the task requires it.",
-     "start": 267.41,
-     "end": 277.71
-    },
-    {
-     "text": "State checks compare every field, not just a done flag.",
-     "start": 277.89,
-     "end": 281.765
-    },
-    {
-     "text": "For answers, the exact check runs first, and the judge is called only when it fails.",
-     "start": 281.945,
-     "end": 287.32
-    },
-    {
-     "text": "That happened twenty-six times here, all with the mock judge.",
-     "start": 287.5,
-     "end": 291.2
-    },
-    {
-     "text": "A real model judge is supported, but wasn't run.",
-     "start": 291.38,
-     "end": 294.98
-    },
-    {
-     "text": "And since the mock's rules were written alongside these probes, its agreement is not independent validation.",
-     "start": 295.16,
-     "end": 301.735
-    }
-   ],
-   "words": [
-    [
-     "The",
-     267.66,
-     267.735
+     206.22,
+     206.32
     ],
     [
      "hardened",
-     267.735,
-     268.135
+     206.32,
+     206.745
     ],
     [
      "graders",
-     268.135,
-     268.622
+     206.745,
+     207.145
     ],
     [
-     "parse",
-     268.622,
-     269.01
+     "score",
+     207.145,
+     207.532
     ],
     [
-     "each",
-     269.01,
-     269.235
-    ],
-    [
-     "output",
-     269.235,
-     269.685
+     "zero",
+     207.532,
+     207.92
     ],
     [
      "by",
-     269.685,
-     269.86
+     207.92,
+     208.095
     ],
     [
-     "its",
-     269.86,
-     270.06
+     "construction",
+     208.095,
+     209.02
     ],
     [
-     "declared",
-     270.06,
-     270.522
+     "because",
+     209.12,
+     209.445
     ],
     [
-     "type",
-     270.522,
-     271.185
-    ],
-    [
-     "with",
-     271.285,
-     271.472
-    ],
-    [
-     "float",
-     271.472,
-     271.735
-    ],
-    [
-     "tolerance",
-     271.735,
-     272.51
-    ],
-    [
-     "null",
-     272.647,
-     272.885
-    ],
-    [
-     "markers",
-     272.885,
-     273.535
-    ],
-    [
-     "date",
-     273.647,
-     273.935
-    ],
-    [
-     "formats",
-     273.935,
-     274.635
-    ],
-    [
-     "and",
-     274.71,
-     274.848
-    ],
-    [
-     "row",
-     274.848,
-     275.135
-    ],
-    [
-     "order",
-     275.135,
-     275.523
-    ],
-    [
-     "only",
-     275.523,
-     275.873
-    ],
-    [
-     "when",
-     275.873,
-     275.998
-    ],
-    [
-     "the",
-     275.998,
-     276.098
-    ],
-    [
-     "task",
-     276.098,
-     276.498
-    ],
-    [
-     "requires",
-     276.498,
-     276.998
-    ],
-    [
-     "it",
-     276.998,
-     277.46
-    ],
-    [
-     "State",
-     278.165,
-     278.465
-    ],
-    [
-     "checks",
-     278.465,
-     278.765
-    ],
-    [
-     "compare",
-     278.765,
-     279.14
-    ],
-    [
-     "every",
-     279.14,
-     279.452
-    ],
-    [
-     "field",
-     279.452,
-     280.04
-    ],
-    [
-     "not",
-     280.14,
-     280.365
-    ],
-    [
-     "just",
-     280.365,
-     280.553
-    ],
-    [
-     "a",
-     280.553,
-     280.615
-    ],
-    [
-     "done",
-     280.615,
-     280.852
-    ],
-    [
-     "flag",
-     280.852,
-     281.49
-    ],
-    [
-     "For",
-     282.22,
-     282.345
-    ],
-    [
-     "answers",
-     282.345,
-     282.87
-    ],
-    [
-     "the",
-     282.92,
-     283.07
-    ],
-    [
-     "exact",
-     283.07,
-     283.507
-    ],
-    [
-     "check",
-     283.507,
-     283.77
-    ],
-    [
-     "runs",
-     283.77,
-     284.045
-    ],
-    [
-     "first",
-     284.045,
-     284.67
-    ],
-    [
-     "and",
-     284.77,
-     284.883
-    ],
-    [
-     "the",
-     284.883,
-     284.983
-    ],
-    [
-     "judge",
-     284.983,
-     285.295
-    ],
-    [
-     "is",
-     285.295,
-     285.445
-    ],
-    [
-     "called",
-     285.445,
-     285.807
-    ],
-    [
-     "only",
-     285.807,
-     286.107
-    ],
-    [
-     "when",
-     286.107,
-     286.232
-    ],
-    [
-     "it",
-     286.232,
-     286.32
-    ],
-    [
-     "fails",
-     286.32,
-     287.07
-    ],
-    [
-     "That",
-     287.775,
-     287.925
-    ],
-    [
-     "happened",
-     287.925,
-     288.275
-    ],
-    [
-     "twenty-six",
-     288.275,
-     288.8
-    ],
-    [
-     "times",
-     288.8,
-     289.15
-    ],
-    [
-     "here",
-     289.15,
-     289.55
-    ],
-    [
-     "all",
-     289.675,
-     289.837
-    ],
-    [
-     "with",
-     289.837,
-     289.938
-    ],
-    [
-     "the",
-     289.938,
-     290.025
-    ],
-    [
-     "mock",
-     290.025,
-     290.3
-    ],
-    [
-     "judge",
-     290.3,
-     290.925
-    ],
-    [
-     "A",
-     291.655,
-     291.742
-    ],
-    [
-     "real",
-     291.742,
-     292.055
-    ],
-    [
-     "model",
-     292.055,
-     292.442
-    ],
-    [
-     "judge",
-     292.442,
-     292.755
-    ],
-    [
-     "is",
-     292.755,
-     292.88
-    ],
-    [
-     "supported",
-     292.88,
-     293.58
-    ],
-    [
-     "but",
-     293.68,
-     293.83
-    ],
-    [
-     "wasn't",
-     293.83,
-     294.13
-    ],
-    [
-     "run",
-     294.13,
-     294.73
-    ],
-    [
-     "And",
-     295.41,
-     295.56
-    ],
-    [
-     "since",
-     295.56,
-     295.785
-    ],
-    [
-     "the",
-     295.785,
-     295.885
-    ],
-    [
-     "mock's",
-     295.885,
-     296.235
-    ],
-    [
-     "rules",
-     296.235,
-     296.573
+     "they",
+     209.445,
+     209.595
     ],
     [
      "were",
-     296.573,
-     296.722
+     209.595,
+     209.758
     ],
     [
      "written",
-     296.722,
-     297.01
-    ],
-    [
-     "alongside",
-     297.01,
-     297.573
-    ],
-    [
-     "these",
-     297.573,
-     297.785
-    ],
-    [
-     "probes",
-     297.785,
-     298.585
-    ],
-    [
-     "its",
-     298.685,
-     298.86
-    ],
-    [
-     "agreement",
-     298.86,
-     299.447
-    ],
-    [
-     "is",
-     299.447,
-     299.623
-    ],
-    [
-     "not",
-     299.623,
-     299.91
-    ],
-    [
-     "independent",
-     299.91,
-     300.485
-    ],
-    [
-     "validation",
-     300.485,
-     301.485
-    ]
-   ]
-  },
-  {
-   "n": 10,
-   "title": "Evidence and limits",
-   "start": 302.335,
-   "speech": 48.165,
-   "end": 351.1,
-   "sentences": [
-    {
-     "text": "The evidence.",
-     "start": 302.335,
-     "end": 303.91
-    },
-    {
-     "text": "One hundred fifty-two tests pass: one hundred thirty-nine unit, thirteen integration.",
-     "start": 304.09,
-     "end": 309.99
-    },
-    {
-     "text": "They include every hardened grader against all eight probes.",
-     "start": 310.17,
-     "end": 313.995
-    },
-    {
-     "text": "A mutation test swaps an equality check for a substring check in the hardened answer grader, and the audit reports a false positive on the A1 trap.",
-     "start": 314.175,
-     "end": 323.875
-    },
-    {
-     "text": "So the harness measures all three error types against known labels, and separates the two graders on these ninety-six synthetic cases.",
-     "start": 324.055,
-     "end": 332.555
-    },
-    {
-     "text": "It doesn't show the hardened graders are correct in general.",
-     "start": 332.735,
-     "end": 336.46
-    },
-    {
-     "text": "They were written knowing these probe types.",
-     "start": 336.64,
-     "end": 339.14
-    },
-    {
-     "text": "Nor does it cover real environments, or a real model judge.",
-     "start": 339.32,
-     "end": 343.37
-    },
-    {
-     "text": "Future work: human-reviewed, model-generated adversarial probes, and adapters for real environments.",
-     "start": 343.55,
-     "end": 350.5
-    }
-   ],
-   "words": [
-    [
-     "The",
-     302.685,
-     302.81
-    ],
-    [
-     "evidence",
-     302.81,
-     303.635
-    ],
-    [
-     "One",
-     304.39,
-     304.59
-    ],
-    [
-     "hundred",
-     304.59,
-     304.94
-    ],
-    [
-     "fifty-two",
-     304.94,
-     305.453
-    ],
-    [
-     "tests",
-     305.453,
-     305.852
-    ],
-    [
-     "pass",
-     305.852,
-     306.59
-    ],
-    [
-     "one",
-     306.753,
-     306.902
-    ],
-    [
-     "hundred",
-     306.902,
-     307.24
-    ],
-    [
-     "thirty-nine",
-     307.24,
-     307.715
-    ],
-    [
-     "unit",
-     307.715,
-     308.115
-    ],
-    [
-     "thirteen",
-     308.228,
-     308.765
-    ],
-    [
-     "integration",
-     308.765,
-     309.74
-    ],
-    [
-     "They",
-     310.445,
-     310.582
-    ],
-    [
-     "include",
-     310.582,
-     311.02
-    ],
-    [
-     "every",
-     311.02,
-     311.358
-    ],
-    [
-     "hardened",
-     311.358,
-     311.77
-    ],
-    [
-     "grader",
-     311.77,
-     312.195
-    ],
-    [
-     "against",
-     312.195,
-     312.558
-    ],
-    [
-     "all",
-     312.558,
-     312.82
-    ],
-    [
-     "eight",
-     312.82,
-     313.02
-    ],
-    [
-     "probes",
-     313.02,
-     313.745
-    ],
-    [
-     "A",
-     314.45,
-     314.525
-    ],
-    [
-     "mutation",
-     314.525,
-     315.15
-    ],
-    [
-     "test",
-     315.15,
-     315.713
-    ],
-    [
-     "swaps",
-     315.713,
-     316.137
-    ],
-    [
-     "an",
-     316.137,
-     316.225
-    ],
-    [
-     "equality",
-     316.225,
-     316.813
-    ],
-    [
-     "check",
-     316.813,
-     317.2
-    ],
-    [
-     "for",
-     317.2,
-     317.325
-    ],
-    [
-     "a",
-     317.325,
-     317.438
-    ],
-    [
-     "substring",
-     317.438,
-     317.963
-    ],
-    [
-     "check",
-     317.963,
-     318.438
-    ],
-    [
-     "in",
-     318.438,
-     318.537
-    ],
-    [
-     "the",
-     318.537,
-     318.625
-    ],
-    [
-     "hardened",
-     318.625,
-     319.05
-    ],
-    [
-     "answer",
-     319.05,
-     319.375
-    ],
-    [
-     "grader",
-     319.375,
-     320.15
-    ],
-    [
-     "and",
-     320.275,
-     320.388
-    ],
-    [
-     "the",
-     320.388,
-     320.513
-    ],
-    [
-     "audit",
-     320.513,
-     320.875
-    ],
-    [
-     "reports",
-     320.875,
-     321.313
-    ],
-    [
-     "a",
-     321.313,
-     321.412
-    ],
-    [
-     "false",
-     321.412,
-     321.75
-    ],
-    [
-     "positive",
-     321.75,
-     322.325
-    ],
-    [
-     "on",
-     322.325,
-     322.437
-    ],
-    [
-     "the",
-     322.437,
-     322.587
-    ],
-    [
-     "A1",
-     322.587,
-     323.025
-    ],
-    [
-     "trap",
-     323.025,
-     323.625
-    ],
-    [
-     "So",
-     324.33,
-     324.417
-    ],
-    [
-     "the",
-     324.417,
-     324.505
-    ],
-    [
-     "harness",
-     324.505,
-     324.967
-    ],
-    [
-     "measures",
-     324.967,
-     325.442
-    ],
-    [
-     "all",
-     325.442,
-     325.78
-    ],
-    [
-     "three",
-     325.78,
-     326.117
-    ],
-    [
-     "error",
-     326.117,
-     326.43
-    ],
-    [
-     "types",
-     326.43,
-     326.78
-    ],
-    [
-     "against",
-     326.78,
-     327.142
-    ],
-    [
-     "known",
-     327.142,
-     327.455
-    ],
-    [
-     "labels",
-     327.455,
-     328.255
-    ],
-    [
-     "and",
-     328.355,
-     328.493
-    ],
-    [
-     "separates",
-     328.493,
-     329.055
-    ],
-    [
-     "the",
-     329.055,
-     329.167
-    ],
-    [
-     "two",
-     329.167,
-     329.38
-    ],
-    [
-     "graders",
-     329.38,
-     329.955
-    ],
-    [
-     "on",
-     329.955,
-     330.092
-    ],
-    [
-     "these",
-     330.092,
-     330.318
-    ],
-    [
-     "ninety-six",
-     330.318,
-     330.955
-    ],
-    [
-     "synthetic",
-     330.955,
-     331.48
-    ],
-    [
-     "cases",
-     331.48,
-     332.305
-    ],
-    [
-     "It",
-     332.985,
-     333.097
-    ],
-    [
-     "doesn't",
-     333.097,
-     333.397
-    ],
-    [
-     "show",
-     333.397,
-     333.735
-    ],
-    [
-     "the",
-     333.735,
-     333.835
-    ],
-    [
-     "hardened",
-     333.835,
-     334.21
-    ],
-    [
-     "graders",
-     334.21,
-     334.797
-    ],
-    [
-     "are",
-     334.797,
-     334.935
-    ],
-    [
-     "correct",
-     334.935,
-     335.36
-    ],
-    [
-     "in",
-     335.36,
-     335.51
-    ],
-    [
-     "general",
-     335.51,
-     336.21
-    ],
-    [
-     "They",
-     336.915,
-     337.002
-    ],
-    [
-     "were",
-     337.002,
-     337.14
-    ],
-    [
-     "written",
-     337.14,
-     337.465
+     209.758,
+     210.07
     ],
     [
      "knowing",
-     337.465,
-     337.777
+     210.07,
+     210.382
     ],
     [
      "these",
-     337.777,
-     337.99
-    ],
-    [
-     "probe",
-     337.99,
-     338.265
-    ],
-    [
-     "types",
-     338.265,
-     338.89
-    ],
-    [
-     "Nor",
-     339.645,
-     339.832
-    ],
-    [
-     "does",
-     339.832,
-     339.957
-    ],
-    [
-     "it",
-     339.957,
-     340.045
-    ],
-    [
-     "cover",
-     340.045,
-     340.382
-    ],
-    [
-     "real",
-     340.382,
-     340.632
-    ],
-    [
-     "environments",
-     340.632,
-     341.445
-    ],
-    [
-     "or",
-     341.545,
-     341.695
-    ],
-    [
-     "a",
-     341.695,
-     341.807
-    ],
-    [
-     "real",
-     341.807,
-     342.12
-    ],
-    [
-     "model",
-     342.12,
-     342.47
-    ],
-    [
-     "judge",
-     342.47,
-     343.095
-    ],
-    [
-     "Future",
-     343.825,
-     344.2
-    ],
-    [
-     "work",
-     344.2,
-     344.675
-    ],
-    [
-     "human-reviewed",
-     344.788,
-     345.725
-    ],
-    [
-     "model-generated",
-     345.838,
-     346.775
-    ],
-    [
-     "adversarial",
-     346.775,
-     347.425
+     210.382,
+     210.595
     ],
     [
      "probes",
-     347.425,
-     348.125
+     210.595,
+     211.32
+    ],
+    [
+     "One",
+     211.99,
+     212.215
+    ],
+    [
+     "gotcha",
+     212.215,
+     212.815
+    ],
+    [
+     "the",
+     212.94,
+     213.04
+    ],
+    [
+     "naive",
+     213.04,
+     213.415
+    ],
+    [
+     "state",
+     213.415,
+     213.74
+    ],
+    [
+     "grader",
+     213.74,
+     214.128
+    ],
+    [
+     "checks",
+     214.128,
+     214.415
+    ],
+    [
+     "status",
+     214.415,
+     214.79
+    ],
+    [
+     "by",
+     214.79,
+     214.965
+    ],
+    [
+     "substring",
+     214.965,
+     215.69
+    ],
+    [
+     "so",
+     215.802,
+     216.015
+    ],
+    [
+     "not",
+     216.065,
+     216.29
+    ],
+    [
+     "succeeded",
+     216.29,
+     216.765
+    ],
+    [
+     "passes",
+     216.815,
+     217.64
+    ],
+    [
+     "The",
+     218.26,
+     218.372
+    ],
+    [
+     "flakiness",
+     218.372,
+     218.985
+    ],
+    [
+     "is",
+     218.985,
+     219.123
+    ],
+    [
+     "simulated",
+     219.123,
+     220.01
     ],
     [
      "and",
-     348.225,
-     348.35
+     220.11,
+     220.222
     ],
     [
-     "adapters",
-     348.35,
-     348.925
-    ],
-    [
-     "for",
-     348.925,
-     349.087
+     "the",
+     220.222,
+     220.322
     ],
     [
      "real",
-     349.087,
-     349.337
+     220.322,
+     220.648
     ],
     [
-     "environments",
-     349.337,
-     350.25
+     "L-L-M",
+     220.648,
+     221.222
+    ],
+    [
+     "judge",
+     221.222,
+     221.61
+    ],
+    [
+     "was",
+     221.61,
+     221.81
+    ],
+    [
+     "never",
+     221.81,
+     222.11
+    ],
+    [
+     "run",
+     222.11,
+     222.71
+    ],
+    [
+     "Labels",
+     223.405,
+     223.78
+    ],
+    [
+     "are",
+     223.78,
+     223.905
+    ],
+    [
+     "assumed",
+     223.905,
+     224.33
+    ],
+    [
+     "known",
+     224.33,
+     224.905
+    ],
+    [
+     "and",
+     225.005,
+     225.118
+    ],
+    [
+     "the",
+     225.118,
+     225.218
+    ],
+    [
+     "tasks",
+     225.218,
+     225.705
+    ],
+    [
+     "are",
+     225.705,
+     225.83
+    ],
+    [
+     "synthetic",
+     225.83,
+     226.38
+    ],
+    [
+     "files",
+     226.38,
+     226.98
+    ],
+    [
+     "not",
+     227.08,
+     227.28
+    ],
+    [
+     "browser",
+     227.28,
+     227.705
+    ],
+    [
+     "state",
+     227.705,
+     228.33
+    ],
+    [
+     "Next",
+     229.0,
+     229.475
+    ],
+    [
+     "adversarial",
+     229.575,
+     230.275
+    ],
+    [
+     "probes",
+     230.275,
+     230.625
+    ],
+    [
+     "from",
+     230.625,
+     230.762
+    ],
+    [
+     "an",
+     230.762,
+     230.875
+    ],
+    [
+     "L-L-M",
+     230.875,
+     231.625
+    ],
+    [
+     "reviewed",
+     231.725,
+     232.1
+    ],
+    [
+     "by",
+     232.1,
+     232.275
+    ],
+    [
+     "a",
+     232.275,
+     232.35
+    ],
+    [
+     "human",
+     232.35,
+     233.025
+    ],
+    [
+     "To",
+     233.67,
+     233.77
+    ],
+    [
+     "recap",
+     233.77,
+     234.495
+    ],
+    [
+     "known",
+     234.633,
+     234.895
+    ],
+    [
+     "labels",
+     234.895,
+     235.295
+    ],
+    [
+     "two",
+     235.345,
+     235.545
+    ],
+    [
+     "graders",
+     235.545,
+     236.095
+    ],
+    [
+     "five",
+     236.183,
+     236.558
+    ],
+    [
+     "seeded",
+     236.558,
+     236.895
+    ],
+    [
+     "runs",
+     236.895,
+     237.27
+    ],
+    [
+     "one",
+     237.32,
+     237.545
+    ],
+    [
+     "command",
+     237.545,
+     238.27
     ]
    ]
   }
