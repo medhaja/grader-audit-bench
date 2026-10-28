@@ -22,9 +22,8 @@ out/
 .DS_Store
 Thumbs.db
 
-# KT video build products (sources and evidence stay tracked)
+# KT video build products (sources stay tracked)
 docs/kt-video/.venv/
 docs/kt-video/node_modules/
 docs/kt-video/audio/
 docs/kt-video/out/
-docs/kt-video/assets/fonts/inter-latin-600-normal.woff2

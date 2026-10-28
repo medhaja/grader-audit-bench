@@ -1,5 +1,7 @@
 """Local voiceover for the Grader Audit KT video (Kokoro, runs entirely on this machine).
 
+Voice af_heart, KPipeline(lang_code="a"), 24 kHz mono.
+
 Reads the approved narration from script.md, synthesizes it sentence by sentence, and writes:
   audio/scene_XX.wav     speech for each scene (24 kHz mono)
   audio/narration.wav    all scenes with SCENE_PAD seconds of silence after each one
@@ -35,22 +37,21 @@ VOICE = "af_heart"
 LANG = "a"  # American English
 SPEED = 1.0
 SR = 24000
-SENTENCE_GAP = 0.18  # silence between sentences within a scene
+SENTENCE_GAP = 0.12  # silence between sentences within a scene
 SCENE_PAD = 0.6  # silence after each scene
 REPO_ID = "hexgrad/Kokoro-82M"
 
 # Captions show what the screen shows, not the pronunciation spelling used for the voice.
 CAPTION_SUBS = [
-    ("Python, dash m, audit dot serve", "python -m audit.serve"),
-    ("orders dot C S V", "orders.csv"), ("customer I D", "customer ID"),
-    ("results dot json", "results.json"), ("Build tasks", "build_tasks"), ("Build probes", "build_probes"),
-    ("Run audit", "run_audit"), ("grade k", "_grade_k"),
-    ("A one", "A1"), ("A two", "A2"), ("T four", "T4"), ("S one", "S1"),
-    ("One hundred fifty-two", "152"), ("one hundred thirty-nine", "139"), ("thirteen", "13"),
-    ("five hundred seventy-four", "574"), ("five hundred seven", "507"), ("one hundred forty-three", "143"),
-    ("one hundred forty-two", "142"), ("eighty-one", "81"), ("three hundred", "300"),
-    ("twenty-six", "26"), ("seven", "7"), ("ninety-six", "96"), ("Forty-seven", "47"), ("forty-seven", "47"),
-    ("forty-nine", "49"), ("twenty", "20"), ("fourteen", "14"), ("seventeen", "17"), ("twelve", "12"),
+    ("python dash m audit dot serve", "python -m audit.serve"),
+    ("O-S World issue five eighteen", "OSWorld issue #518"),
+    ("Tasks dot py", "tasks.py"), ("Probes dot py", "probes.py"), ("generate dot py", "generate.py"),
+    ("Runner dot py", "runner.py"), ("Serve dot py", "serve.py"), ("Fast A-P-I", "FastAPI"),
+    ("A-P-I", "API"), ("L-L-M", "LLM"), ("Run audit", "run_audit"), ("Grade K", "_grade_k"),
+    ("grade K", "_grade_k"), ("S-one", "S1"), ("one point five zero", "1.50"), ("one point five", "1.5"),
+    ("A hundred and fifty-two", "152"), ("three hundred", "300"), ("ninety-six", "96"),
+    ("forty-nine", "49"), ("forty-seven", "47"), ("twenty", "20"), ("fourteen", "14"),
+    ("seventeen", "17"), ("seven", "7"), ("twelve", "12"),
 ]
 
 
@@ -61,17 +62,19 @@ def settings() -> dict:
 
 
 def load_scenes() -> list[dict]:
-    text = SCRIPT.read_text(encoding="utf-8")
+    text = SCRIPT.read_text(encoding="utf-8").replace("\r\n", "\n")
     scenes = []
-    for m in re.finditer(r"^## Scene (\d+): (.+)$", text, flags=re.M):
+    for m in re.finditer(r"^## (\d+) · (.+)$", text, flags=re.M):
         body = text[m.end():]
         nxt = re.search(r"^## ", body, flags=re.M)
         body = body[: nxt.start()] if nxt else body
-        narr = re.search(r"\*\*Narration\*\*\s*\n\s*\n((?:> .*\n?)+)", body)
-        if not narr:
-            sys.exit(f"Scene {m.group(1)} has no Narration block")
+        narr = re.search(r"^### Narration\s*\n\s*\n((?:> .*\n?)+)", body, flags=re.M)
+        label = re.search(r"^Chapter label: `(.+)`", body, flags=re.M)
+        if not narr or not label:
+            sys.exit(f"Scene {m.group(1)} needs a 'Chapter label' line and a '### Narration' block")
         spoken = " ".join(line[2:].strip() for line in narr.group(1).splitlines())
-        scenes.append({"n": int(m.group(1)), "title": m.group(2).strip(), "text": spoken})
+        scenes.append({"n": int(m.group(1)), "title": m.group(2).strip(), "label": label.group(1),
+                       "text": spoken})
     return scenes
 
 
@@ -192,7 +195,7 @@ def main() -> None:
         speech = np.concatenate(parts)
         sf.write(AUDIO / f"scene_{sc['n']:02d}.wav", speech, SR, subtype="PCM_16")
         speech_dur = len(speech) / SR
-        timeline.append({"n": sc["n"], "title": sc["title"], "start": round(t0, 3),
+        timeline.append({"n": sc["n"], "title": sc["title"], "label": sc["label"], "start": round(t0, 3),
                          "speech": round(speech_dur, 3), "end": round(t0 + speech_dur + SCENE_PAD, 3),
                          "sentences": sentences, "words": words})
         full += [speech, pad]

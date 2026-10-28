@@ -1,8 +1,0 @@
-{
-  "_source": "Values recorded in evidence.md (Phase 1). Not present in snapshot/results.json.",
-  "commit": "c3dd9a2",
-  "tests": { "unit": 139, "integration": 13, "_command": "env -u JUDGE_MODEL python -m pytest -p no:asyncio -m unit|integration -q" },
-  "delays": [506.7, 80.6, 573.6, 142.8, 141.6],
-  "_delays_command": "python -c \"from audit.graders import GradeContext, BASE_NOW; [print(s, round((GradeContext.for_seed(s).now-BASE_NOW).total_seconds(),1)) for s in range(5)]\"",
-  "code_excerpt": { "file": "audit/graders/hardened.py", "start": 86, "end": 92, "first_line_prefix": "def grade_answer(" }
-}

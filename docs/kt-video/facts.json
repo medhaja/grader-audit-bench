@@ -1,0 +1,832 @@
+{
+ "meta": {
+  "k": 5,
+  "judge_backend": "mock",
+  "n_cases": 96,
+  "probes": [
+   "gold",
+   "paraphrase",
+   "format_variant",
+   "noop",
+   "substring_trap",
+   "look_done",
+   "shuffled",
+   "partial"
+  ]
+ },
+ "summary": {
+  "naive": {
+   "fp": 20,
+   "fn": 14,
+   "flaky": 6,
+   "negatives": 49,
+   "positives": 47,
+   "total": 96,
+   "fp_rate": 0.40816326530612246,
+   "fn_rate": 0.2978723404255319,
+   "flaky_rate": 0.0625
+  },
+  "hardened": {
+   "fp": 0,
+   "fn": 0,
+   "flaky": 0,
+   "negatives": 49,
+   "positives": 47,
+   "total": 96,
+   "fp_rate": 0.0,
+   "fn_rate": 0.0,
+   "flaky_rate": 0.0
+  }
+ },
+ "labels": [
+  [
+   "A1_null_customer_ids",
+   "gold",
+   true
+  ],
+  [
+   "A1_null_customer_ids",
+   "paraphrase",
+   true
+  ],
+  [
+   "A1_null_customer_ids",
+   "format_variant",
+   true
+  ],
+  [
+   "A1_null_customer_ids",
+   "noop",
+   false
+  ],
+  [
+   "A1_null_customer_ids",
+   "substring_trap",
+   false
+  ],
+  [
+   "A1_null_customer_ids",
+   "look_done",
+   false
+  ],
+  [
+   "A1_null_customer_ids",
+   "shuffled",
+   true
+  ],
+  [
+   "A1_null_customer_ids",
+   "partial",
+   false
+  ],
+  [
+   "A2_completed_revenue",
+   "gold",
+   true
+  ],
+  [
+   "A2_completed_revenue",
+   "paraphrase",
+   true
+  ],
+  [
+   "A2_completed_revenue",
+   "format_variant",
+   true
+  ],
+  [
+   "A2_completed_revenue",
+   "noop",
+   false
+  ],
+  [
+   "A2_completed_revenue",
+   "substring_trap",
+   false
+  ],
+  [
+   "A2_completed_revenue",
+   "look_done",
+   false
+  ],
+  [
+   "A2_completed_revenue",
+   "shuffled",
+   true
+  ],
+  [
+   "A2_completed_revenue",
+   "partial",
+   false
+  ],
+  [
+   "A3_top_region",
+   "gold",
+   true
+  ],
+  [
+   "A3_top_region",
+   "paraphrase",
+   true
+  ],
+  [
+   "A3_top_region",
+   "format_variant",
+   true
+  ],
+  [
+   "A3_top_region",
+   "noop",
+   false
+  ],
+  [
+   "A3_top_region",
+   "substring_trap",
+   false
+  ],
+  [
+   "A3_top_region",
+   "look_done",
+   false
+  ],
+  [
+   "A3_top_region",
+   "shuffled",
+   true
+  ],
+  [
+   "A3_top_region",
+   "partial",
+   false
+  ],
+  [
+   "A4_distinct_customers",
+   "gold",
+   true
+  ],
+  [
+   "A4_distinct_customers",
+   "paraphrase",
+   true
+  ],
+  [
+   "A4_distinct_customers",
+   "format_variant",
+   true
+  ],
+  [
+   "A4_distinct_customers",
+   "noop",
+   false
+  ],
+  [
+   "A4_distinct_customers",
+   "substring_trap",
+   false
+  ],
+  [
+   "A4_distinct_customers",
+   "look_done",
+   false
+  ],
+  [
+   "A4_distinct_customers",
+   "shuffled",
+   true
+  ],
+  [
+   "A4_distinct_customers",
+   "partial",
+   false
+  ],
+  [
+   "T1_dedupe_customers",
+   "gold",
+   true
+  ],
+  [
+   "T1_dedupe_customers",
+   "paraphrase",
+   true
+  ],
+  [
+   "T1_dedupe_customers",
+   "format_variant",
+   true
+  ],
+  [
+   "T1_dedupe_customers",
+   "noop",
+   false
+  ],
+  [
+   "T1_dedupe_customers",
+   "substring_trap",
+   false
+  ],
+  [
+   "T1_dedupe_customers",
+   "look_done",
+   false
+  ],
+  [
+   "T1_dedupe_customers",
+   "shuffled",
+   true
+  ],
+  [
+   "T1_dedupe_customers",
+   "partial",
+   false
+  ],
+  [
+   "T2_join_orders_customers",
+   "gold",
+   true
+  ],
+  [
+   "T2_join_orders_customers",
+   "paraphrase",
+   true
+  ],
+  [
+   "T2_join_orders_customers",
+   "format_variant",
+   true
+  ],
+  [
+   "T2_join_orders_customers",
+   "noop",
+   false
+  ],
+  [
+   "T2_join_orders_customers",
+   "substring_trap",
+   false
+  ],
+  [
+   "T2_join_orders_customers",
+   "look_done",
+   false
+  ],
+  [
+   "T2_join_orders_customers",
+   "shuffled",
+   true
+  ],
+  [
+   "T2_join_orders_customers",
+   "partial",
+   false
+  ],
+  [
+   "T3_cast_types",
+   "gold",
+   true
+  ],
+  [
+   "T3_cast_types",
+   "paraphrase",
+   true
+  ],
+  [
+   "T3_cast_types",
+   "format_variant",
+   true
+  ],
+  [
+   "T3_cast_types",
+   "noop",
+   false
+  ],
+  [
+   "T3_cast_types",
+   "substring_trap",
+   false
+  ],
+  [
+   "T3_cast_types",
+   "look_done",
+   false
+  ],
+  [
+   "T3_cast_types",
+   "shuffled",
+   true
+  ],
+  [
+   "T3_cast_types",
+   "partial",
+   false
+  ],
+  [
+   "T4_revenue_by_region",
+   "gold",
+   true
+  ],
+  [
+   "T4_revenue_by_region",
+   "paraphrase",
+   true
+  ],
+  [
+   "T4_revenue_by_region",
+   "format_variant",
+   true
+  ],
+  [
+   "T4_revenue_by_region",
+   "noop",
+   false
+  ],
+  [
+   "T4_revenue_by_region",
+   "substring_trap",
+   false
+  ],
+  [
+   "T4_revenue_by_region",
+   "look_done",
+   false
+  ],
+  [
+   "T4_revenue_by_region",
+   "shuffled",
+   true
+  ],
+  [
+   "T4_revenue_by_region",
+   "partial",
+   false
+  ],
+  [
+   "T5_top_customers",
+   "gold",
+   true
+  ],
+  [
+   "T5_top_customers",
+   "paraphrase",
+   true
+  ],
+  [
+   "T5_top_customers",
+   "format_variant",
+   true
+  ],
+  [
+   "T5_top_customers",
+   "noop",
+   false
+  ],
+  [
+   "T5_top_customers",
+   "substring_trap",
+   false
+  ],
+  [
+   "T5_top_customers",
+   "look_done",
+   false
+  ],
+  [
+   "T5_top_customers",
+   "shuffled",
+   false
+  ],
+  [
+   "T5_top_customers",
+   "partial",
+   false
+  ],
+  [
+   "S1_finalize_run",
+   "gold",
+   true
+  ],
+  [
+   "S1_finalize_run",
+   "paraphrase",
+   true
+  ],
+  [
+   "S1_finalize_run",
+   "format_variant",
+   true
+  ],
+  [
+   "S1_finalize_run",
+   "noop",
+   false
+  ],
+  [
+   "S1_finalize_run",
+   "substring_trap",
+   false
+  ],
+  [
+   "S1_finalize_run",
+   "look_done",
+   false
+  ],
+  [
+   "S1_finalize_run",
+   "shuffled",
+   true
+  ],
+  [
+   "S1_finalize_run",
+   "partial",
+   false
+  ],
+  [
+   "S2_requeue_failed_run",
+   "gold",
+   true
+  ],
+  [
+   "S2_requeue_failed_run",
+   "paraphrase",
+   true
+  ],
+  [
+   "S2_requeue_failed_run",
+   "format_variant",
+   true
+  ],
+  [
+   "S2_requeue_failed_run",
+   "noop",
+   false
+  ],
+  [
+   "S2_requeue_failed_run",
+   "substring_trap",
+   false
+  ],
+  [
+   "S2_requeue_failed_run",
+   "look_done",
+   false
+  ],
+  [
+   "S2_requeue_failed_run",
+   "shuffled",
+   true
+  ],
+  [
+   "S2_requeue_failed_run",
+   "partial",
+   false
+  ],
+  [
+   "S3_advance_watermark",
+   "gold",
+   true
+  ],
+  [
+   "S3_advance_watermark",
+   "paraphrase",
+   true
+  ],
+  [
+   "S3_advance_watermark",
+   "format_variant",
+   true
+  ],
+  [
+   "S3_advance_watermark",
+   "noop",
+   false
+  ],
+  [
+   "S3_advance_watermark",
+   "substring_trap",
+   false
+  ],
+  [
+   "S3_advance_watermark",
+   "look_done",
+   false
+  ],
+  [
+   "S3_advance_watermark",
+   "shuffled",
+   true
+  ],
+  [
+   "S3_advance_watermark",
+   "partial",
+   false
+  ]
+ ],
+ "a1": {
+  "instruction": "How many rows in orders.csv have a null (empty) customer_id? Answer with the number.",
+  "gold": "7",
+  "output": "17",
+  "naive": {
+   "score": 1,
+   "runs": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "flaky": false,
+   "reason": "output contains gold answer '7'",
+   "graded_by": null,
+   "judge": null,
+   "error": "FP"
+  },
+  "hardened": {
+   "score": 0,
+   "runs": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "flaky": false,
+   "reason": "judge (mock): numeric mismatch: 17 != 7",
+   "graded_by": "judge",
+   "judge": {
+    "backend": "mock",
+    "score": 0,
+    "reason": "numeric mismatch: 17 != 7"
+   },
+   "error": null
+  }
+ },
+ "t4": {
+  "region": "North-East",
+  "got": "1538.27",
+  "want": "1537.27",
+  "naive": {
+   "score": 1,
+   "runs": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "flaky": false,
+   "reason": "header matches and row count is 4",
+   "graded_by": null,
+   "judge": null,
+   "error": "FP"
+  },
+  "hardened": {
+   "score": 0,
+   "runs": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "flaky": false,
+   "reason": "a row differs (total_amount: expected '1537.27', got '1538.27')",
+   "graded_by": null,
+   "judge": null,
+   "error": null
+  }
+ },
+ "s1": {
+  "gold": {
+   "run_id": "run-0142",
+   "pipeline": "adf_copy_orders",
+   "status": "succeeded",
+   "started_at": "2025-06-01T10:02:11Z",
+   "finished_at": "2025-06-01T10:15:00Z",
+   "rows_written": 120,
+   "attempt": 1,
+   "error": null,
+   "outputs": [
+    "bronze.orders",
+    "silver.orders"
+   ]
+  },
+  "window": 300,
+  "base_now": "10:15:00",
+  "delays": [
+   506.7,
+   80.6,
+   573.6,
+   142.8,
+   141.6
+  ],
+  "naive": {
+   "score": 1,
+   "runs": [
+    0,
+    1,
+    0,
+    1,
+    1
+   ],
+   "flaky": true,
+   "reason": "status 'succeeded' looks complete",
+   "graded_by": null,
+   "judge": null,
+   "error": null
+  }
+ },
+ "state_traps": [
+  [
+   "S1_finalize_run",
+   "FP",
+   "status 'not_succeeded' looks complete"
+  ],
+  [
+   "S2_requeue_failed_run",
+   "FP",
+   "status 'not_queued' looks complete"
+  ],
+  [
+   "S3_advance_watermark",
+   "FP",
+   "status 'not_succeeded' looks complete"
+  ]
+ ],
+ "flaky": [
+  [
+   "S1_finalize_run",
+   "naive"
+  ]
+ ],
+ "serve_lines": [
+  "  naive     FP 20/49  FN 14/47  flaky 6/96",
+  "  hardened  FP 0/49  FN 0/47  flaky 0/96"
+ ],
+ "headline": "Naive graders passed 8 of 12 partial agents and wrongly failed 14 of 47 correct outputs; hardened graders got all 96 right.",
+ "tests": 152,
+ "code": {
+  "naive_table": {
+   "file": "audit/graders/naive.py",
+   "lines": [
+    [
+     25,
+     "def grade_table(task: dict, output: str, ctx: GradeContext) -> dict:"
+    ],
+    [
+     26,
+     "    gold_lines = task[\"gold\"].strip().splitlines()"
+    ],
+    [
+     27,
+     "    out_lines = output.strip().splitlines()"
+    ],
+    [
+     28,
+     "    if not out_lines or out_lines[0] != gold_lines[0]:"
+    ],
+    [
+     29,
+     "        return verdict(False, \"header does not match expected header\")"
+    ],
+    [
+     30,
+     "    if len(out_lines) != len(gold_lines):"
+    ],
+    [
+     31,
+     "        return verdict(False, f\"row count {len(out_lines) - 1} != expected {len(gold_lines) - 1}\")"
+    ],
+    [
+     32,
+     "    return verdict(True, f\"header matches and row count is {len(out_lines) - 1}\")"
+    ]
+   ]
+  },
+  "hardened_table": {
+   "file": "audit/graders/hardened.py",
+   "lines": [
+    [
+     126,
+     "def grade_table(task: dict, output: str, ctx: GradeContext) -> dict:"
+    ],
+    [
+     127,
+     "    try:"
+    ],
+    [
+     128,
+     "        gold = normalize_table(task, task[\"gold\"])"
+    ],
+    [
+     129,
+     "        rows = normalize_table(task, output)"
+    ],
+    [
+     "...",
+     "…"
+    ],
+    [
+     134,
+     "    if len(rows) != len(gold):"
+    ],
+    [
+     "...",
+     "…"
+    ],
+    [
+     139,
+     "    if key_idx:"
+    ],
+    [
+     140,
+     "        dupes = [k for k, n in Counter(tuple(r[i] for i in key_idx) for r in rows).items() if n > 1]"
+    ],
+    [
+     141,
+     "        if dupes:"
+    ],
+    [
+     142,
+     "            return verdict(False, f\"duplicate key {dupes[0]}\")"
+    ],
+    [
+     "...",
+     "…"
+    ],
+    [
+     144,
+     "    if not task[\"order_matters\"]:"
+    ],
+    [
+     145,
+     "        rows, gold = sorted(rows, key=_sort_key), sorted(gold, key=_sort_key)"
+    ],
+    [
+     146,
+     "    for i, (got, want) in enumerate(zip(rows, gold), start=1):"
+    ],
+    [
+     147,
+     "        if got != want:"
+    ]
+   ]
+  },
+  "naive_answer_if": {
+   "file": "audit/graders/naive.py",
+   "lines": [
+    [
+     20,
+     "if task[\"gold\"] in output:"
+    ]
+   ]
+  },
+  "hardened_exact": {
+   "file": "audit/graders/hardened.py",
+   "lines": [
+    [
+     87,
+     "if _exact(normalize_text(task[\"gold\"]), normalize_text(output)):"
+    ]
+   ]
+  },
+  "error_rule": {
+   "file": "audit/runner.py",
+   "lines": [
+    [
+     56,
+     "v[\"error\"] = (\"FP\" if v[\"score\"] and not case[\"should_pass\"]"
+    ],
+    [
+     57,
+     "              else \"FN\" if not v[\"score\"] and case[\"should_pass\"] else None)"
+    ]
+   ]
+  },
+  "naive_state_if": {
+   "file": "audit/graders/naive.py",
+   "lines": [
+    [
+     42,
+     "if target not in status and status not in DONE_WORDS:"
+    ]
+   ]
+  },
+  "float_norm": {
+   "file": "audit/graders/hardened.py",
+   "lines": [
+    [
+     69,
+     "return repr(round(float(v.replace(\",\", \"\")), 6))  # 1.50, 1.5 and 1.5000001 -> \"1.5\""
+    ]
+   ]
+  },
+  "date_formats": {
+   "file": "audit/graders/hardened.py",
+   "lines": [
+    [
+     25,
+     "DATE_FORMATS = [\"%Y-%m-%d\", \"%Y/%m/%d\"]  # MM/DD vs DD/MM is ambiguous, so neither is accepted"
+    ]
+   ]
+  }
+ }
+}

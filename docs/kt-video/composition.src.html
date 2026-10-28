@@ -2,76 +2,86 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Grader Audit KT video</title>
+<title>Grader Audit: KT walkthrough</title>
 <!--
-  Deterministic 1920x1080 composition. render.mjs inlines data, fonts and images in place of the
-  two placeholders below and writes out/composition.html. Every frame is a pure function of time:
-  window.renderAt(seconds). No CSS transitions, no animations, no randomness, no network.
+  Deterministic 1920x1080 composition. render.mjs replaces the two placeholders below (fonts, data)
+  and writes out/composition.html. Every frame is a pure function of time: window.renderAt(seconds).
+  No CSS transitions or animations, no requestAnimationFrame timing, no randomness, no network.
+  Open out/composition.html#preview for a play/scrub preview synced to the narration.
 -->
 <style>
 /*__FONTS__*/
 :root {
-  --bg: #0B1020; --panel: #111933; --panel2: #16203F; --line: #24304F;
-  --ink: #F8FAFC; --muted: #94A3B8; --cyan: #38BDF8; --green: #34D399; --amber: #FBBF24; --red: #F87171;
-  --sans: "Inter", "Segoe UI", system-ui, sans-serif; --mono: "JetBrains Mono", Consolas, monospace;
+  /* stage */
+  --bg: #0A0E1A; --panel: #121829; --panel2: #182037; --line: #263049; --ink: #EEF2F8; --muted: #8B97AF; --dim: #4B5672;
+  /* accents: one meaning each, used the same way in every scene */
+  --data: #5AB0FF;    /* data / probe output in motion */
+  --state: #F2B544;   /* stored state on disk */
+  --grader: #A78BFA;  /* a grader or judge */
+  --ok: #4ADE80;      /* verdict agrees with the label */
+  --bad: #F87171;     /* wrong verdict (FP / FN) or unstable (flaky) */
+  --display: "Space Grotesk", "Segoe UI", sans-serif;
+  --sans: "Inter", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", Consolas, monospace;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; transition: none !important; animation: none !important;
-  font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; } /* show real text verbatim (no != → ≠) */
+  font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; } /* show code verbatim: != stays != */
 html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); color: var(--ink);
   font-family: var(--sans); -webkit-font-smoothing: antialiased; }
-#stage { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); }
+#stage { position: absolute; inset: 0; overflow: hidden; background: var(--bg); }
 .scene { position: absolute; inset: 0; opacity: 0; }
 .abs { position: absolute; }
-.chapter { position: absolute; left: 120px; top: 56px; font-size: 22px; letter-spacing: .14em; text-transform: uppercase;
-  color: var(--muted); font-weight: 600; }
-.chapter b { color: var(--cyan); font-weight: 600; margin-right: 14px; }
-.foot { position: absolute; right: 120px; bottom: 40px; font-size: 18px; color: var(--muted); letter-spacing: .04em; }
-.card { position: absolute; background: var(--panel); border: 1.5px solid var(--line); border-radius: 18px; padding: 28px 34px; }
+.chapter { position: absolute; left: 120px; top: 52px; font: 600 20px var(--sans); letter-spacing: .16em;
+  text-transform: uppercase; color: var(--muted); }
+.chapter b { color: var(--ink); font-weight: 700; margin-right: 10px; }
+.title { position: absolute; left: 120px; top: 92px; font: 700 54px/1.1 var(--display); letter-spacing: -.01em; }
+.foot { position: absolute; right: 120px; bottom: 26px; font-size: 16px; color: var(--dim); letter-spacing: .03em; }
+.card { position: absolute; background: var(--panel); border: 2px solid var(--line); border-radius: 18px; padding: 24px 30px; }
 .mono { font-family: var(--mono); }
 .muted { color: var(--muted); }
-.lbl { font-size: 22px; color: var(--muted); letter-spacing: .03em; }
-.big { font-family: var(--mono); font-size: 120px; font-weight: 500; line-height: 1; }
-.badge { display: inline-block; font-size: 22px; font-weight: 700; padding: 6px 16px; border-radius: 999px; letter-spacing: .03em; }
-.b-red { background: rgba(248,113,113,.16); color: var(--red); border: 1.5px solid rgba(248,113,113,.6); }
-.b-green { background: rgba(52,211,153,.14); color: var(--green); border: 1.5px solid rgba(52,211,153,.55); }
-.b-amber { background: rgba(251,191,36,.14); color: var(--amber); border: 1.5px solid rgba(251,191,36,.6); }
-.b-cyan { background: rgba(56,189,248,.12); color: var(--cyan); border: 1.5px solid rgba(56,189,248,.55); }
-.edge-red { border-color: var(--red) !important; box-shadow: 0 0 0 1px var(--red) inset; }
-.edge-amber { border-color: var(--amber) !important; }
-.edge-cyan { border-color: var(--cyan) !important; }
-.edge-green { border-color: var(--green) !important; }
-.shot { position: absolute; overflow: hidden; border-radius: 16px; border: 1.5px solid var(--line); background: #0E1424;
-  box-shadow: 0 30px 80px rgba(0,0,0,.45); }
-.shot img { position: absolute; left: 0; top: 0; transform-origin: 0 0; image-rendering: auto; }
-.shot .hl { position: absolute; border-radius: 10px; border: 4px solid var(--cyan); }
-.shot .tag { position: absolute; left: 18px; top: 16px; }
-.note { position: absolute; font-size: 22px; color: var(--muted); }
-.callout { position: absolute; font-size: 24px; line-height: 1.45; }
-.callout code, .q { font-family: var(--mono); font-size: 22px; color: var(--ink); background: var(--panel2);
-  padding: 3px 10px; border-radius: 8px; }
-.arrow { position: absolute; height: 3px; background: var(--cyan); }
-.arrow::after { content: ""; position: absolute; right: -2px; top: -7px; border-left: 14px solid var(--cyan);
-  border-top: 8px solid transparent; border-bottom: 8px solid transparent; }
-.dot { display: inline-block; width: 26px; height: 26px; border-radius: 50%; margin-right: 10px; vertical-align: middle; }
-.d-pass { background: var(--green); } .d-fail { background: transparent; border: 3px solid var(--red); }
-.grid-cell { position: absolute; border-radius: 8px; font-family: var(--mono); font-size: 17px; display: flex;
+.small { font-size: 18px; }
+.lbl { font: 500 18px var(--mono); color: var(--muted); letter-spacing: .02em; }
+.chip { display: inline-block; font: 600 20px var(--sans); padding: 6px 16px; border-radius: 999px; letter-spacing: .02em; white-space: nowrap; }
+.c-data { color: var(--data); border: 2px solid var(--data); background: rgba(90,176,255,.10); }
+.c-state { color: var(--state); border: 2px solid var(--state); background: rgba(242,181,68,.10); }
+.c-grader { color: var(--grader); border: 2px solid var(--grader); background: rgba(167,139,250,.10); }
+.c-ok { color: var(--ok); border: 2px solid var(--ok); background: rgba(74,222,128,.10); }
+.c-bad { color: var(--bad); border: 2px solid var(--bad); background: rgba(248,113,113,.10); }
+.c-flaky { color: var(--bad); border: 2px dashed var(--bad); background: transparent; }
+.b-data { border-color: var(--data) !important; } .b-state { border-color: var(--state) !important; }
+.b-grader { border-color: var(--grader) !important; } .b-ok { border-color: var(--ok) !important; }
+.b-bad { border-color: var(--bad) !important; }
+.t-data { color: var(--data); } .t-state { color: var(--state); } .t-grader { color: var(--grader); }
+.t-ok { color: var(--ok); } .t-bad { color: var(--bad); }
+code, .code-inline { font-family: var(--mono); }
+/* code panes */
+.code { position: absolute; background: #0D1324; border: 2px solid var(--line); border-radius: 16px; padding: 18px 0 20px; }
+.code .path { font: 500 18px var(--mono); color: var(--muted); padding: 0 28px 12px; }
+.code .path b { color: var(--grader); font-weight: 500; }
+.code .ln { position: relative; display: block; font: 400 20px/36px var(--mono); white-space: pre; padding: 0 28px 0 96px; color: #C9D3E3; }
+.code .ln i { position: absolute; left: 20px; width: 56px; text-align: right; font-style: normal; color: var(--dim); }
+.code .ln .bar { position: absolute; inset: 0; background: rgba(167,139,250,.16); border-left: 5px solid var(--grader); opacity: 0; }
+.code .ln .tx { position: relative; }
+.code .ln.gap { color: var(--dim); }
+.code.tight .ln { font-size: 19px; line-height: 31px; }
+.code.tight .ln.gap { line-height: 18px; }
+/* boxes in diagrams */
+.box { position: absolute; background: var(--panel); border: 2px solid var(--line); border-radius: 16px; padding: 18px 22px; }
+.box .h { font: 500 25px var(--mono); white-space: nowrap; }
+.box .s { font-size: 19px; color: var(--muted); margin-top: 8px; line-height: 1.35; }
+.disk { border-color: var(--state); border-radius: 16px 16px 40px 40px / 16px 16px 26px 26px; }
+.disk .h { color: var(--state); }
+.pill { margin-top: 12px; border: 2px solid var(--grader); border-radius: 12px; padding: 8px 14px; font: 500 20px var(--mono); color: var(--grader); }
+.pill.dashed { border-style: dashed; }
+.pill span { display: block; font: 400 16px var(--sans); color: var(--muted); margin-top: 2px; }
+.token { position: absolute; font: 600 26px var(--mono); color: #071324; background: var(--data); border-radius: 12px;
+  padding: 4px 14px; box-shadow: 0 0 0 6px rgba(90,176,255,.18); }
+.dot { display: inline-block; width: 26px; height: 26px; border-radius: 50%; margin-right: 10px; vertical-align: middle; border: 3px solid; }
+svg.ov { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: visible; pointer-events: none; }
+.grid-cell { position: absolute; border-radius: 8px; border: 2px solid; font: 400 15px var(--mono); display: flex;
   align-items: center; justify-content: center; }
-.code { position: absolute; background: #0D1428; border: 1.5px solid var(--line); border-radius: 16px; padding: 26px 0; }
-.code .ln { position: relative; display: block; font-family: var(--mono); font-size: 21px; line-height: 40px;
-  white-space: pre; padding: 0 30px 0 92px; color: #CBD5E1; }
-.code .ln i { position: absolute; left: 24px; width: 50px; text-align: right; font-style: normal; color: #475569; }
-.code .ln .hlbar { position: absolute; left: 0; right: 0; top: 0; bottom: 0; background: rgba(56,189,248,.14);
-  border-left: 5px solid var(--cyan); opacity: 0; }
-.code .ln span.t { position: relative; }
-.node { position: absolute; width: 300px; height: 118px; background: var(--panel); border: 2px solid var(--line);
-  border-radius: 16px; padding: 18px 20px; }
-.node .fn { font-family: var(--mono); font-size: 21px; color: var(--ink); white-space: nowrap; }
-.node .sub { font-size: 18px; color: var(--muted); margin-top: 8px; line-height: 1.3; }
-.node .num { position: absolute; right: 14px; top: 12px; font-size: 16px; color: #475569; font-family: var(--mono); }
-.col h3 { font-size: 26px; margin-bottom: 18px; letter-spacing: .02em; }
-.col li { font-size: 24px; line-height: 1.4; margin: 0 0 14px 28px; color: #E2E8F0; }
 #controls { display: none; }
-body.preview #controls { display: flex; position: fixed; left: 0; right: 0; bottom: 0; height: 56px; z-index: 99;
+body.preview #controls { display: flex; position: fixed; left: 0; right: 0; bottom: 0; height: 52px; z-index: 99;
   background: rgba(0,0,0,.85); align-items: center; gap: 14px; padding: 0 16px; font: 16px var(--sans); color: #fff; }
 #controls input[type=range] { flex: 1; }
 #controls button { font: 16px var(--sans); padding: 6px 14px; }
@@ -85,567 +95,576 @@ body.preview #controls { display: flex; position: fixed; left: 0; right: 0; bott
 </script>
 <script>
 "use strict";
-// ---------------------------------------------------------------------------------------------
-// Data injected by render.mjs: TIMING (timing.json), RESULTS (subset of snapshot/results.json),
-// TASKS (instructions), MANIFEST (capture rects), CODE (verbatim source excerpt), ASSETS (images),
-// EVIDENCE (values recorded in evidence.md that are not in results.json).
-// ---------------------------------------------------------------------------------------------
-const T = window.TIMING, R = window.RESULTS, M = window.MANIFEST, A = window.ASSETS, EV = window.EVIDENCE;
-const W = 1920, H = 1080;
+// Injected by render.mjs: TIMING (timing.json), FACTS (facts.json), ASSETS (UI captures as data URLs),
+// MANIFEST (element rectangles inside the captures).
+const T = window.TIMING, F = window.FACTS, A = window.ASSETS, M = window.MANIFEST;
+const FADE = 0.3;
 
-// ---- math helpers -------------------------------------------------------------------------------
+// ---- pure helpers ---------------------------------------------------------------------------------
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
-const ease = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+const ease = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2); // ease-in-out cubic
 const ramp = (t, t0, d = 0.5) => ease(clamp((t - t0) / d));
 const lerp = (a, b, k) => a + (b - a) * k;
-const caseOf = (task, probe) => R.cases.find((c) => c.task_id === task && c.probe === probe);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const px = (v) => `${v}px`;
 
-// ---- word-timestamp beats -----------------------------------------------------------------------
-// at(sceneNo, phrase) returns the global time (s) at which Kokoro started speaking `phrase` in that
-// scene, from timing.json word timestamps. A missing phrase throws, so a script edit can't silently
-// desynchronize a beat.
+// ---- beats from Kokoro word timestamps --------------------------------------------------------------
+// at(scene, phrase, nth) = global time when the nth occurrence of `phrase` starts in that scene's audio.
+// A phrase that no longer exists in the narration throws, so a script edit can't silently desync a beat.
 const norm = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "");
-const wordIndex = {};
-function at(n, phrase) {
+const idx = {};
+function at(n, phrase, nth = 0) {
   const sc = T.scenes[n - 1];
-  if (!wordIndex[n]) {
-    let s = "", map = [];
+  if (!idx[n]) {
+    let s = ""; const map = [];
     sc.words.forEach((w, i) => { const k = norm(w[0]); s += k; for (let j = 0; j < k.length; j++) map.push(i); });
-    wordIndex[n] = { s, map };
+    idx[n] = { s, map };
   }
-  const { s, map } = wordIndex[n];
-  const pos = s.indexOf(norm(phrase));
-  if (pos < 0) throw new Error(`beat phrase not found in scene ${n}: "${phrase}"`);
+  const { s, map } = idx[n];
+  let pos = -1;
+  for (let i = 0; i <= nth; i++) { pos = s.indexOf(norm(phrase), pos + 1); if (pos < 0) break; }
+  if (pos < 0) throw new Error(`beat phrase not found in scene ${n}: "${phrase}" (#${nth})`);
   return sc.words[map[pos]][1];
 }
 
-// ---- DOM helpers --------------------------------------------------------------------------------
+// ---- DOM helpers (DOM is built once; renderAt only sets styles/text) -------------------------------
 const stage = document.getElementById("stage");
 function el(parent, cls, html = "", style = {}) {
   const e = document.createElement("div");
   if (cls) e.className = cls;
   e.innerHTML = html;
-  Object.assign(e.style, style);
+  for (const [k, v] of Object.entries(style)) e.style[k] = typeof v === "number" ? px(v) : v;
   parent.appendChild(e);
   return e;
 }
-const px = (v) => `${v}px`;
-function show(e, k, dy = 18) {
-  e.style.opacity = k.toFixed(4);
-  e.style.transform = `translateY(${((1 - k) * dy).toFixed(2)}px)`;
+// Elements at rest get no transform and fully transparent ones are hidden, so compositor layers
+// never depend on which frames were drawn before (keeps frames byte-identical for any render order).
+function show(e, k, dy = 16, dx = 0) {
+  e.style.opacity = k >= 1 ? "" : k.toFixed(4);
+  e.style.visibility = k <= 0 ? "hidden" : "";
+  e.style.transform = k >= 1 ? "" : `translate(${((1 - k) * dx).toFixed(2)}px, ${((1 - k) * dy).toFixed(2)}px)`;
+}
+// Type text deterministically: characters revealed = f(t).
+function typeAt(e, text, t, t0, cps = 45) {
+  const n = Math.floor(clamp((t - t0) * cps, 0, text.length));
+  e.textContent = text.slice(0, n);
+}
+const SVGNS = "http://www.w3.org/2000/svg";
+function svgLayer(parent) {
+  const s = document.createElementNS(SVGNS, "svg");
+  s.setAttribute("class", "ov"); s.setAttribute("viewBox", "0 0 1920 1080");
+  parent.appendChild(s);
+  return s;
+}
+// Arrow that draws itself from start to end as k goes 0 -> 1. pts = [[x,y], ...] polyline.
+function arrow(svg, pts, color, width = 3) {
+  const p = document.createElementNS(SVGNS, "path");
+  p.setAttribute("d", "M" + pts.map((q) => q.join(" ")).join(" L"));
+  p.setAttribute("fill", "none"); p.setAttribute("stroke", color); p.setAttribute("stroke-width", width);
+  p.setAttribute("stroke-linecap", "round"); p.setAttribute("stroke-linejoin", "round");
+  const head = document.createElementNS(SVGNS, "path");
+  const [x1, y1] = pts[pts.length - 2], [x2, y2] = pts[pts.length - 1];
+  const a = Math.atan2(y2 - y1, x2 - x1), L = 16, Wd = 8;
+  const bx = x2 - L * Math.cos(a), by = y2 - L * Math.sin(a);
+  head.setAttribute("d", `M${x2} ${y2} L${bx + Wd * Math.sin(a)} ${by - Wd * Math.cos(a)} L${bx - Wd * Math.sin(a)} ${by + Wd * Math.cos(a)} Z`);
+  head.setAttribute("fill", color);
+  svg.appendChild(p); svg.appendChild(head);
+  let len = 0;
+  for (let i = 1; i < pts.length; i++) len += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
+  p.setAttribute("stroke-dasharray", `${len} ${len}`);
+  return (k) => {
+    p.setAttribute("stroke-dashoffset", ((1 - k) * len).toFixed(2));
+    p.style.opacity = k > 0 ? "1" : "0";
+    head.style.opacity = clamp((k - 0.85) / 0.15).toFixed(3);
+  };
+}
+// A real source excerpt with line numbers; returns {root, rows: Map(lineNo -> row element)}.
+function codePane(parent, key, x, y, w, label) {
+  const ex = F.code[key];
+  const root = el(parent, "code", "", { left: x, top: y, width: w });
+  el(root, "path", `<b>${esc(ex.file)}</b>${label ? "  ·  " + esc(label) : ""}`);
+  const rows = new Map();
+  for (const [n, text] of ex.lines) {
+    const gap = n === "...";
+    const r = el(root, "ln" + (gap ? " gap" : ""), `<span class="bar"></span><i>${gap ? "" : n}</i><span class="tx">${esc(text)}</span>`);
+    if (!gap) rows.set(n, r);
+  }
+  return { root, rows };
+}
+function hiRows(pane, lines, k) {
+  for (const n of lines) pane.rows.get(n).querySelector(".bar").style.opacity = k.toFixed(3);
+}
+function dots(parent, runs, color, filledWhen = 1) {
+  const wrap = el(parent, "", "", { display: "inline-block" });
+  const ds = runs.map((r) => el(wrap, "dot", "", { borderColor: color, background: r === filledWhen ? color : "transparent" }));
+  return { wrap, ds };
 }
 
-// ---- screenshot frames with deterministic zoom and highlights ------------------------------------
-class Shot {
-  constructor(parent, name, x, y, w, h) {
-    const cap = M.captures[name];
-    if (!cap) throw new Error(`no capture ${name}`);
-    this.cap = cap; this.w = w; this.h = h;
-    this.root = el(parent, "shot", "", { left: px(x), top: px(y), width: px(w), height: px(h) });
-    this.img = document.createElement("img");
-    this.img.src = A[cap.file];
-    this.img.style.width = px(cap.w);
-    this.img.style.height = px(cap.h);
-    this.root.appendChild(this.img);
-    this.hls = [];
-  }
-  rect(name) {
-    const r = this.cap.rects[name];
-    if (!r) throw new Error(`no rect ${name} in ${this.cap.file}`);
-    return r;
-  }
-  // focus: rect (css px of the capture) or null; k: 0 = whole capture, 1 = fully focused.
-  view(focus, k, pad = 24, maxScale = 2.4) {
-    const cw = this.cap.w, ch = this.cap.h;
-    const s0 = Math.min(this.w / cw, this.h / ch);
-    let s = s0, cx = cw / 2, cy = ch / 2;
-    if (focus && k > 0) {
-      const sf = Math.min(this.w / (focus.w + 2 * pad), this.h / (focus.h + 2 * pad), maxScale);
-      s = lerp(s0, Math.max(s0, sf), k);
-      cx = lerp(cw / 2, focus.x + focus.w / 2, k);
-      cy = lerp(ch / 2, focus.y + focus.h / 2, k);
-    }
-    // Keep the capture covering the frame where possible.
-    const vw = this.w / s, vh = this.h / s;
-    if (vw < cw) cx = clamp(cx, vw / 2, cw - vw / 2); else cx = cw / 2;
-    if (vh < ch) cy = clamp(cy, vh / 2, ch - vh / 2); else cy = ch / 2;
-    this.s = s; this.tx = this.w / 2 - cx * s; this.ty = this.h / 2 - cy * s;
-    this.img.style.transform = `translate(${this.tx.toFixed(2)}px, ${this.ty.toFixed(2)}px) scale(${s.toFixed(5)})`;
-    return this;
-  }
-  // Draw highlight i around a capture rect with a given color and opacity.
-  hl(i, r, color, alpha, pad = 6) {
-    while (this.hls.length <= i) this.hls.push(el(this.root, "hl"));
-    const h = this.hls[i];
-    // Clamp to the frame so a highlight is never clipped by the frame edge.
-    const x0 = Math.max(3, r.x * this.s + this.tx - pad), y0 = Math.max(3, r.y * this.s + this.ty - pad);
-    const x1 = Math.min(this.w - 3, (r.x + r.w) * this.s + this.tx + pad), y1 = Math.min(this.h - 3, (r.y + r.h) * this.s + this.ty + pad);
-    h.style.left = px(x0); h.style.top = px(y0); h.style.width = px(x1 - x0); h.style.height = px(y1 - y0);
-    h.style.borderColor = color;
-    h.style.opacity = alpha.toFixed(4);
-    return this;
-  }
-  hide(fromIndex = 0) { for (let i = fromIndex; i < this.hls.length; i++) this.hls[i].style.opacity = "0"; return this; }
-  opacity(k) { this.root.style.opacity = k.toFixed(4); return this; }
-}
-const union = (...rs) => {
-  const x = Math.min(...rs.map((r) => r.x)), y = Math.min(...rs.map((r) => r.y));
-  const x2 = Math.max(...rs.map((r) => r.x + r.w)), y2 = Math.max(...rs.map((r) => r.y + r.h));
-  return { x, y, w: x2 - x, h: y2 - y };
-};
-
-const COLORS = { cyan: "#38BDF8", green: "#34D399", amber: "#FBBF24", red: "#F87171" };
-const SHORT = ["Can we trust the grader?", "What Grader Audit tests", "The synthetic test bench", "Run the audit",
-  "A false positive", "A false negative", "Flakiness", "How the report is produced", "Why the hardened checks differ",
-  "Evidence and limits"];
-
-// ---- scene construction -------------------------------------------------------------------------
-const scenes = [];
+// ---- scenes ---------------------------------------------------------------------------------------
+const SCENES = [];
 function scene(n, build) {
+  const sc = T.scenes[n - 1];
   const root = el(stage, "scene");
-  el(root, "chapter", `<b>${String(n).padStart(2, "0")}</b>${esc(SHORT[n - 1])}`);
-  el(root, "foot", "Synthetic tasks · scripted probes · mock judge");
-  const render = build(root, T.scenes[n - 1]);
-  scenes.push({ n, root, render, sc: T.scenes[n - 1] });
+  const [num, name] = sc.label.split(" / ");
+  el(root, "chapter", `<b>${esc(num)}</b>/ ${esc(name)}`);
+  const foot = el(root, "foot", "Independent prototype · synthetic data · not affiliated with HUD");
+  const update = build(root, sc, n);
+  SCENES.push({ n, sc, root, update, foot });
 }
 
-// 1 · Can we trust the grader? ----------------------------------------------------------------------
-scene(1, (root, sc) => {
-  const c = caseOf("A1_null_customer_ids", "substring_trap");
-  const v = c.verdicts.naive;
-  const q = el(root, "card", `<div class="lbl">Synthetic task · A1_null_customer_ids</div>
-    <div style="font-size:38px;margin-top:14px;line-height:1.35">${esc(window.TASKS.A1_null_customer_ids)}</div>`,
-    { left: "160px", top: "150px", width: "1600px" });
-  const gold = el(root, "card", `<div class="lbl">Correct (gold) answer</div><div class="big" style="margin-top:16px">7</div>`,
-    { left: "160px", top: "400px", width: "520px", height: "230px" });
-  const probe = el(root, "card", `<div class="lbl">Scripted probe output</div>
-    <div class="big" style="margin-top:16px">1<span style="border-bottom:8px solid var(--amber)">7</span></div>`,
-    { left: "720px", top: "400px", width: "520px", height: "230px" });
-  const verdict = el(root, "card edge-red", `<div class="lbl">naive grader</div>
-    <div style="margin-top:16px"><span class="badge b-red">PASSED</span></div>
-    <div class="mono" style="font-size:22px;margin-top:20px;color:#E2E8F0">${esc(v.reason)}</div>`,
-    { left: "1280px", top: "400px", width: "480px", height: "230px" });
-  const tag = el(root, "callout", `Label: <span class="badge b-amber">should fail</span> &nbsp;→&nbsp;
-    verdict disagrees: <span class="badge b-red">false positive</span>`, { left: "160px", top: "680px" });
-  const line = el(root, "callout", `<span style="font-size:40px;font-weight:600">A wrong verdict becomes a wrong score.</span>`,
-    { left: "160px", top: "800px" });
-  const B = { gold: at(1, "The correct answer"), probe: at(1, "probe answers"), verdict: at(1, "marks it correct"),
-    tag: at(1, "because the digit"), line: at(1, "inherits the error") };
+// 01 · The grader can be the bug ------------------------------------------------------------------
+scene(1, (root, sc, n) => {
+  const a1 = F.a1;
+  const title = el(root, "title", "Can you trust the grader?");
+  const task = el(root, "card", `
+    <div class="lbl">task · A1_null_customer_ids</div>
+    <div style="font-size:31px;line-height:1.35;margin-top:14px">${esc(a1.instruction)}</div>
+    <div style="margin-top:22px"><span class="chip c-state">gold.txt&nbsp;&nbsp;<span class="mono">${esc(a1.gold)}</span></span></div>`,
+    { left: 120, top: 220, width: 820, height: 240 });
+  const probe = el(root, "card b-data", `
+    <div class="lbl">probe · substring_trap · label: <span class="t-bad">should fail</span></div>
+    <div class="mono t-data" style="font-size:150px;line-height:1;margin-top:18px;font-weight:500">1<span id="s1u" style="border-bottom:8px solid transparent">${esc(a1.gold)}</span></div>`,
+    { left: 120, top: 496, width: 820, height: 270 });
+  const under = probe.querySelector("#s1u");
+  const svg = svgLayer(root);
+  const arr = arrow(svg, [[950, 631], [1030, 631]], "var(--data)");
+  const naiveIf = F.code.naive_answer_if.lines[0];
+  const grader = el(root, "card b-grader", `
+    <div class="mono t-grader" style="font-size:30px">naive.grade_answer</div>
+    <div class="lbl" style="margin-top:6px">${esc(F.code.naive_answer_if.file)}:${naiveIf[0]}</div>
+    <div class="mono" style="font-size:24px;margin-top:16px;background:#0D1324;border-radius:10px;padding:12px 16px">${esc(naiveIf[1])}</div>
+    <div style="margin-top:26px;display:flex;align-items:center;gap:18px">
+      <span class="chip c-bad" id="s1pass" style="font-size:30px;padding:8px 26px">PASS</span>
+      <span class="mono" id="s1reason" style="font-size:21px;color:var(--ink)"></span></div>
+    <div id="s1fp" style="margin-top:22px;font-size:22px" class="t-bad">score 1 on a should-fail case → false positive</div>`,
+    { left: 1040, top: 406, width: 760, height: 360 });
+  const pass = grader.querySelector("#s1pass"), reason = grader.querySelector("#s1reason"), fp = grader.querySelector("#s1fp");
+  const src = el(root, "abs", `<span class="lbl">public report</span>&nbsp;&nbsp; OSWorld issue #518: reward = 1 from loose substring matching <span class="muted small">&nbsp;(cited in PRD.md)</span>`,
+    { left: 120, top: 820, fontSize: "22px" });
+  const close = el(root, "abs", "A wrong grader corrupts the score.", { left: 120, top: 900, font: "700 40px var(--display)" });
+  const tProbe = at(n, "answers seventeen"), tPass = at(n, "passes it"), tIn = at(n, "appears inside"),
+    tSrc = at(n, "Public reports"), tClose = at(n, "measures the grader");
   return (t) => {
-    show(q, ramp(t, 0.1));
-    show(gold, ramp(t, B.gold)); show(probe, ramp(t, B.probe)); show(verdict, ramp(t, B.verdict));
-    show(tag, ramp(t, B.tag)); show(line, ramp(t, B.line));
+    show(title, ramp(t, sc.start - FADE, 0.6));
+    show(task, ramp(t, sc.start + 0.2, 0.6));
+    show(probe, ramp(t, tProbe - 0.2, 0.6), 0, -60);
+    arr(ramp(t, tProbe + 0.4, 0.5));
+    show(grader, ramp(t, tProbe + 0.6, 0.5));
+    const kp = ramp(t, tPass, 0.35);
+    pass.style.opacity = kp.toFixed(3); pass.style.transform = `scale(${lerp(1.25, 1, kp).toFixed(3)})`;
+    typeAt(reason, a1.naive.reason, t, tPass + 0.3);
+    grader.style.borderColor = t >= tPass + 0.2 ? "var(--bad)" : "var(--grader)";
+    show(fp, ramp(t, tPass + 1.2, 0.5));
+    under.style.borderBottomColor = `rgba(248,113,113,${ramp(t, tIn, 0.4).toFixed(3)})`;
+    show(src, ramp(t, tSrc, 0.5));
+    show(close, ramp(t, tClose, 0.5));
+    const dim = 1 - 0.45 * ramp(t, tClose, 0.6);
+    pass.parentElement.style.opacity = dim.toFixed(3);
   };
 });
 
-// 2 · What Grader Audit tests -----------------------------------------------------------------------
-scene(2, (root, sc) => {
-  const s = R.summary.naive;
-  const probeBox = el(root, "card edge-cyan", `<div class="lbl">Scripted probe</div>
-    <div style="font-size:28px;margin-top:10px">fixed output + label <span class="q">should_pass</span></div>`,
-    { left: "160px", top: "170px", width: "560px" });
-  const a1 = el(root, "arrow", "", { left: "740px", top: "232px", width: "130px" });
-  const grader = el(root, "card", `<div class="lbl">Grader under test</div><div style="font-size:28px;margin-top:10px">score 0 or 1 + reason</div>`,
-    { left: "890px", top: "170px", width: "440px" });
-  const a2 = el(root, "arrow", "", { left: "1350px", top: "232px", width: "110px" });
-  const cmp = el(root, "card", `<div class="lbl">Compare</div><div style="font-size:28px;margin-top:10px">verdict vs label</div>`,
-    { left: "1480px", top: "170px", width: "280px" });
-  const mk = (x, cls, title, body, den) => el(root, `card ${cls}`, `<div style="font-size:34px;font-weight:700">${title}</div>
-    <div style="font-size:26px;margin-top:16px;line-height:1.4">${body}</div>
-    <div class="lbl" style="margin-top:22px">${den}</div>`, { left: px(x), top: "420px", width: "500px", height: "330px" });
-  const fp = mk(160, "edge-red", '<span style="color:var(--red)">False positive</span>',
-    "passed, but the label says <b>should fail</b>", `rate over the ${s.negatives} should-fail cases`);
-  const fn = mk(710, "edge-red", '<span style="color:var(--red)">False negative</span>',
-    "failed, but the label says <b>should pass</b>", `rate over the ${s.positives} should-pass cases`);
-  const fl = mk(1260, "edge-amber", '<span style="color:var(--amber)">Flaky</span>',
-    "the verdict changes across repeated runs of the same input", `rate over all ${s.total} cases`);
-  const disc = el(root, "callout", `<span class="muted">Independent prototype · synthetic tasks · scripted probes · does not audit HUD's actual benchmarks</span>`,
-    { left: "160px", top: "830px", width: "1600px" });
-  const B = { probes: at(2, "scripted probes"), wrong: at(2, "three ways"), fp: at(2, "A false positive"),
-    fn: at(2, "A false negative"), fl: at(2, "A flaky verdict"), disc: at(2, "This is an independent") };
-  return (t) => {
-    show(probeBox, ramp(t, B.probes)); show(a1, ramp(t, B.probes + 0.4), 0); show(grader, ramp(t, B.probes + 0.6));
-    show(a2, ramp(t, B.wrong - 0.4), 0); show(cmp, ramp(t, B.wrong - 0.2));
-    show(fp, ramp(t, B.fp)); show(fn, ramp(t, B.fn)); show(fl, ramp(t, B.fl)); show(disc, ramp(t, B.disc));
-  };
-});
-
-// 3 · The synthetic test bench ----------------------------------------------------------------------
-scene(3, (root, sc) => {
-  const probes = R.meta.probes;
-  const tasks = [...new Set(R.cases.map((c) => c.task_id))];
-  const order = (id) => ({ A: 0, T: 1, S: 2 }[id[0]]) * 100 + Number(id[1]);
-  tasks.sort((a, b) => order(a) - order(b));
-  const x0 = 520, colW = 152, y0 = 205, rowH = 50;
-  const yOf = (i) => y0 + 46 + i * rowH + (i >= 4 ? 14 : 0) + (i >= 9 ? 14 : 0);
-  const heads = probes.map((p, j) => el(root, "abs mono", esc(p), { left: px(x0 + j * colW), top: px(y0), width: px(colW - 8),
-    textAlign: "center", fontSize: "17px", color: "#CBD5E1" }));
-  const rows = tasks.map((id, i) => el(root, "abs mono", esc(id), { left: "160px", top: px(yOf(i) + 10), fontSize: "19px", color: "#E2E8F0" }));
+// 02 · Grade the grader --------------------------------------------------------------------------
+scene(2, (root, sc, n) => {
+  const title = el(root, "title", "Audit the grader, not the agent");
+  const order = ["A1", "A2", "A3", "A4", "T1", "T2", "T3", "T4", "T5", "S1", "S2", "S3"];
+  const tasks = [...new Set(F.labels.map((l) => l[0]))].sort((a, b) => order.indexOf(a.slice(0, 2)) - order.indexOf(b.slice(0, 2)));
+  const probes = F.meta.probes;
+  const X0 = 470, PX = 158, CW = 150, Y0 = 290, PY = 44, CH = 38;
+  const typeOf = { A: "answer", T: "table", S: "state" };
+  const rows = tasks.map((id, r) => el(root, "abs", `<span class="mono" style="font-size:19px">${id.slice(0, 2)}</span>
+    <span class="muted mono" style="font-size:15px;margin-left:8px">${esc(id.slice(3))}</span>`,
+    { left: 120, top: Y0 + r * PY + 6, width: 340, whiteSpace: "nowrap", overflow: "hidden" }));
+  const types = ["A", "T", "S"].map((ch) => {
+    const r0 = tasks.findIndex((id) => id[0] === ch), r1 = tasks.length - 1 - [...tasks].reverse().findIndex((id) => id[0] === ch);
+    return el(root, "abs lbl", typeOf[ch], { left: X0 + 8 * PX + 8, top: Y0 + ((r0 + r1) / 2) * PY + 8, fontSize: "15px" });
+  });
+  const heads = probes.map((p, c) => el(root, "abs mono", esc(p), { left: X0 + c * PX, top: Y0 - 34, width: CW, textAlign: "center", fontSize: "15px", color: "var(--muted)" }));
+  const label = {}; F.labels.forEach(([tid, p, sp]) => (label[tid + "|" + p] = sp));
   const cells = [];
-  let special = null;
-  tasks.forEach((id, i) => probes.forEach((p, j) => {
-    const c = caseOf(id, p);
-    const e = el(root, "grid-cell", c.should_pass ? "pass" : "fail", {
-      left: px(x0 + j * colW), top: px(yOf(i)), width: px(colW - 8), height: px(rowH - 8),
-      border: c.should_pass ? "2px solid rgba(56,189,248,.7)" : "2px solid #24304F",
-      background: c.should_pass ? "rgba(56,189,248,.10)" : "#16203F", color: c.should_pass ? "#7DD3FC" : "#64748B" });
-    cells.push({ e, i, j });
-    if (id === "T5_top_customers" && p === "shuffled") special = e;
+  tasks.forEach((tid, r) => probes.forEach((p, c) => {
+    const sp = label[tid + "|" + p];
+    const note = tid.startsWith("T5") && p === "shuffled" ? "*" : "";
+    cells.push([r, c, el(root, "grid-cell", (sp ? "pass" : "fail") + note, {
+      left: X0 + c * PX, top: Y0 + r * PY, width: CW, height: CH,
+      borderColor: sp ? "var(--ok)" : "var(--dim)", color: sp ? "var(--ok)" : "var(--muted)",
+      background: sp ? "rgba(74,222,128,.06)" : "transparent" })]);
   }));
-  const ring = el(root, "abs", "", { left: px(parseFloat(special.style.left) - 6), top: px(parseFloat(special.style.top) - 6),
-    width: px(colW + 4), height: px(rowH + 4), border: "4px solid var(--amber)", borderRadius: "12px" });
-  const callout = el(root, "callout", `<span style="color:var(--amber)">T5 × shuffled:</span> row order is part of the answer → <b>should fail</b>`,
-    { left: "160px", top: "905px" });
-  const pos = R.summary.naive.positives, neg = R.summary.naive.negatives;
-  const totals = el(root, "callout", `<b>${tasks.length} tasks × ${probes.length} probes = ${R.meta.n_cases} cases</b>
-    &nbsp;·&nbsp; <span style="color:#7DD3FC">${pos} should pass</span> &nbsp;·&nbsp; <span class="muted">${neg} should fail</span>`,
-    { left: "160px", top: "965px", fontSize: "30px" });
-  const B = { rows: at(3, "twelve synthetic"), probes: at(3, "eight probes"), labels: at(3, "Labels depend"),
-    t5: at(3, "except in a top five"), totals: at(3, "ninety-six cases") };
+  const pos = F.summary.naive.positives, neg = F.summary.naive.negatives;
+  const counter = el(root, "abs", `<span class="mono" style="font-size:30px">${F.meta.n_cases}</span> labeled cases &nbsp;=&nbsp;
+    <span class="t-ok">${pos} should pass</span> + <span class="muted">${neg} should fail</span>`, { left: 1100, top: 112, fontSize: "24px" });
+  const foot5 = el(root, "abs muted", "* T5 is a top-5 table where row order matters, so shuffled rows should fail there.",
+    { left: X0, top: Y0 + 12 * PY + 2, fontSize: "17px" });
+  const defs = [
+    ["False positive", "score 1 on a should-fail case", `out of ${neg}`, "c-bad"],
+    ["False negative", "score 0 on a should-pass case", `out of ${pos}`, "c-bad"],
+    ["Flaky", "verdict differs across the 5 runs", `out of ${F.meta.n_cases}`, "c-flaky"]];
+  const chips = defs.map(([h, d, o, cls], i) => el(root, "card", `<span class="chip ${cls}">${h}</span>
+    <div style="font-size:22px;margin-top:12px">${d} <span class="muted">· ${o}</span></div>`,
+    { left: 120 + i * 570, top: 878, width: 540, height: 128, padding: "16px 24px" }));
+  const tTasks = at(n, "Twelve synthetic"), tCases = at(n, "ninety-six cases");
+  const beatsP = { gold: at(n, "Gold"), paraphrase: at(n, "paraphrase"), noop: at(n, "no-op"),
+    substring_trap: at(n, "substring trap"), look_done: at(n, "fake that only looks done") };
+  const tMore = at(n, "and more");
+  const tDef = [at(n, "A false positive"), at(n, "A false negative"), at(n, "A flaky verdict")];
   return (t) => {
-    rows.forEach((r, i) => show(r, ramp(t, B.rows + i * 0.08, 0.35), 8));
-    heads.forEach((h, j) => show(h, ramp(t, B.probes + j * 0.12, 0.35), 8));
-    cells.forEach(({ e, i, j }) => { e.style.opacity = ramp(t, B.labels + (i + j) * 0.04, 0.35).toFixed(4); });
-    show(ring, ramp(t, B.t5), 0); show(callout, ramp(t, B.t5 + 0.2)); show(totals, ramp(t, B.totals));
-  };
-});
-
-// 4 · Run the audit -------------------------------------------------------------------------------
-scene(4, (root, sc) => {
-  const s = R.summary;
-  const line = (name) => `  ${name.padEnd(9)} FP ${s[name].fp}/${s[name].negatives}  FN ${s[name].fn}/${s[name].positives}  flaky ${s[name].flaky}/${s[name].total}`;
-  const term = el(root, "card", `<div class="lbl" style="margin-bottom:16px">Terminal · recorded run (JUDGE_MODEL unset → mock judge, k = 5)</div>
-    <pre class="mono" style="font-size:28px;line-height:1.6;color:#E2E8F0"><span style="color:var(--cyan)">$</span> python -m audit.serve
-${esc(line("naive"))}
-${esc(line("hardened"))}
-  Grader Audit UI: http://localhost:8000</pre>`, { left: "260px", top: "300px", width: "1400px" });
-  const shot = new Shot(root, "summary", 120, 170, 1680, 1680 * M.captures.summary.h / M.captures.summary.w);
-  const maj = el(root, "callout", `<span class="dot d-fail"></span><span class="dot d-pass"></span><span class="dot d-fail"></span><span class="dot d-pass"></span><span class="dot d-pass"></span>
-    <span style="font-size:30px;margin:0 16px;color:var(--cyan)">→</span><span class="dot d-pass" style="width:34px;height:34px"></span>
-    <div style="margin-top:14px">Five runs per case → one <b>majority verdict</b>.<br>FP and FN counts use that verdict.</div>`,
-    { left: "160px", top: "560px", width: "760px" });
-  const fr = shot.view(null, 0).rect("naive_flaky");
-  const round = el(root, "note", `<span style="color:var(--amber)">6/96 cases;</span> percentage rounding differs between views.`,
-    { left: px(120 + fr.x * shot.s + shot.tx), top: px(170 + shot.h + 14), fontSize: "20px" });
-  const scope = el(root, "callout", `<span style="border-left:5px solid var(--amber);padding-left:16px">Scope: these 96 synthetic cases only.</span>`,
-    { left: "1060px", top: "600px", fontSize: "30px" });
-  const B = { serve: at(4, "serves this page"), maj: at(4, "majority vote"), fp: at(4, "twenty of"),
-    fn: at(4, "fourteen of"), fl: at(4, "Six of"), hard: at(4, "hardened graders made"), scope: at(4, "synthetic cases only") };
-  return (t) => {
-    const k = ramp(t, B.serve, 0.6);
-    term.style.opacity = ((t < 0.3 ? ramp(t, 0.1) : 1) * (1 - k)).toFixed(4);
-    shot.opacity(k).view(null, 0);
-    show(maj, ramp(t, B.maj));
-    shot.hl(0, shot.rect("naive_fp"), COLORS.red, ramp(t, B.fp) * (1 - ramp(t, B.fn)));
-    shot.hl(1, shot.rect("naive_fn"), COLORS.red, ramp(t, B.fn) * (1 - ramp(t, B.fl)));
-    shot.hl(2, shot.rect("naive_flaky"), COLORS.amber, ramp(t, B.fl) * (1 - ramp(t, B.hard)));
-    shot.hl(3, shot.rect("hardened_card"), COLORS.green, ramp(t, B.hard));
-    show(round, ramp(t, B.fl)); show(scope, ramp(t, B.scope));
-  };
-});
-
-// 5 · A false positive, inspected -------------------------------------------------------------------
-scene(5, (root, sc) => {
-  const mcap = M.captures.matrix;
-  const matH = 880, matW = Math.round(matH * mcap.w / mcap.h);
-  const mat = new Shot(root, "matrix", Math.round((W - matW) / 2), 140, matW, matH);
-  const heatTag = el(root, "abs", `<span class="badge b-cyan">error-count heatmap</span>`, { left: "120px", top: "150px" });
-  const a1 = new Shot(root, "case_A1_substring_trap", 120, 150, 1680, 1680 * M.captures.case_A1_substring_trap.h / M.captures.case_A1_substring_trap.w);
-  const c1 = caseOf("A1_null_customer_ids", "substring_trap");
-  const a1note = el(root, "callout", `naive: <code>${esc(c1.verdicts.naive.reason)}</code> <span class="badge b-red">false positive</span><br>
-    hardened: <code>${esc(c1.verdicts.hardened.reason)}</code> <span class="badge b-green">agrees with label</span>`,
-    { left: "120px", top: "690px", lineHeight: "2.1" });
-  const t4cap = M.captures.case_T4_partial;
-  const t4 = new Shot(root, "case_T4_partial", 120, 130, 1680, 820);
-  const c4 = caseOf("T4_revenue_by_region", "partial");
-  const t4note = el(root, "callout", `naive: <code>${esc(c4.verdicts.naive.reason)}</code> <span class="badge b-red">false positive</span>`,
-    { left: "120px", top: "975px" });
-  const B = { heat: at(5, "error-count heatmap"), click: at(5, "Click a cell"), trap: at(5, "substring trap"),
-    a1: at(5, "Case A1"), out: at(5, "probes seventeen"), label: at(5, "The label says"), naive: at(5, "naive grader passed"),
-    hard: at(5, "hardened grader failed"), t4: at(5, "In table case"), t4naive: at(5, "naive check sees"), diff: at(5, "The diff shows") };
-  return (t) => {
-    const kA1 = ramp(t, B.a1, 0.5), kT4 = ramp(t, B.t4, 0.5);
-    mat.opacity(1 - kA1).view(null, 0);
-    show(heatTag, ramp(t, B.heat) * (1 - kA1), 0);
-    mat.hl(0, mat.rect("naive_col_head"), COLORS.cyan, 0);
-    mat.hl(1, mat.rect("cell_trap_naive"), COLORS.red, ramp(t, B.click));
-    mat.hl(2, mat.rect("row_A1"), COLORS.red, ramp(t, B.trap + 0.6));
-    a1.opacity(kA1 * (1 - kT4));
-    const f = a1.cap.rects;
-    const focus = t < B.naive ? union(f.output, f.gold) : union(f.naive, f.hardened);
-    a1.view(focus, ramp(t, B.out) * 0.0, 24);
-    a1.hl(0, union(f.output, f.gold), COLORS.cyan, ramp(t, B.out) * (1 - ramp(t, B.naive)));
-    a1.hl(1, f.naive, COLORS.red, ramp(t, B.naive));
-    a1.hl(2, f.hardened, COLORS.green, ramp(t, B.hard));
-    show(a1note, ramp(t, B.naive) * (1 - kT4));
-    t4.opacity(kT4);
-    const g = t4.cap.rects;
-    t4.view(g.diff, ramp(t, B.diff, 0.8) * 0.75, 30);
-    t4.hl(0, g.naive, COLORS.red, ramp(t, B.t4naive) * (1 - ramp(t, B.diff)));
-    t4.hl(1, g.diff, COLORS.cyan, ramp(t, B.diff + 0.5));
-    show(t4note, ramp(t, B.t4naive) * (1 - ramp(t, B.diff)));
-  };
-});
-
-// 6 · A false negative, inspected -------------------------------------------------------------------
-scene(6, (root, sc) => {
-  const cap = M.captures.case_A2_paraphrase;
-  const a2 = new Shot(root, "case_A2_paraphrase", 120, 150, 1680, 1680 * cap.h / cap.w);
-  const c = caseOf("A2_completed_revenue", "paraphrase");
-  const mock = el(root, "abs", `<span class="badge b-amber">MOCK JUDGE · deterministic rules, not a model</span>`, { left: "980px", top: "100px" });
-  const vals = el(root, "callout", `Gold <code>9469.30</code> &nbsp; Probe <code>Completed orders total $9,469.30.</code> &nbsp; Label <span class="badge b-cyan">should pass</span>`,
-    { left: "120px", top: "690px" });
-  const reasons = el(root, "callout", `naive: <code>${esc(c.verdicts.naive.reason)}</code> <span class="badge b-red">false negative</span><br>
-    hardened: <code>${esc(c.verdicts.hardened.reason)}</code> <span class="badge b-green">agrees with label</span>`,
-    { left: "120px", top: "770px", lineHeight: "2.1" });
-  const rule = el(root, "card edge-amber", `<div class="lbl">Mock judge numeric rule</div>
-    <div class="mono" style="font-size:26px;margin-top:10px">exactly one number · |value − gold| ≤ 0.005</div>`,
-    { left: "1140px", top: "890px", width: "660px", padding: "18px 26px" });
-  const t5cap = M.captures.case_T5_shuffled;
-  const t5 = new Shot(root, "case_T5_shuffled", 120, 150, 1680, 700);
-  const c5 = caseOf("T5_top_customers", "shuffled");
-  const t5note = el(root, "callout", `T5 × shuffled · label <span class="badge b-amber">should fail</span> (row order matters) · hardened verdict <span class="badge b-green">agrees with label</span>`,
-    { left: "120px", top: "885px" });
-  const B = { a2: at(6, "Task A2"), dollar: at(6, "dollar sign"), naive: at(6, "naive substring check"),
-    hard: at(6, "hardened exact check"), mock: at(6, "mock judge"), rule: at(6, "half a cent"), order: at(6, "Order is different") };
-  return (t) => {
-    const kO = ramp(t, B.order, 0.5);
-    const f = a2.cap.rects;
-    a2.opacity(1 - kO).view(null, 0);
-    a2.hl(0, f.instr, COLORS.cyan, ramp(t, B.a2 + 0.3) * (1 - ramp(t, B.dollar)));
-    a2.hl(1, f.output, COLORS.cyan, ramp(t, B.dollar) * (1 - ramp(t, B.naive)));
-    a2.hl(2, f.naive, COLORS.red, ramp(t, B.naive));
-    a2.hl(3, f.hardened, COLORS.green, ramp(t, B.hard));
-    show(vals, ramp(t, B.dollar) * (1 - kO)); show(reasons, ramp(t, B.naive) * (1 - kO));
-    show(mock, ramp(t, B.mock) * (1 - kO), 0); show(rule, ramp(t, B.rule) * (1 - kO));
-    const g = t5.cap.rects;
-    t5.opacity(kO).view(union(g.instr, g.hardened), 0.0);
-    t5.hl(0, g.hardened, COLORS.green, ramp(t, B.order + 0.6));
-    show(t5note, ramp(t, B.order + 0.3));
-  };
-});
-
-// 7 · Flakiness and repeatability -----------------------------------------------------------------
-scene(7, (root, sc) => {
-  const rule = el(root, "card edge-amber", `<div class="lbl">Planted naive check on S1_finalize_run</div>
-    <div class="mono" style="font-size:30px;margin-top:10px">now − finished_at ≤ 300 s</div>`, { left: "160px", top: "130px", width: "760px" });
-  const clockLbl = el(root, "callout", `<span class="mono">GradeContext.for_seed(seed)</span> → simulated delay after <span class="mono">finished_at</span>`,
-    { left: "980px", top: "160px", width: "800px" });
-  const ax0 = 220, ax1 = 1700, ay = 400, sec = (v) => ax0 + (ax1 - ax0) * v / 600;
-  const axis = el(root, "abs", "", { left: px(ax0), top: px(ay), width: px(ax1 - ax0), height: "3px", background: "#475569" });
-  const ticks = [0, 100, 200, 300, 400, 500, 600].map((v) => el(root, "abs mono", `${v} s`, { left: px(sec(v) - 30), top: px(ay + 18), width: "60px",
-    textAlign: "center", fontSize: "18px", color: "#64748B" }));
-  const thr = el(root, "abs", `<div class="mono" style="position:absolute;top:150px;left:-60px;width:120px;text-align:center;font-size:20px;color:var(--amber)">300 s limit</div>`,
-    { left: px(sec(300)), top: px(ay - 70), width: "0", height: "140px", borderLeft: "3px dashed var(--amber)" });
-  // Green = run verdict agrees with the label (S1 gold should pass); red = disagrees.
-  // Seeds 3 and 4 are 1.2 s apart, so seed 4's label sits one level higher.
-  const marks = EV.delays.map((d, i) => {
-    const fail = d > 300, color = fail ? "var(--red)" : "var(--green)", level = i === 4 ? 1 : 0;
-    return el(root, "abs", `<div class="mono" style="position:absolute;left:-68px;width:136px;bottom:${26 + level * 62}px;text-align:center;font-size:18px;line-height:1.3;color:${color}">seed ${i}<br>${d.toFixed(1)} s ${fail ? "✗" : "✓"}</div>
-      <div style="position:absolute;left:-15px;top:-15px;width:30px;height:30px;border-radius:50%;${fail ? "border:4px solid var(--red);background:var(--bg)" : "background:var(--green)"}"></div>`,
-      { left: px(sec(d)), top: px(ay + 1), width: "0", height: "0" });
-  });
-  const s1cap = M.captures.case_S1_gold;
-  const nr = M.captures.case_S1_gold.rects.naive, s1W = 860, s1Pad = 10;
-  const s1H = Math.round(s1W * (nr.h + 2 * s1Pad) / (nr.w + 2 * s1Pad));
-  const s1 = new Shot(root, "case_S1_gold", 120, 620, s1W, s1H);
-  const s1lbl = el(root, "note", "S1_finalize_run × gold (label: should pass) · naive grader, 5 runs", { left: "120px", top: px(620 + s1H + 16) });
-  const rep = new Shot(root, "report_flaky", 1020, 560, 780, 400);
-  const repLbl = el(root, "note", "report.md § Flaky verdicts", { left: "1020px", top: "975px" });
-  const cav1 = el(root, "card edge-amber", `<div style="font-size:30px;font-weight:700;color:var(--amber)">Controlled variation</div>
-    <div style="font-size:26px;margin-top:12px;line-height:1.4">The clock is simulated and seeded, so detecting this grader is <b>by construction</b>. Real nondeterminism needs real repeated runs.</div>`,
-    { left: "160px", top: "560px", width: "780px", height: "330px" });
-  const cav2 = el(root, "card edge-amber", `<div style="font-size:30px;font-weight:700;color:var(--amber)">Majority vote hides some errors</div>
-    <div style="font-size:26px;margin-top:12px;line-height:1.4">S1 × gold failed <b>2 of 5</b> runs, yet its majority verdict passes, so it is <b>not counted</b> as a false negative.</div>`,
-    { left: "980px", top: "560px", width: "780px", height: "330px" });
-  const B = { clock: at(7, "simulated clock"), delays: at(7, "Two of the five"), fpf: at(7, "fail, pass"),
-    six: at(7, "six flaky"), cav: at(7, "Two caveats"), c1: at(7, "clock variation"), c2: at(7, "majority vote hides") };
-  return (t) => {
-    show(rule, ramp(t, sc.start + 0.2)); show(clockLbl, ramp(t, B.clock));
-    const kAx = ramp(t, B.clock);
-    axis.style.opacity = kAx.toFixed(4); ticks.forEach((e) => (e.style.opacity = kAx.toFixed(4))); show(thr, ramp(t, B.clock + 0.4), 0);
-    marks.forEach((m, i) => (m.style.opacity = ramp(t, B.delays + i * 0.3, 0.4).toFixed(4)));
-    const kC = ramp(t, B.cav, 0.6);
-    const f = s1.cap.rects;
-    s1.opacity(ramp(t, B.fpf) * (1 - kC)).view(f.naive, 1, s1Pad, 3);
-    s1.hl(0, f.naive_runs, COLORS.amber, ramp(t, B.fpf + 0.4));
-    show(s1lbl, ramp(t, B.fpf) * (1 - kC), 0);
-    const g = rep.cap.rects;
-    rep.opacity(ramp(t, B.six) * (1 - kC)).view(union(g.flaky_heading, g.flaky_table), 1, 14, 3);
-    show(repLbl, ramp(t, B.six) * (1 - kC), 0);
-    show(cav1, ramp(t, B.c1)); show(cav2, ramp(t, B.c2));
-  };
-});
-
-// 8 · How the code produces the report ------------------------------------------------------------
-scene(8, (root, sc) => {
-  const N = [
-    ["tasks.build_tasks()", 'task A1, gold "7"'],
-    ["probes.build_probes()", 'output "17", should_pass=false'],
-    ["generate.generate()", "data/ + labels.json"],
-    ["runner.run_audit()", "loads all 96 cases"],
-    ["runner._grade_k()", "5 seeded runs per grader"],
-    ["majority → error", 'error = "FP"'],
-    ["_summarize() · _cell()", "summary + heatmap"],
-    ["write_results()", "results.json · report.md"],
-    ["serve.py  /api/case", "FastAPI endpoint"],
-    ["index.html  showCase()", "the case view"],
-  ];
-  const pos = N.map((_, i) => i < 5 ? { x: 120 + i * 345, y: 260 } : { x: 120 + (9 - i) * 345, y: 600 });
-  const nodes = N.map(([fn, sub], i) => el(root, "node", `<div class="fn">${esc(fn)}</div><div class="sub">${esc(sub)}</div>`,
-    { left: px(pos[i].x), top: px(pos[i].y) }));
-  const links = [];
-  for (let i = 0; i < 9; i++) {
-    const a = pos[i], b = pos[i + 1];
-    if (a.y === b.y) {
-      const left = Math.min(a.x, b.x) + 300, w = 45;
-      links.push(el(root, "abs", "", { left: px(left), top: px(a.y + 58), width: px(w), height: "3px", background: "#334155" }));
-    } else {
-      links.push(el(root, "abs", "", { left: px(a.x + 148), top: px(a.y + 118), width: "3px", height: px(b.y - a.y - 118), background: "#334155" }));
-    }
-  }
-  const token = el(root, "abs", "", { width: "34px", height: "34px", borderRadius: "50%", background: "var(--cyan)", boxShadow: "0 0 30px rgba(56,189,248,.7)" });
-  const tokLbl = el(root, "abs mono", 'A1 × substring_trap · "17"', { fontSize: "19px", color: "var(--cyan)", whiteSpace: "nowrap" });
-  const fives = el(root, "abs", [0, 1, 2, 3, 4].map(() => '<span class="dot" style="width:16px;height:16px;background:var(--cyan)"></span>').join(""),
-    { left: px(pos[4].x - 10), top: px(pos[4].y + 135) });
-  const thumbCap = M.captures.case_A1_substring_trap;
-  const thumb = new Shot(root, "case_A1_substring_trap", 120, 770, 600, 600 * thumbCap.h / thumbCap.w);
-  const B = [at(8, "Build tasks"), at(8, "Build probes"), at(8, "Generate writes"), at(8, "Run audit"), at(8, "grade k"),
-    at(8, "majority verdict"), at(8, "counted in the summary"), at(8, "written to results"), at(8, "FastAPI serves"), at(8, "to this page")];
-  return (t) => {
-    nodes.forEach((n, i) => {
-      show(n, ramp(t, sc.start + 0.1 + i * 0.06, 0.4), 10);
-      const active = t >= B[i] && (i === 9 || t < B[i + 1]);
-      n.style.borderColor = active ? (i >= 5 ? "#F87171" : "#38BDF8") : (t >= B[i] ? "#334155" : "#24304F");
+    show(title, ramp(t, sc.start - FADE, 0.6));
+    rows.forEach((r, i) => show(r, ramp(t, tTasks + i * 0.07, 0.4), 0, -20));
+    types.forEach((r) => show(r, ramp(t, tTasks + 0.9, 0.4)));
+    heads.forEach((h, c) => {
+      const p = probes[c];
+      const t0 = beatsP[p] !== undefined ? beatsP[p] : tMore + 0.15 * ["format_variant", "shuffled", "partial"].indexOf(p);
+      show(h, ramp(t, t0, 0.35), -10);
+      h.style.color = t >= t0 && t < t0 + 1.0 ? "var(--ink)" : "var(--muted)";
     });
-    links.forEach((l, i) => (l.style.opacity = ramp(t, sc.start + 0.3 + i * 0.06, 0.4).toFixed(4)));
-    let i = 0;
-    while (i < 9 && t >= B[i + 1]) i++;
-    const k = i < 9 ? ramp(t, B[i + 1] - 0.45, 0.45) : 0;
-    const from = pos[i], to = pos[Math.min(9, i + 1)];
-    const cx = lerp(from.x, to.x, k) + 150, cy = lerp(from.y, to.y, k) - 26;
-    const red = t >= B[5];
-    token.style.left = px(cx - 17); token.style.top = px(cy - 17);
-    token.style.background = red ? "var(--red)" : "var(--cyan)";
-    token.style.boxShadow = red ? "0 0 30px rgba(248,113,113,.7)" : "0 0 30px rgba(56,189,248,.7)";
-    token.style.opacity = ramp(t, B[0] - 0.3, 0.3).toFixed(4);
-    // Keep the label on screen: put it left of the token near the right edge.
-    const lw = tokLbl.offsetWidth;
-    tokLbl.style.left = px(cx + 26 + lw > W - 40 ? cx - 26 - lw : cx + 26); tokLbl.style.top = px(cy - 13);
-    tokLbl.style.color = red ? "var(--red)" : "var(--cyan)";
-    tokLbl.style.opacity = token.style.opacity;
-    const pulses = [...fives.children];
-    pulses.forEach((d, j) => (d.style.opacity = (t >= B[4] + j * 0.25 ? 1 : 0.15).toFixed(2)));
-    fives.style.opacity = ramp(t, B[4] - 0.2, 0.3).toFixed(4);
-    thumb.opacity(ramp(t, B[9])).view(null, 0);
+    for (const [r, c, e] of cells) show(e, ramp(t, tCases + (r * 8 + c) * 0.014, 0.3), 6);
+    show(counter, ramp(t, tCases + 0.4, 0.5));
+    show(foot5, ramp(t, tCases + 1.6, 0.5));
+    chips.forEach((ch, i) => show(ch, ramp(t, tDef[i], 0.45), 24));
   };
 });
 
-// 9 · Why the hardened checks differ --------------------------------------------------------------
-scene(9, (root, sc) => {
-  const C = window.CODE;
-  const code = el(root, "code", C.lines.map((ln, i) => `<span class="ln"><span class="hlbar"></span><i>${C.start + i}</i><span class="t">${esc(ln)}</span></span>`).join(""),
-    { left: "120px", top: "150px", width: "1680px" });
-  const cap = el(root, "note", `${esc(C.file)} · lines ${C.start}–${C.start + C.lines.length - 1} (verbatim)`, { left: "120px", top: "112px" });
-  const bars = [...code.querySelectorAll(".hlbar")];
-  const lane1 = el(root, "card edge-cyan col", `<h3 style="color:var(--cyan)">Deterministic checks</h3><ul>
-    <li>parse by declared type: float tolerance, null markers, date formats</li>
-    <li>row order only when the task requires it</li>
-    <li class="st">state: every field compared, never just a "done" flag</li></ul>`,
-    { left: "120px", top: "530px", width: "880px", height: "320px" });
-  const lane2 = el(root, "card edge-amber col", `<h3 style="color:var(--amber)">Semantic judge</h3><ul>
-    <li>answer tasks only, after the exact check fails</li>
-    <li>this run: <b>mock judge</b>, deterministic rules</li>
-    <li class="llm">real model judge (LiteLLM): supported, <b>not run</b></li></ul>`,
-    { left: "1040px", top: "530px", width: "760px", height: "320px" });
-  const stLi = lane1.querySelector(".st"), llmLi = lane2.querySelector(".llm");
-  const stat = el(root, "callout", `Judge calls in this run: <b>${R.judge_calls}</b> · backend: <span class="badge b-amber">${esc(R.meta.judge_backend)}</span>`,
-    { left: "120px", top: "925px", fontSize: "28px" });
-  const cav = el(root, "callout", `<span style="border-left:5px solid var(--amber);padding-left:16px">Mock agreement with labels ≠ independent validation</span>`,
-    { left: "1040px", top: "925px", fontSize: "28px" });
-  const iExact = C.lines.findIndex((l) => l.includes("_exact(")), iJudge = C.lines.findIndex((l) => l.includes("judge.judge("));
-  if (iExact < 0 || iJudge < 0) throw new Error("code excerpt does not contain the expected lines");
-  const B = { parse: at(9, "parse each output"), state: at(9, "State checks"), exact: at(9, "exact check runs first"),
-    fails: at(9, "only when it fails"), n: at(9, "twenty-six"), real: at(9, "real model judge"), cav: at(9, "not independent") };
+// 03 · Architecture -------------------------------------------------------------------------------
+scene(3, (root, sc, n) => {
+  const title = el(root, "title", "A straight pipeline, one fixed seed");
+  const B = (x, y, w, h, html, cls = "") => el(root, "box " + cls, html, { left: x, top: y, width: w, height: h });
+  const W = 360, H = 170, R1 = 250, R2 = 640;
+  const tasks = B(120, R1, W, H, `<div class="h">tasks.py</div><div class="s"><code>build_tasks()</code> · 12 tasks<br>SEED = 1337</div>`);
+  const probes = B(560, R1, W, H, `<div class="h">probes.py</div><div class="s"><code>build_probes()</code><br>8 outputs per task + label</div>`);
+  const gen = B(1000, R1, W, H, `<div class="h">generate.py</div><div class="s">writes everything to disk<br>byte-for-byte deterministic</div>`);
+  const data = B(1440, R1, W, H, `<div class="h">data/</div><div class="s">tasks/ · probes/<br>labels.json</div>`, "disk");
+  const runner = B(1440, 560, W, 360, `<div class="h">runner.py</div><div class="s"><code>run_audit()</code> · 5 runs each</div>
+    <div class="pill">naive.py</div><div class="pill">hardened.py</div>
+    <div class="pill dashed">judge.py<span>optional LLM · deterministic mock by default</span></div>`);
+  const results = B(1000, R2, W, H, `<div class="h">results/</div><div class="s">results.json<br>report.md</div>`, "disk");
+  const serve = B(560, R2, W, H, `<div class="h">serve.py</div><div class="s">FastAPI · /api/results<br>/api/case/… · /api/report</div>`);
+  const page = B(120, R2, W, H, `<div class="h">static/index.html</div><div class="s">one page, vanilla JS<br>summary · matrix · case · report</div>`);
+  const pills = [...runner.querySelectorAll(".pill")];
+  const svg = svgLayer(root);
+  const y1 = R1 + H / 2, y2 = R2 + H / 2;
+  const a = [
+    arrow(svg, [[486, y1], [554, y1]], "var(--data)"), arrow(svg, [[926, y1], [994, y1]], "var(--data)"),
+    arrow(svg, [[1366, y1], [1434, y1]], "var(--data)"), arrow(svg, [[1620, R1 + H + 6], [1620, 554]], "var(--data)"),
+    arrow(svg, [[1434, y2], [1366, y2]], "var(--data)"), arrow(svg, [[994, y2], [926, y2]], "var(--data)"),
+    arrow(svg, [[554, y2], [486, y2]], "var(--data)")];
+  const tT = at(n, "Tasks dot py"), tP = at(n, "Probes dot py"), tG = at(n, "generate dot py"),
+    tR = at(n, "Runner dot py"), tW = at(n, "writes results"), tS = at(n, "Serve dot py"), tPage = at(n, "static page");
   return (t) => {
-    show(code, ramp(t, sc.start + 0.1)); show(cap, ramp(t, sc.start + 0.1), 0);
-    show(lane1, ramp(t, B.parse)); stLi.style.opacity = ramp(t, B.state).toFixed(4);
-    bars[iExact].style.opacity = (ramp(t, B.exact) * (1 - ramp(t, B.fails))).toFixed(4);
-    bars[iJudge].style.opacity = ramp(t, B.fails).toFixed(4);
-    show(lane2, ramp(t, B.fails)); llmLi.style.opacity = ramp(t, B.real).toFixed(4);
-    show(stat, ramp(t, B.n)); show(cav, ramp(t, B.cav));
+    show(title, ramp(t, sc.start - FADE, 0.6));
+    show(tasks, ramp(t, tT, 0.5));
+    a[0](ramp(t, tP - 0.1, 0.5)); show(probes, ramp(t, tP + 0.2, 0.5));
+    a[1](ramp(t, tG - 0.1, 0.5)); show(gen, ramp(t, tG + 0.2, 0.5));
+    a[2](ramp(t, tG + 1.0, 0.5)); show(data, ramp(t, tG + 1.3, 0.5));
+    a[3](ramp(t, tR - 0.1, 0.5)); show(runner, ramp(t, tR + 0.2, 0.5));
+    pills.forEach((p, i) => show(p, ramp(t, tR + 1.0 + i * 0.45, 0.4), 10));
+    a[4](ramp(t, tW - 0.1, 0.5)); show(results, ramp(t, tW + 0.2, 0.5));
+    a[5](ramp(t, tS - 0.1, 0.5)); show(serve, ramp(t, tS + 0.2, 0.5));
+    a[6](ramp(t, tPage - 0.3, 0.5)); show(page, ramp(t, tPage, 0.5));
   };
 });
 
-// 10 · Evidence and limits ------------------------------------------------------------------------
-scene(10, (root, sc) => {
-  const tests = el(root, "card", `<div class="lbl">Tests (commit ${esc(EV.commit)}, mock mode)</div>
-    <pre class="mono" style="font-size:25px;line-height:1.7;margin-top:12px">pytest -m unit         → <span style="color:var(--green)">${EV.tests.unit} passed</span>
-pytest -m integration  → <span style="color:var(--green)">${EV.tests.integration} passed</span></pre>`,
-    { left: "120px", top: "130px", width: "800px", height: "230px" });
-  const mut = el(root, "card", `<div class="lbl">Mutation test · tests/test_audit.py</div>
-    <div class="mono" style="font-size:24px;margin-top:16px">_exact: gold_norm <span class="eq" style="position:relative">==<span class="strike" style="position:absolute;left:-4px;right:-4px;top:50%;height:3px;background:var(--red)"></span></span> out_norm
-      <span class="inop" style="color:var(--amber)">→ gold in out</span></div>
-    <div style="font-size:24px;margin-top:18px">audit reports <span class="badge b-red">hardened FP</span> on <span class="mono">A1 × substring_trap</span></div>`,
-    { left: "960px", top: "130px", width: "840px", height: "230px" });
-  const strike = mut.querySelector(".strike"), inop = mut.querySelector(".inop"), fpb = mut.querySelector(".badge").parentElement;
-  const col = (x, w, color, title, items) => el(root, `card col`, `<h3 style="color:${color}">${title}</h3><ul>${items.map((i) => `<li>${i}</li>`).join("")}</ul>`,
-    { left: px(x), top: "400px", width: px(w), height: "430px", borderColor: color });
-  const c1 = col(120, 540, "var(--green)", "Demonstrated", ["FP, FN and flaky verdicts measured against known labels",
-    `naive vs hardened separated on these ${R.meta.n_cases} synthetic cases`]);
-  const c2 = col(690, 540, "var(--amber)", "Not established", ["general correctness of the hardened graders (written knowing these probe types)",
-    "real browser or desktop environments", "a real model judge"]);
-  const c3 = col(1260, 540, "var(--cyan)", "Future work", ["model-generated adversarial probes, reviewed by a person", "adapters for graders over real environments"]);
-  const end = el(root, "callout", `<span class="muted">Independent prototype · synthetic data · not affiliated with HUD</span>`,
-    { left: "120px", top: "880px", fontSize: "26px" });
-  const B = { tests: at(10, "One hundred fifty-two"), mut: at(10, "A mutation test"), swap: at(10, "swaps an equality"),
-    fp: at(10, "reports a false positive"), c1: at(10, "So the harness"), c2: at(10, "doesnt show"), c3: at(10, "Future work"), end: at(10, "adapters") };
+// 04 · One case, end to end ------------------------------------------------------------------------
+scene(4, (root, sc, n) => {
+  const a1 = F.a1;
+  const title = el(root, "title", "Tracing A1 × substring_trap");
+  const B = (x, y, w, h, html, cls = "") => el(root, "box " + cls, html, { left: x, top: y, width: w, height: h });
+  const load = B(120, 180, 470, 104, `<div class="h">generate.load_cases()</div><div class="s">labels.json → task, probe, should_pass, output</div>`);
+  const run = B(700, 180, 520, 104, `<div class="h">runner.run_audit()</div><div class="s">for each case, for each grader</div>`);
+  const gk = B(700, 316, 520, 118, `<div class="h">runner._grade_k(…, k=5)</div>
+    <div class="s" style="display:flex;gap:10px;align-items:center">seeds ${[0, 1, 2, 3, 4].map((s) => `<span class="chip c-data" style="font-size:16px;padding:2px 10px">${s}</span>`).join("")} → majority vote</div>`);
+  const seedChips = [...gk.querySelectorAll(".chip")];
+  const hx = F.code.hardened_exact.lines[0];
+  const naive = B(120, 470, 780, 244, `<div class="h t-grader">naive.grade_answer</div>
+    <div class="lbl" style="margin-top:4px">audit/graders/naive.py:${F.code.naive_answer_if.lines[0][0]}</div>
+    <div class="mono" style="font-size:22px;margin-top:14px">${esc(F.code.naive_answer_if.lines[0][1])}</div>
+    <div class="mono muted" id="nre" style="font-size:19px;margin-top:14px;height:26px"></div>
+    <div style="margin-top:16px;display:flex;align-items:center;gap:6px" id="nd"></div>`, "b-grader");
+  const hard = B(1020, 470, 780, 244, `<div class="h t-grader">hardened.grade_answer</div>
+    <div class="lbl" style="margin-top:4px">audit/graders/hardened.py:${hx[0]}</div>
+    <div class="mono" style="font-size:18px;margin-top:14px">${esc(hx[1])} <span id="hx" class="t-bad" style="font-size:24px">✗</span></div>
+    <div style="margin-top:12px;display:flex;gap:14px;align-items:center" id="hj"><span class="mono t-grader" style="font-size:20px">judge.MockJudge.judge</span>
+      <span class="mono" id="hre" style="font-size:19px"></span></div>
+    <div style="margin-top:16px;display:flex;align-items:center;gap:6px" id="hd"></div>`, "b-grader");
+  const nd = dots(naive.querySelector("#nd"), a1.naive.runs, "var(--bad)");
+  const nScore = el(naive.querySelector("#nd"), "mono", `score ${a1.naive.score}`, { fontSize: "22px", marginLeft: "12px" });
+  const hd = dots(hard.querySelector("#hd"), a1.hardened.runs, "var(--ok)");
+  const hScore = el(hard.querySelector("#hd"), "mono", `score ${a1.hardened.score}`, { fontSize: "22px", marginLeft: "12px" });
+  const hxMark = hard.querySelector("#hx"), hj = hard.querySelector("#hj"), hre = hard.querySelector("#hre"), nre = naive.querySelector("#nre");
+  const er = F.code.error_rule;
+  const merge = B(120, 750, 1680, 172, `<div class="lbl">${esc(er.file)}:${er.lines[0][0]}-${er.lines[1][0]}</div>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+    <pre class="mono" style="font-size:21px;line-height:34px;margin-top:8px">${esc(er.lines[0][1])}\n${esc(er.lines[1][1])}</pre>
+    <div style="display:flex;flex-direction:column;gap:12px;align-items:flex-end">
+      <span class="chip c-bad" id="mfp">naive → FP</span><span class="chip c-ok" id="mok">hardened → correct</span></div></div>`);
+  const mfp = merge.querySelector("#mfp"), mok = merge.querySelector("#mok");
+  const tok1 = el(root, "token", esc(a1.output)), tok2 = el(root, "token", esc(a1.output));
+  const svg = svgLayer(root);
+  const ar = [arrow(svg, [[596, 232], [694, 232]], "var(--data)"), arrow(svg, [[960, 290], [960, 310]], "var(--data)"),
+    arrow(svg, [[800, 440], [510, 464]], "var(--data)"), arrow(svg, [[1120, 440], [1410, 464]], "var(--data)")];
+  const tRun = at(n, "Run audit loads"), tGk = at(n, "grade K"), tSeeds = at(n, "seeds zero to four"),
+    tNaive = at(n, "naive grader asks"), tOne = at(n, "scores one"), tHard = at(n, "hardened grader"),
+    tFails = at(n, "That fails"), tMock = at(n, "deterministic mock"), tZero = at(n, "Score zero"), tFin = at(n, "Finally");
+  // token path: (x, y, from time)
+  const path1 = [[180, 300, sc.start], [860, 196, tRun], [1120, 332, tGk], [800, 486, tNaive], [500, 800, tFin]];
+  const path2 = [[1120, 332, tHard - 0.6], [1700, 486, tHard], [1000, 840, tFin]];
+  function along(tok, path, t, visibleFrom) {
+    let x = path[0][0], y = path[0][1];
+    for (let i = 1; i < path.length; i++) {
+      const k = ramp(t, path[i][2], 0.7);
+      x = lerp(x, path[i][0], k); y = lerp(y, path[i][1], k);
+    }
+    tok.style.left = px(x); tok.style.top = px(y);
+    const fadeOut = 1 - ramp(t, tFin + 1.2, 0.4);
+    tok.style.opacity = (ramp(t, visibleFrom, 0.4) * fadeOut).toFixed(3);
+  }
   return (t) => {
-    show(tests, ramp(t, B.tests)); show(mut, ramp(t, B.mut));
-    strike.style.opacity = ramp(t, B.swap + 0.6).toFixed(4); inop.style.opacity = ramp(t, B.swap + 0.9).toFixed(4);
-    fpb.style.opacity = ramp(t, B.fp).toFixed(4);
-    show(c1, ramp(t, B.c1)); show(c2, ramp(t, B.c2)); show(c3, ramp(t, B.c3)); show(end, ramp(t, B.end));
+    show(title, ramp(t, sc.start - FADE, 0.6));
+    show(load, ramp(t, sc.start + 0.1, 0.5));
+    show(run, ramp(t, tRun - 0.2, 0.5)); ar[0](ramp(t, tRun - 0.4, 0.4));
+    show(gk, ramp(t, tGk - 0.1, 0.5)); ar[1](ramp(t, tGk - 0.2, 0.3));
+    seedChips.forEach((c, i) => { c.style.opacity = ramp(t, tSeeds + i * 0.12, 0.25).toFixed(3); });
+    show(naive, ramp(t, tNaive - 0.2, 0.5)); ar[2](ramp(t, tNaive - 0.3, 0.5));
+    typeAt(nre, a1.naive.reason, t, tOne - 0.4);
+    nd.ds.forEach((d, i) => { d.style.opacity = ramp(t, tOne + i * 0.1, 0.2).toFixed(3); });
+    nScore.style.opacity = ramp(t, tOne + 0.5, 0.3).toFixed(3);
+    show(hard, ramp(t, tHard - 0.2, 0.5)); ar[3](ramp(t, tHard - 0.3, 0.5));
+    hxMark.style.opacity = ramp(t, tFails, 0.3).toFixed(3);
+    show(hj, ramp(t, tMock - 0.8, 0.4));
+    typeAt(hre, a1.hardened.judge.reason, t, tMock + 0.2);
+    hd.ds.forEach((d, i) => { d.style.opacity = ramp(t, tZero + i * 0.1, 0.2).toFixed(3); });
+    hScore.style.opacity = ramp(t, tZero + 0.5, 0.3).toFixed(3);
+    show(merge, ramp(t, tFin - 0.2, 0.5));
+    show(mfp, ramp(t, tFin + 1.4, 0.4), 0, 20); show(mok, ramp(t, tFin + 1.8, 0.4), 0, 20);
+    along(tok1, path1, t, sc.start + 0.3);
+    along(tok2, path2, t, tHard - 0.6);
   };
 });
 
-// ---- the deterministic frame function --------------------------------------------------------------
-// Transition: the outgoing scene fades out over the last 0.3 s of its trailing silence and the
-// incoming scene fades in from 0.1 s before its first word, so the stage passes briefly through the
-// background instead of stacking two dense layouts on top of each other.
-const OUT_D = 0.3, OUT_END = 0.0, IN_D = 0.25, IN_LEAD = 0.1;
-window.renderAt = function renderAt(t) {
-  const last = scenes.length - 1;
-  scenes.forEach((s, i) => {
-    const a = s.sc.start, b = s.sc.end;
-    const kin = i === 0 ? 1 : ramp(t, a - IN_LEAD, IN_D);
-    const kout = i === last ? 1 : 1 - ramp(t, b - OUT_END - OUT_D, OUT_D);
-    const k = Math.min(kin, kout);
-    s.root.style.opacity = k.toFixed(4);
-    s.root.style.visibility = k > 0 ? "visible" : "hidden";
-    if (k > 0) s.render(t);
+// 05 · Naive vs hardened, in code ------------------------------------------------------------------
+scene(5, (root, sc, n) => {
+  const title = el(root, "title", "Tables: surface check vs typed comparison");
+  const naive = codePane(root, "naive_table", 120, 200, 1680, "naive · header + row count");
+  const t4 = F.t4;
+  const chip = el(root, "card b-bad", `<span class="lbl">T4_revenue_by_region × partial</span>&nbsp;&nbsp;
+    <span class="mono">${esc(t4.region)} · total_amount <span class="t-bad">${esc(t4.got)}</span> <span class="muted">(gold ${esc(t4.want)})</span></span>
+    &nbsp;&nbsp;<span class="chip c-bad">naive PASS</span>&nbsp;&nbsp;<span class="mono muted" style="font-size:18px">“${esc(t4.naive.reason)}”</span>`,
+    { left: 120, top: 600, width: 1680, padding: "20px 28px", fontSize: "22px" });
+  const bar = el(root, "card", `<span class="lbl">audit/graders/naive.py:25-32</span>&nbsp;&nbsp; header + row count
+    → <span class="t-bad">passed a table with one wrong total</span>`, { left: 120, top: 172, width: 1680, padding: "12px 26px", fontSize: "21px" });
+  const hard = codePane(root, "hardened_table", 120, 246, 1680, "hardened · typed comparison");
+  hard.root.classList.add("tight");
+  const fl = F.code.float_norm.lines[0], df = F.code.date_formats.lines[0];
+  const c1 = el(root, "card b-grader", `<div class="lbl">audit/graders/hardened.py:${fl[0]} · normalize_cell</div>
+    <div class="mono" style="font-size:24px;margin-top:10px">1.50 · 1.5 · 1.5000001 → "1.5"</div>`, { left: 120, top: 784, width: 820, height: 130, padding: "16px 26px" });
+  const c2 = el(root, "card b-grader", `<div class="lbl">audit/graders/hardened.py:${df[0]}</div>
+    <div class="mono" style="font-size:21px;margin-top:10px">${esc(df[1].split("  #")[0])}</div>
+    <div style="font-size:19px;margin-top:4px"><span class="mono">MM/DD/YYYY</span> <span class="t-bad">rejected: ambiguous</span></div>`,
+    { left: 980, top: 784, width: 820, height: 130, padding: "16px 26px" });
+  const tHead = at(n, "header"), tRow = at(n, "row count"), tWrong = at(n, "one wrong total"),
+    tHard = at(n, "hardened grader normalizes"), tCell = at(n, "each cell"), tFloat = at(n, "one point five"),
+    tDate = at(n, "month-first"), tRc = at(n, "checks the row count"), tKeys = at(n, "unique keys"), tEvery = at(n, "every row");
+  const groups = [[[128, 129], tCell], [[134], tRc + 0.3], [[139, 140, 141, 142], tKeys], [[144, 145, 146, 147], tEvery]];
+  return (t) => {
+    show(title, ramp(t, sc.start - FADE, 0.6));
+    const out = 1 - ramp(t, tHard - 0.4, 0.5);
+    show(naive.root, ramp(t, sc.start + 0.2, 0.5) * out);
+    hiRows(naive, [28], ramp(t, tHead, 0.3) * (1 - ramp(t, tRow, 0.3)));
+    hiRows(naive, [30], ramp(t, tRow, 0.3));
+    show(chip, ramp(t, tWrong, 0.5) * out);
+    show(bar, ramp(t, tHard - 0.1, 0.5), -10);
+    show(hard.root, ramp(t, tHard, 0.5), 24);
+    groups.forEach(([lines, t0], i) => {
+      const t1 = i + 1 < groups.length ? groups[i + 1][1] : 1e9;
+      hiRows(hard, lines, ramp(t, t0, 0.3) * (1 - ramp(t, t1, 0.3)));
+    });
+    show(c1, ramp(t, tFloat, 0.45)); show(c2, ramp(t, tDate, 0.45));
+  };
+});
+
+// 06 · Flakiness from a seeded clock --------------------------------------------------------------
+scene(6, (root, sc, n) => {
+  const s1 = F.s1, g = s1.gold;
+  const title = el(root, "title", "Repeat runs catch time-dependent graders");
+  const card = el(root, "card", `<div class="lbl">S1_finalize_run · gold.json (excerpt)</div>
+    <pre class="mono" style="font-size:22px;line-height:38px;margin-top:12px">"status": <span class="t-state">"${esc(g.status)}"</span>,
+"finished_at": <span class="t-state">"${esc(g.finished_at)}"</span>,
+"rows_written": <span class="t-state">${g.rows_written}</span></pre>
+    <div style="margin-top:20px"><span class="chip c-grader">naive grader · freshness window ${s1.window} s</span></div>
+    <div class="lbl" style="margin-top:12px">audit/graders/naive.py:45-51 · audit/tasks.py:236</div>`,
+    { left: 120, top: 220, width: 720, height: 310 });
+  // timeline: 0..600 s mapped to x 920..1800
+  const TX0 = 920, TX1 = 1800, TY = 410, sx = (s) => TX0 + (s / 600) * (TX1 - TX0);
+  const tl = el(root, "abs", "", { left: 0, top: 0, width: 1920, height: 1080 });
+  el(tl, "abs", "", { left: TX0, top: TY - 50, width: sx(s1.window) - TX0, height: 100, background: "rgba(74,222,128,.10)", borderRadius: "8px" });
+  el(tl, "abs t-ok", `fresh: ≤ ${s1.window} s old`, { left: TX0 + 12, top: TY - 84, fontSize: "18px" });
+  el(tl, "abs", "", { left: TX0, top: TY, width: TX1 - TX0, height: 3, background: "var(--muted)" });
+  el(tl, "abs lbl", `BASE_NOW ${s1.base_now}<br>= finished_at`, { left: TX0 - 10, top: TY + 86, fontSize: "16px", lineHeight: "1.4" });
+  el(tl, "abs lbl", `+${s1.window} s`, { left: sx(s1.window) - 24, top: TY + 86, fontSize: "16px" });
+  el(tl, "abs lbl", "+600 s", { left: TX1 - 50, top: TY + 86, fontSize: "16px" });
+  const ticks = s1.delays.map((d, s) => {
+    const fresh = d <= s1.window, above = s % 2 === 0;
+    const c = fresh ? "var(--ok)" : "var(--bad)";
+    const e = el(tl, "abs", "", { left: sx(d) - 2, top: TY - 36, width: 4, height: 76, background: c, borderRadius: "2px" });
+    const lab = el(tl, "abs mono", `seed ${s}`, { left: sx(d) - 34, top: above ? TY - 70 : TY + 46, fontSize: "16px", color: c, width: "70px", textAlign: "center" });
+    return [e, lab];
   });
-  // Total scene opacity: ~1 everywhere if crossfades never dip to an empty frame (used by QA).
-  return scenes.reduce((a, s) => a + parseFloat(s.root.style.opacity), 0);
-};
-window.DURATION = T.total;
-
-// Every image decoded and every font loaded before the first frame is captured.
-window.ready = Promise.all([document.fonts.ready, ...[...document.images].map((i) => i.decode())]).then(() => {
-  window.renderAt(0);
-  return true;
+  const capt = el(root, "abs muted", "grading clock = BASE_NOW + uniform(0, 600 s), seeded per run · audit/graders/__init__.py:19-23",
+    { left: TX0, top: 560, fontSize: "18px" });
+  const runRow = el(root, "abs", `<span class="lbl">naive runs, seeds 0–4</span>`, { left: TX0, top: 620 });
+  const pips = s1.naive.runs.map((r, i) => el(root, "abs mono", "", {
+    left: TX0 + i * 70, top: 656, width: 52, height: 52, borderRadius: "50%", border: "3px solid var(--dim)",
+    display: "flex", alignItems: "center", justifyContent: "center", fontSize: "22px" }));
+  const maj = el(root, "abs", `<span class="chip c-ok" style="font-size:24px">majority: PASS</span>&nbsp;&nbsp;
+    <span class="chip c-flaky" style="font-size:24px">flaky: runs disagree</span>`, { left: TX0, top: 746 });
+  const flk = F.flaky.map(([tid, gname]) => `("${tid}", "${gname}")`).join(", ");
+  const foot = el(root, "card", `<span class="lbl">tests/test_audit.py:36-39</span>&nbsp;&nbsp;
+    <span class="mono" style="font-size:21px">flaky == {${esc(flk)}}</span> <span class="muted">&nbsp;· the only flaky grader in the audit</span>`,
+    { left: 120, top: 860, width: 1680, padding: "18px 28px", fontSize: "20px" });
+  const tFive = at(n, "Why five runs"), tS1 = at(n, "S-one"), tSim = at(n, "simulated from the seed"),
+    tPass = at(n, "passes three runs"), tMaj = at(n, "majority says pass"), tOnly = at(n, "only grader flagged");
+  return (t) => {
+    show(title, ramp(t, sc.start - FADE, 0.6));
+    show(runRow, ramp(t, tFive, 0.4));
+    pips.forEach((p, i) => {
+      show(p, ramp(t, tFive + 0.1 + i * 0.1, 0.3), 8);
+      const k = ramp(t, tPass + i * 0.18, 0.25), r = s1.naive.runs[i], c = r ? "var(--ok)" : "var(--bad)";
+      p.textContent = k > 0.5 ? String(r) : "";
+      p.style.borderColor = k > 0.5 ? c : "var(--dim)";
+      p.style.color = c;
+      p.style.background = k > 0.5 && r ? "rgba(74,222,128,.14)" : "transparent";
+    });
+    show(card, ramp(t, tS1 - 0.2, 0.5));
+    tl.style.opacity = ramp(t, tSim - 0.3, 0.5).toFixed(3);
+    ticks.forEach(([e, lab], i) => {
+      const k = ramp(t, tSim + 0.6 + i * 0.3, 0.35);
+      show(e, k, -30); show(lab, k, -10);
+    });
+    show(capt, ramp(t, tSim + 0.4, 0.5));
+    show(maj, ramp(t, tMaj, 0.45));
+    show(foot, ramp(t, tOnly - 0.2, 0.5));
+  };
 });
 
-// ---- preview controls (not used by the renderer) ------------------------------------------------
-if (location.hash.includes("preview")) {
+// 07 · Run it, and what it found -------------------------------------------------------------------
+scene(7, (root, sc, n) => {
+  const title = el(root, "title", "One command: generate, audit, serve");
+  const term = el(root, "card", "", { left: 120, top: 200, width: 840, height: 330, background: "#070A12", fontFamily: "var(--mono)", fontSize: "19px", lineHeight: "32px" });
+  const tl1 = el(term, "", `<span class="muted">$</span> pip install -r requirements.txt`);
+  const tl2 = el(term, "", `<span class="muted">$</span> <span class="t-data">python -m audit.serve</span>`);
+  const outs = [...F.serve_lines.map((l) => [l, ""]), ["  " + F.headline, "muted"], ["  Grader Audit UI: http://localhost:8000", "t-data"]];
+  const outEls = outs.map(([l, c]) => el(term, c, esc(l), { whiteSpace: "pre-wrap", fontSize: c === "muted" ? "16px" : "19px", lineHeight: c === "muted" ? "24px" : "32px", margin: c === "muted" ? "4px 0 6px" : "0" }));
+  outEls.forEach((e, i) => { if (i < F.serve_lines.length) e.innerHTML = esc(outs[i][0]).replace(/(FP \d+\/\d+|FN \d+\/\d+)/g, (m) => (/ 0\//.test(m) ? `<span class="t-ok">${m}</span>` : `<span class="t-bad">${m}</span>`)); });
+  const key = el(root, "card", `<span class="chip c-grader">No API key</span>&nbsp;&nbsp; mock judge by default ·
+    <span class="mono" style="font-size:19px">JUDGE_MODEL=&lt;model&gt;</span> opts in`,
+    { left: 120, top: 560, width: 840, padding: "18px 26px", fontSize: "21px" });
+  const tests = el(root, "card", `<span class="chip c-ok">${F.tests} tests pass</span>
+    <div style="font-size:20px;margin-top:12px">mutation test: hardened <code>_exact</code> swapped from <code>==</code> to <code>in</code> → audit catches it as a false positive</div>
+    <div class="lbl" style="margin-top:8px">tests/test_audit.py:64-70</div>`, { left: 120, top: 680, width: 840, padding: "18px 26px" });
+  const cap = M.captures.summary, mcap = M.captures.matrix;
+  const lab = el(root, "abs lbl", "the real UI · synthetic data · localhost:8000", { left: 1010, top: 200 });
+  const SW = 790, SS = SW / cap.w;
+  const shot = el(root, "abs", "", { left: 1010, top: 234, width: SW, height: cap.h * SS + 4, borderRadius: "12px", overflow: "hidden", border: "2px solid var(--line)" });
+  const img = document.createElement("img"); img.src = A["summary.png"]; img.style.width = px(SW); shot.appendChild(img);
+  const hl = el(shot, "abs", "", { border: "4px solid var(--bad)", borderRadius: "10px" });
+  const MH = 560, MS = MH / mcap.h;
+  const mshot = el(root, "abs", "", { left: 1010, top: 420, width: mcap.w * MS, height: MH, borderRadius: "12px", overflow: "hidden", border: "2px solid var(--line)" });
+  const mimg = document.createElement("img"); mimg.src = A["matrix.png"]; mimg.style.width = px(mcap.w * MS); mshot.appendChild(mimg);
+  const rect = (name) => cap.rects[name];
+  function place(r, color, k) {
+    hl.style.left = px(r.x * SS - 4); hl.style.top = px(r.y * SS - 4);
+    hl.style.width = px(r.w * SS + 8); hl.style.height = px(r.h * SS + 8);
+    hl.style.borderColor = color; hl.style.opacity = k.toFixed(3);
+  }
+  const tRun = at(n, "To run it"), tServe = at(n, "serves the page"), tKey = at(n, "No A-P-I key"),
+    tTw = at(n, "naive graders pass twenty"), tFt = at(n, "fourteen"), tZero = at(n, "zero errors"), tTests = at(n, "hundred and fifty-two");
+  return (t) => {
+    show(title, ramp(t, sc.start - FADE, 0.6));
+    show(term, ramp(t, tRun - 0.3, 0.5));
+    show(tl1, ramp(t, tRun, 0.3), 0); show(tl2, ramp(t, tRun + 1.2, 0.3), 0);
+    outEls.forEach((e, i) => show(e, ramp(t, tServe + 0.3 + i * 0.35, 0.25), 0));
+    show(key, ramp(t, tKey, 0.45));
+    show(lab, ramp(t, tServe + 1.5, 0.5)); show(shot, ramp(t, tServe + 1.5, 0.5));
+    if (t < tFt) place(rect("naive_fp"), "var(--bad)", ramp(t, tTw, 0.3));
+    else if (t < tZero) place(rect("naive_fn"), "var(--bad)", 1);
+    else place(rect("hardened_card"), "var(--ok)", 1);
+    show(mshot, ramp(t, tZero + 1.2, 0.5));
+    show(tests, ramp(t, tTests, 0.45));
+  };
+});
+
+// 08 · Limits, next steps, recap -------------------------------------------------------------------
+scene(8, (root, sc, n) => {
+  const title = el(root, "title", "What the numbers do and don't prove");
+  const C = (y, h, html) => el(root, "card", html, { left: 120, top: y, width: 1060, height: h, padding: "16px 26px" });
+  const tag = (s) => `<span class="lbl" style="float:right">${esc(s)}</span>`;
+  const ns = F.code.naive_state_if.lines[0];
+  const traps = F.state_traps.filter((r) => r[1] === "FP").length;
+  const cards = [
+    C(186, 74, `${tag("README.md:152")}<div style="font-size:23px">Hardened <b>0 / 0</b> is by construction: written knowing these probes</div>`),
+    C(276, 156, `${tag("audit/graders/naive.py:" + ns[0])}<div style="font-size:23px">Gotcha: naive state check is a substring test</div>
+      <div class="mono" style="font-size:20px;margin-top:10px">${esc(ns[1])}</div>
+      <div style="font-size:20px;margin-top:8px"><span class="mono">"not_succeeded"</span> contains <span class="mono">"succeeded"</span> →
+      <span class="chip c-bad" style="font-size:17px">PASS</span> <span class="muted">· FP on ${traps} of 3 state tasks</span></div>`),
+    C(448, 74, `${tag("audit/graders/__init__.py:9")}<div style="font-size:23px">Flakiness is simulated with a seeded clock, not real time</div>`),
+    C(538, 74, `${tag("audit/graders/judge.py:86")}<div style="font-size:23px">Real LLM judge never run; on any error it falls back to the mock</div>`),
+    C(628, 74, `${tag("README.md:216-217")}<div style="font-size:23px">Labels assumed known · synthetic CSV and JSON, not browser state</div>`),
+  ];
+  const next = el(root, "card b-data", `<div class="lbl">next step</div>
+    <div style="font-size:26px;margin-top:12px;line-height:1.35">Adversarial probes generated by an <b>LLM</b>, reviewed by a human before they become labeled cases</div>
+    <div class="lbl" style="margin-top:12px">README.md:215</div>`, { left: 1240, top: 186, width: 560, height: 260 });
+  const recapItems = ["Known labels → you can audit the grader", "Two graders, the same 96 cases",
+    "Five seeded runs → FP · FN · flaky", "One command: python -m audit.serve"];
+  const recap = recapItems.map((s, i) => el(root, "abs", `<span class="mono t-data" style="font-size:30px;margin-right:26px">0${i + 1}</span>${esc(s).replace("python -m audit.serve", '<span class="mono" style="font-size:40px;font-weight:500">python -m audit.serve</span>')}`,
+    { left: 360, top: 300 + i * 104, font: "700 46px var(--display)" }));
+  const disc = el(root, "abs muted", "Independent prototype built from public information and synthetic data. Not affiliated with HUD.",
+    { left: 0, width: 1920, textAlign: "center", top: 860, fontSize: "26px" });
+  const beats = [at(n, "by construction"), at(n, "One gotcha"), at(n, "simulated"), at(n, "never run"), at(n, "Labels are assumed")];
+  const tNext = at(n, "Next"), tRecap = at(n, "To recap");
+  const rb = [at(n, "known labels"), at(n, "two graders"), at(n, "five seeded runs"), at(n, "one command")];
+  const self = SCENES.length; // index of this scene's record (set after build)
+  return (t) => {
+    const out = 1 - ramp(t, tRecap - 0.5, 0.5);
+    show(title, ramp(t, sc.start - FADE, 0.6) * out);
+    cards.forEach((c, i) => show(c, ramp(t, beats[i] - 0.2, 0.45) * out, 0, -30));
+    show(next, ramp(t, tNext - 0.1, 0.5) * out, 0, 30);
+    recap.forEach((r, i) => show(r, ramp(t, Math.max(rb[i], tRecap) - 0.1, 0.45), 0, -24));
+    show(disc, ramp(t, tRecap + 0.6, 0.6));
+    SCENES[self].foot.style.opacity = out.toFixed(3);
+  };
+});
+
+// ---- renderAt -------------------------------------------------------------------------------------
+// Scene i fades out over [end - FADE, end] while scene i+1 fades in over [start - FADE, start]
+// (the 0.6 s silent pad), so the crossfade never passes through an empty frame.
+function renderAt(t) {
+  t = clamp(t, 0, T.total);
+  let sum = 0;
+  SCENES.forEach(({ sc, root, update }, i) => {
+    const first = i === 0, last = i === SCENES.length - 1;
+    const kin = first ? 1 : ramp(t, sc.start - FADE, FADE);
+    const kout = last ? 1 : 1 - ramp(t, sc.end - FADE, FADE);
+    const k = kin * kout;
+    root.style.opacity = k >= 1 ? "1" : k.toFixed(4);
+    root.style.visibility = k > 0 ? "visible" : "hidden";
+    if (k > 0) update(t);
+    sum += k;
+  });
+  return sum;
+}
+window.renderAt = renderAt;
+window.ready = document.fonts.ready.then(() => Promise.all([...document.images].map((im) => im.decode().catch(() => {})))).then(() => { renderAt(0); return true; });
+
+// ---- preview mode (open with #preview; not used by the renderer) ---------------------------------
+if (location.hash === "#preview") {
   document.body.classList.add("preview");
+  const audio = new Audio("../audio/narration.wav");
   const scrub = document.getElementById("scrub"), clock = document.getElementById("clock"), play = document.getElementById("play");
   scrub.max = T.total;
-  const audio = new Audio("../audio/narration.wav");
-  const fmt = (t) => `${Math.floor(t / 60)}:${(t % 60).toFixed(2).padStart(5, "0")}`;
-  const tick = () => { const t = audio.currentTime; window.renderAt(t); scrub.value = t; clock.textContent = fmt(t); if (!audio.paused) requestAnimationFrame(tick); };
-  play.onclick = () => { if (audio.paused) { audio.play(); play.textContent = "Pause"; requestAnimationFrame(tick); } else { audio.pause(); play.textContent = "Play"; } };
-  scrub.oninput = () => { audio.currentTime = +scrub.value; window.renderAt(+scrub.value); clock.textContent = fmt(+scrub.value); };
+  const fmt = (s) => `${Math.floor(s / 60)}:${(s % 60).toFixed(2).padStart(5, "0")}`;
+  const draw = (s) => { renderAt(s); scrub.value = s; clock.textContent = fmt(s); };
+  play.onclick = () => { if (audio.paused) { audio.play(); play.textContent = "Pause"; } else { audio.pause(); play.textContent = "Play"; } };
+  scrub.oninput = () => { audio.currentTime = +scrub.value; draw(+scrub.value); };
+  const loop = () => { if (!audio.paused) draw(audio.currentTime); requestAnimationFrame(loop); };
+  requestAnimationFrame(loop);
 }
 </script>
 </body>

@@ -1,134 +1,146 @@
-# Grader Audit KT video: outline (Phase 1 checkpoint)
+# Grader Audit KT video: outline
 
-**Target:** about 5:45, ten scenes, roughly 760–820 spoken words.
-**Sources:** all numbers come from `snapshot/results.json` (SHA `de8c65a4…`), and all code references are listed in `evidence.md`.
-**Order:** problem (1–2) → working demo (3–7) → implementation (8–9) → evidence and limits (10).
+**Audience:** HUD founders and engineers seeing this code for the first time.
+**Target:** about 3:45 across 8 scenes, roughly 520–540 spoken words at 145 wpm.
+**Order:** the problem, then the architecture, then one case traced through the real functions, then the details that matter, then running it, then gotchas and a recap.
+
+## What the system does
+
+Grader Audit tests benchmark **graders**, not agents.
+
+It builds a synthetic mini-benchmark of 12 data-engineering tasks (4 `answer`, 5 `table`, 3 `state`). For each task it writes 8 scripted "probe" outputs, so 96 cases in total, and each case carries a known `should_pass` label.
+
+Every case goes through two graders:
+- a **naive** grader, built from publicly reported failure patterns: substring match, header-plus-row-count, and trusting a `status` field;
+- a **hardened** grader: typed normalization, real data equality, and a semantic judge for free-text answers only.
+
+Each grader runs 5 times per case, each time with a seeded clock. The runner then counts:
+- **false positives:** a pass on a should-fail case;
+- **false negatives:** a fail on a should-pass case;
+- **flaky verdicts:** the verdict changes across the 5 runs.
+
+Results are written to `results/results.json` and `results/report.md`, and FastAPI serves them to a one-page UI.
+
+It's for benchmark engineers who want to show that a grader is fair before any model runs against it. It's an independent prototype on synthetic data and is not affiliated with HUD.
+
+**Colors on screen.** Each color has one meaning throughout:
+
+| Color | Meaning |
+|---|---|
+| Blue | data and probe outputs moving through the system |
+| Amber | stored state on disk (`data/`, `results/`) |
+| Violet | a grader or judge |
+| Green | the verdict agrees with the label |
+| Red | a wrong verdict (FP or FN) |
 
 ---
 
-### 1. Can we trust the grader? (~25 s)
+## Scenes
 
-| | |
-|---|---|
-| **Takeaway** | A grader can pass a wrong answer, and the benchmark score inherits the error. |
-| **Narration** | A synthetic task asks how many orders have a null customer ID, and the correct answer is 7. A scripted probe answers 17. The naive grader marks it correct. It simply checks whether "7" appears somewhere in the answer. If graders do this at scale, the scores measure the grader, not the agent. |
-| **Visual** | A plain question card. Expected "7" next to the probe's "17". A naive verdict card reading "PASSED", outlined red because it disagrees with the expected verdict. |
-| **Evidence** | `snapshot/results.json → cases[A1_null_customer_ids, substring_trap].verdicts.naive` (score 1, error FP); `naive.py:19-22`; `probes.py:52` |
-| **Open** | Whether to add an external motivation line (see open question Q1). The default is no external citation. |
+### 1. The grader can be the bug (~25 s)
 
-### 2. What Grader Audit tests (~30 s)
+- **Idea:** If a grader passes a wrong answer, the benchmark score inherits the error.
+- **Visual:**
+  - A task card: "How many rows in orders.csv have a null customer_id?", with gold `7`.
+  - A probe card answering `17` slides in. A naive grader box stamps PASS with the reason `output contains gold answer '7'`, outlined red.
+  - A small source strip cites the public reports listed in PRD.md: OSWorld issue #518 (substring match) and #487 (flaky checks).
+- **Files:** `PRD.md:7-14`, `audit/tasks.py:122-126`, `audit/probes.py:50`, `audit/graders/naive.py:19-22`
 
-| | |
-|---|---|
-| **Takeaway** | You can test a grader without running any model: feed it outputs whose correct verdict you already know. |
-| **Narration** | Explain scripted probes: fixed outputs, each with a label `should_pass`. Then the three error types. A false positive is a pass on an output labeled should-fail. A false negative is a fail on an output labeled should-pass. A flaky verdict is one that changes across repeated runs of the same input. Include the independent-prototype disclosure here. |
-| **Visual** | Three definition cards. Red for FP and FN (they disagree with the label), amber for flaky. Each card states its denominator. |
-| **Evidence** | `runner.py:56-57` (error classification), `runner.py:91-100` (denominators) |
-| **Open** | None |
+### 2. The idea: grade the grader (~25 s)
 
-### 3. The synthetic test bench (~25 s)
+- **Idea:** You can audit a grader without running a model. Feed it outputs whose correct verdict you already know.
+- **Visual:**
+  - A 12 × 8 grid (tasks × probes) fills in cell by cell. Green-outlined cells are should-pass; grey-outlined cells are should-fail.
+  - The `T5 × shuffled` cell flips, because row order matters for the top-5 task.
+  - Three definition chips follow: FP (pass on should-fail, out of 49), FN (fail on should-pass, out of 47), flaky (verdict changes across runs, out of 96).
+- **Files:** `audit/probes.py:11-22`, `audit/probes.py:141`, `audit/runner.py:56-57`, `audit/runner.py:90-101`
 
-| | |
-|---|---|
-| **Takeaway** | 12 tasks × 8 probes = 96 labeled cases, all synthetic. |
-| **Narration** | There are 4 answer tasks, 5 table tasks and 3 pipeline-state tasks, all in data engineering. Then name the 8 probes. Labels depend on the task: shuffled rows are fine everywhere except the top-5 table, where order is part of the answer. That gives 47 should-pass and 49 should-fail cases. |
-| **Visual** | A 12 × 8 grid that fills in. Columns are colored by label, and T5 × shuffled flips. Counts are shown: 47 / 49. |
-| **Evidence** | `tasks.py:123-260`, `probes.py:11, 141`; `summary.naive.positives = 47`, `negatives = 49` |
-| **Open** | None |
+### 3. Architecture (~30 s)
 
-### 4. Run the audit (~35 s)
+- **Idea:** A straight pipeline: generate, then grade, then measure, then serve. Everything is deterministic from one seed.
+- **Visual:** Boxes appear left to right, and arrows animate in the order data moves:
+  1. `tasks.py` (seeded generator, `SEED = 1337`)
+  2. `probes.py` (8 probes and their labels)
+  3. `generate.py`, which writes `data/` (amber)
+  4. `runner.py`, which calls `graders/naive.py`, `graders/hardened.py` and `graders/judge.py` (violet)
+  5. `results/results.json` and `report.md` (amber)
+  6. `serve.py` (FastAPI)
+  7. `static/index.html`
+- **Files:** `audit/tasks.py:16`, `audit/generate.py:27-50`, `audit/runner.py:42-87`, `audit/serve.py:25-31`, `PRD.md:62`
 
-| | |
-|---|---|
-| **Takeaway** | One command; naive vs hardened side by side. |
-| **Narration** | `python -m audit.serve` generates the data, runs every grader 5 times per case, and serves the page. Naive: 20 of 49 false positives, 14 of 47 false negatives, 6 of 96 flaky. Hardened: 0, 0 and 0, **on these 96 synthetic cases**. Five runs are combined by majority vote into one verdict per case. |
-| **Visual** | A short terminal card showing the command, plus the printed summary lines from the recorded run. Then the real UI summary cards (captured screenshot), with highlight boxes on each metric. |
-| **Evidence** | `serve.py:25-31, 95-109`; `summary.*`; `report.md § Summary` |
-| **Open** | None |
+### 4. One case, end to end (~45 s)
 
-### 5. A false positive, inspected (~45 s)
+- **Idea:** Trace `A1_null_customer_ids × substring_trap` through the real functions.
+- **Visual:** A blue token labelled `"17"` travels through a column of function names, lighting each one as the narration reaches it:
+  1. `load_cases()`
+  2. `run_audit()`
+  3. `_grade_k(k=5)` with `GradeContext.for_seed(0..4)`
+  4. The path splits:
+     - **Naive branch:** `naive.grade_answer`, `gold in output`, score 1.
+     - **Hardened branch:** `normalize_text`, `_exact` (fails), `MockJudge.judge`, `numeric mismatch: 17 != 7`, score 0.
+  5. Back in `run_audit`, the error classifier marks naive FP (red) and hardened correct (green).
+- **Files:** `audit/generate.py:64-70`, `audit/runner.py:50-58`, `audit/runner.py:27-39`, `audit/graders/__init__.py:19-23`, `audit/graders/naive.py:19-22`, `audit/graders/hardened.py:86-92`, `audit/graders/judge.py:37-47`
+- **Recorded values:** `results/results.json` case A1 × substring_trap: naive runs `[1,1,1,1,1]` FP; hardened `[0,0,0,0,0]`, `graded_by: judge`.
 
-| | |
-|---|---|
-| **Takeaway** | The case view shows why a grader was wrong, not just that it was. |
-| **Narration** | Click the substring-trap × naive cell in the heatmap (call it an "error heatmap", not a confusion matrix). Open A1. Walk through the instruction, the probe output "17", gold "7", and the label should-fail. The naive grader reasons "output contains gold answer '7'". The hardened grader's mock judge says "numeric mismatch: 17 != 7". Then one table example, T4 partial. The naive header-and-row-count check passes it. The hardened grader's diff shows the one changed row: North-East, 1538.27 against 1537.27. |
-| **Visual** | Real captures: the heatmap with the cell highlighted, the case list, the A1 case view with verdict cards, then the T4 case view zoomed on the diff table. |
-| **Evidence** | `cases[A1…, substring_trap]`, `cases[T4…, partial]`; `/api/case/T4_revenue_by_region/partial → diff`; `static/index.html:195, 239-258` |
-| **Open** | Q3 (keep T4 or drop it to save about 12 s) |
+### 5. Naive vs hardened, in code (~30 s)
 
-### 6. A false negative, inspected (~35 s)
+- **Idea:** The hardened graders compare typed data, never surface signals.
+- **Visual:** Code focus, split screen.
+  - **Left:** `naive.py` `grade_table`. Header plus row count, 8 lines.
+  - **Right:** `hardened.py` `grade_table`. Normalize, row count, key uniqueness, then sorted row equality (unless order matters), about 12 lines.
+  - Lines highlight as the narration names each check.
+  - A one-line callout follows: `normalize_cell` turns `1.50`, `1.5` and `1.5000001` into the same value. It rejects `MM/DD` dates as ambiguous.
+- **Files:** `audit/graders/naive.py:25-32`, `audit/graders/hardened.py:126-152`, `audit/graders/hardened.py:24-25`, `audit/graders/hardened.py:63-81`
 
-| | |
-|---|---|
-| **Takeaway** | Strict string checks fail correct answers too. |
-| **Narration** | A2 asks for the total of completed orders, to two decimals. The gold answer is 9469.30, and the probe writes "Completed orders total $9,469.30." The value is the same: a currency sign and a thousands separator don't change an amount. Naive: "not found in output", a false negative. The hardened exact check also fails, so it hands the answer to the **mock** judge, which extracts one number and compares it within half a cent. Contrast with T5, where shuffled rows are correctly *failed*, because that task defines order as part of the answer. |
-| **Visual** | Real capture of the A2 paraphrase case. Small inset of the T5 label to show that order is not always free. |
-| **Evidence** | `cases[A2…, paraphrase]`; `probes.py:59`; `judge.py:16, 24-25, 39-48`; `cases[T5…, shuffled]` |
-| **Open** | None |
+### 6. Flakiness from a seeded clock (~25 s)
 
-### 7. Flakiness and repeatability (~40 s)
+- **Idea:** Repeat runs catch time-dependent graders. The clock is simulated, so the flakiness can be reproduced.
+- **Visual:**
+  - A timeline with `BASE_NOW 10:15:00` and five seed ticks at their offsets (seeds 0–4, each between 0 and 600 s later).
+  - A 300 s freshness window is shaded.
+  - The S1 gold case's five run dots fill in as `0 1 0 1 1`: majority PASS, flagged flaky (amber ring).
+  - Caption: "flaky = verdicts differ across seeds; only S1 × naive is flagged."
+- **Files:** `audit/graders/__init__.py:9-23`, `audit/graders/naive.py:45-51`, `audit/tasks.py:235-236`, `audit/runner.py:27-39`, `tests/test_audit.py:36-39`
+- **Recorded values:** S1 × gold, naive runs `[0,1,0,1,1]`.
 
-| | |
-|---|---|
-| **Takeaway** | Repeating each grading run exposes a grader that depends on time, and only that grader. |
-| **Narration** | S1 has a planted naive check: finished_at must be under 300 seconds old. The "clock" is simulated from each run's seed, with delays of 507, 81, 574, 143 and 142 seconds. Runs 1 and 3 fail and the rest pass, giving 0-1-0-1-1. The audit flags 6 flaky cases, all on S1's naive grader. Then two caveats. First, the clock is simulated, so detection works by construction; real nondeterminism needs real repeated runs. Second, a majority vote hides some errors: S1 gold failed 2 of 5 runs but isn't counted as a false negative. |
-| **Visual** | Real capture of the S1 gold case with the 5 run dots. A timeline animation with five delay markers against a 300 s threshold line (amber). The flaky table from `report.md`. |
-| **Evidence** | `graders/__init__.py:11, 19-23`; `naive.py:45-50`; `tasks.py:236`; measured delays (evidence §7); `report.md § Flaky verdicts`; `tests/test_audit.py:36-39` |
-| **Open** | None |
+### 7. Run it, and what it found (~30 s)
 
-### 8. How the code produces the report (~40 s)
+- **Idea:** One command regenerates, audits and serves. Here are the numbers on these 96 synthetic cases.
+- **Visual:**
+  - A terminal card with `python -m audit.serve` and the printed summary lines.
+  - The real UI summary capture (synthetic data), then the matrix capture.
+  - A results table:
 
-| | |
-|---|---|
-| **Takeaway** | One case moves through six real functions to reach the screen. |
-| **Narration** | Follow the A1 case token through the path: `build_tasks` → `build_probes` → `generate` writes `data/` and `labels.json` → `run_audit` → `_grade_k` runs each grader five times → majority vote and FP/FN tag → `_summarize` / `_cell` → `write_results` → FastAPI `/api/case` → the page. |
-| **Visual** | Architecture diagram from the verified call chain, with a cyan token moving node to node. File:function labels in monospace. |
-| **Evidence** | Evidence §8, steps 1–10 |
-| **Open** | None |
+    | Grader | FP | FN | Flaky |
+    |---|---|---|---|
+    | naive | 20 / 49 | 14 / 47 | 6 / 96 |
+    | hardened | 0 | 0 | 0 |
 
-### 9. Why the hardened checks differ (~30 s)
+  - A footer chip: "152 tests, including a mutation test that swaps `==` for `in`."
+- **Files:** `audit/serve.py:95-109`, `audit/serve.py:25-31`, `results/report.md:11-14`, `tests/test_audit.py:64-70`, `README.md:190`
 
-| | |
-|---|---|
-| **Takeaway** | Deterministic, typed checks first; a semantic judge only where wording varies. |
-| **Narration** | The hardened graders parse each output by type: Unicode, nulls, float tolerance, date formats, row order only when the task says so. They never trust a "done" flag. For answer tasks, the exact check runs first, and the judge is called only when it fails. That happened 26 times in this run, all 26 with the **mock** judge. A real model judge is supported but was not run here. |
-| **Visual** | Real code excerpt `hardened.py:86-94` (`grade_answer`, 9 lines). Then a two-lane diagram: "deterministic" (cyan) vs "judge: mock" (amber label "mock, not a model"). |
-| **Evidence** | `hardened.py:86-94`; `judge.py:28-52, 91-99`; `results.json → judge.log` (26/26) |
-| **Open** | None |
+### 8. Gotchas, limits, next steps, recap (~35 s)
 
-### 10. Evidence and limits (~40 s)
-
-| | |
-|---|---|
-| **Takeaway** | What this run shows, and what it doesn't. |
-| **Narration** | **Tests:** 152 passing, 139 unit and 13 integration. That includes all 96 hardened cases and a mutation test that swaps `==` for `in` in the hardened answer grader; the audit then reports a false positive on A1 substring trap. **Demonstrated:** the harness measures FP, FN and flakiness against known labels, and separates the two graders on this synthetic set. **Not established:** that the hardened graders are correct in general. They were written knowing these 8 probe types. Also not established: the synthetic tasks reflect real browser or desktop state, or the real-model judge. **Future work:** model-generated adversarial probes reviewed by a human, and adapters for real environment graders. |
-| **Visual** | Three-column card: Demonstrated (green ticks for agreement) / Not established (amber) / Next (cyan). Test counts with the commands. |
-| **Evidence** | `pytest -m unit` → 139 passed; `pytest -m integration` → 13 passed; `tests/test_audit.py:64-70`; README "Limitations" |
-| **Open** | None |
+- **Idea:** What the numbers do and don't prove.
+- **Visual:** A "with / without" list, then a recap of 5 one-liners.
+- **Gotchas found in the code:**
+  - The hardened graders' 0 / 0 is **by construction**: they were written knowing these 8 probes (`README.md:152-154`).
+  - The naive state check uses `target not in status`, so `"not_succeeded"` slips through as a substring (`audit/graders/naive.py:42`). Verified: all three S tasks × `substring_trap` are naive FPs in `results/results.json` (reason `status 'not_succeeded' looks complete`).
+  - Flakiness is simulated, and real flakiness would need real repeated runs (`audit/graders/__init__.py:9-10`).
+  - The LLM judge is optional. On any error it falls back to the mock for that call. The audit doesn't fail; the fallback only shows up in the reason text (`audit/graders/judge.py:86-88`). The real-model path was not run.
+  - `serve` rewrites `data/` on every start (`audit/generate.py:29-30`, `audit/serve.py:27`). It's safe because generation is byte-identical (`tests/test_audit.py:80-92`).
+- **Limits and next steps** (from `README.md:213-220`): labels are assumed known; synthetic CSV and JSON rather than browser or desktop state. Next: LLM-generated adversarial probes with human review, environment adapters, and an audit of a public benchmark's real graders.
+- **Recap:** probes with known labels, then naive vs hardened, then FP, FN and flaky over K=5 seeded runs, then one command, then honest limits.
 
 ---
 
-## Material PRD vs implementation differences
+## Open questions
 
-Full table in `evidence.md §11`.
-
-1. **"Confusion matrix" is an error-count heatmap.** The video will call it a probe-by-grader error heatmap.
-2. **The flaky grader reads a seeded, simulated clock**, not wall-clock time. Detection of the planted grader is real in the recorded run, but it is guaranteed by construction.
-3. **Majority vote over 5 runs.**
-   - FP/FN are counted per case, after aggregation.
-   - Two of the naive grader's 20 FPs (S1 substring_trap and S1 partial) exist only because 3 of 5 seeded runs passed.
-   - Flaky failures on correct outputs (e.g. S1 gold, 2 of 5 runs failed) are not counted as FN.
-4. **The real LLM judge was never run.** All judge numbers are mock-judge numbers, and the mock was written alongside these probes.
-5. **The PRD example headline ("3 of 12 no-op agents") doesn't match the data.** The naive graders passed 1 of 12 no-op probes. The generated headline picks `partial` (8 of 12) and says "agents"; the narration will say "scripted probes".
-6. **Per-task results are counts, not rates.** The Dockerfile was not built.
-
-## Open questions for you
-
-- **Q1. External motivation.** README/PRD cite a HUD post, a Browserbase × HUD post, and OSWorld issues #518/#487, none of which I verified. I recommend opening with the recorded A1 case only and citing nothing external. The alternative is to let me fetch and verify one source in Phase 2 and quote it narrowly.
-- **Q2. Showing commands.** Scene 4 shows the run command and recorded output as a styled card rather than live terminal footage. OK?
-- **Q3. T4 table diff in Scene 5.** Keep it (it shows the diff feature) or drop it to bring the runtime nearer 5:30?
-- **Q4. Phase 4 toolchain.**
-  - Python 3.12 for `docs/kt-video/.venv` would come from `uv`, which downloads a managed CPython. espeak-ng isn't installed.
-  - Options: (a) `winget install eSpeak-NG.eSpeak-NG`, or (b) try Kokoro without it and check pronunciation.
-  - Approve one, or I'll ask again at Phase 4.
-- **Q5. Voice and pace.** `af_heart` at speed 1.0 unless you prefer otherwise.
+1. **Old video in `docs/kt-video/`.** A previous 5:51 demo-style video, with its sources and assets, is already committed here. I've overwritten `outline.md` (the old one is in git at `ac26995`).
+   - My plan is to replace that pipeline in place. I'd keep the fonts and reuse `assets/ui/summary.png` and `matrix.png` (they still match the current `results.json` byte for byte).
+   - I'd delete the files the new video doesn't use: `capture.mjs`, `evidence.*`, `qa.md`, `snapshot/`, the other screenshots and the old composition.
+   - I'd also update the Makefile `kt-video` target and drop `kt-video-capture`. OK, or do you want the old video kept alongside?
+2. **External sources on screen.** Scene 1 names OSWorld issues #518 and #487 and HUD's "What is a good task?" post. These come from PRD.md, not the code, so their source reference will be `PRD.md:9-11`. Is it OK to name them on screen and in the narration?
+3. **Voice.** I plan neutral third person ("this prototype…") rather than first person. OK?
+4. **Real UI screenshots** in scene 7, or a clean redrawn schematic? I recommend the real screenshots, since they show synthetic data only.
+5. **Personal details.** PRD.md includes personal and employer details (Bizmetric, visa and location). I'll leave all of these out. Tell me if you want the Bizmetric "deterministic first, LLM only where it adds signal" framing in scene 3.

@@ -4,12 +4,17 @@
   "type": "module",
   "description": "Build scripts for the Grader Audit KT video. Not part of the application.",
   "scripts": {
-    "capture": "node capture.mjs",
-    "render": "node render.mjs"
+    "kt-video": "npm run facts && npm run tts && node render.mjs",
+    "facts": ".venv/Scripts/python facts.py",
+    "tts": ".venv/Scripts/python tts.py",
+    "render": "node render.mjs",
+    "preview": "node render.mjs --preview",
+    "qa": "node render.mjs --qa"
   },
   "devDependencies": {
-    "playwright": "1.57.0",
     "@fontsource/inter": "5.1.1",
-    "@fontsource/jetbrains-mono": "5.1.2"
+    "@fontsource/jetbrains-mono": "5.1.2",
+    "@fontsource/space-grotesk": "5.1.1",
+    "playwright": "1.57.0"
   }
 }
